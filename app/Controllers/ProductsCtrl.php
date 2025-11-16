@@ -17,11 +17,15 @@ class ProductsCtrl
         // $produts = $this->productModel->getAll();
         // var_dump($produts);
     }
-    public function details($id)
+    public function detail($slug)
     {
-        $product = $this->productModel->getProductById($id);
-        var_dump($product);
-        var_dump($_GET);
+        // lấy miêu tả cơ bảng của sảng phẩm
+        $product_base = $this->productModel->getProductBySlug($slug);
+
+        // lấy ảnh,giá của từng biến thể
+        $product_variants = $this->productModel->getVariantsById_product($product_base['id']);
+
+        // var_dump($product_variants);
 
         include_once("Views/detail.php");
     }

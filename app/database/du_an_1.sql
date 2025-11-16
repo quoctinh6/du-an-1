@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 15, 2025 at 07:23 AM
+-- Generation Time: Nov 16, 2025 at 01:43 PM
 -- Server version: 8.0.44
 -- PHP Version: 8.3.16
 
@@ -467,7 +467,7 @@ CREATE TABLE `variants` (
 
 INSERT INTO `variants` (`id`, `product_id`, `color_id`, `size_id`, `price`, `quantity`, `sku`, `image`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 1, 500000000.00, 0, 'TEST', 'no', '2025-11-14 12:13:58', '2025-11-14 12:13:58'),
-(6, 1, 1, 1, 3500000.00, 50, 'CS-GA2100-BLK-40', 'product-1-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(6, 1, 1, 2, 3500000.00, 50, 'CS-GA2100-BLK-40', 'product-1-black.jpg', '2025-11-10 09:00:19', '2025-11-16 13:36:14'),
 (7, 2, 5, 2, 350000000.00, 5, 'RLX-DJ41-BLU-42', 'product-2-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
 (8, 3, 1, 2, 7000000.00, 30, 'SK-SRPD-BLK-42', 'product-3-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
 (9, 3, 5, 2, 7200000.00, 20, 'SK-SRPD-BLU-42', 'product-3-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),

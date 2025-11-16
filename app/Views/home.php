@@ -1,89 +1,55 @@
 <?php
 $html_products_featured = '';
-foreach ($productsFeatured as $item) {
-  $html_products_featured .= '<div class="product-box">
-      <div class="product-icons">
-        <button class="icon-btn" aria-label="Add to cart">
-          <!-- SVG Cart Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
-            <path
-              d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-          </svg>
-        </button>
-        <button class="icon-btn" aria-label="Add to favorites">
-          <!-- SVG Heart Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24">
-            <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
-        </button>
-      </div>
-      <img src = "' . $item['image_url'] . '"
-        alt="Classic Black Watch" class="product-img">
-      <div class="product-name">' . $item['name'] . '</div>
-      <div class="product-price">' . number_format($item['price'], 0) . ' VND</div>
-      <button class="buy-btn">Buy Now</button>
-    </div>';
-}
 
+function render_product_item($item)
+{
+
+  // Định dạng giá tiền
+  $formatted_price = number_format($item['price'], 0) . ' VND';
+
+  // Bảo mật: Dùng htmlspecialchars để tránh lỗi XSS
+  $image_url = htmlspecialchars($item['image_url']);
+  $product_name = htmlspecialchars($item['name']);
+  $detail_url = 'index.php/products/detail/' . htmlspecialchars($item['slug']);
+
+  // Dùng Heredoc (<<<HTML) để viết code HTML dễ nhìn hơn
+  return <<<HTML
+    <div class="product-box" onclick="window.location.href= '$detail_url' ">
+        <div class="product-icons">
+            <button class="icon-btn" aria-label="Add to cart">
+                <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
+                </svg>
+            </button>
+            <button class="icon-btn" aria-label="Add to favorites">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+            </button>
+        </div>
+        <img src="$image_url" alt="$product_name" class="product-img">
+        <div class="product-name">$product_name</div>
+        <div class="product-price">$formatted_price</div>
+        <button class="buy-btn">Buy Now</button>
+    </div>
+    HTML;
+}
+// (Đảm bảo bạn đã include file chứa hàm render_product_item)
+
+$html_products_featured = '';
+foreach ($productsFeatured as $item) {
+  $html_products_featured .= render_product_item($item);
+}
 
 $html_products_trending = '';
 foreach ($productsTrending as $item) {
-  $html_products_trending .= '<div class="product-box">
-      <div class="product-icons">
-        <button class="icon-btn" aria-label="Add to cart">
-          <!-- SVG Cart Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
-            <path
-              d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-          </svg>
-        </button>
-        <button class="icon-btn" aria-label="Add to favorites">
-          <!-- SVG Heart Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24">
-            <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
-        </button>
-      </div>
-      <img src = "' . $item['image_url'] . '"
-        alt="Classic Black Watch" class="product-img">
-      <div class="product-name">' . $item['name'] . '</div>
-      <div class="product-price">' . number_format($item['price'], 0) . ' VND</div>
-      <button class="buy-btn">Buy Now</button>
-    </div>';
+  $html_products_trending .= render_product_item($item);
 }
 
-$html_products_Collections = '';
+$html_products_collections = '';
 foreach ($productsCollections as $item) {
-  $html_products_Collections .= '<div class="product-box">
-      <div class="product-icons">
-        <button class="icon-btn" aria-label="Add to cart">
-          <!-- SVG Cart Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
-            <path
-              d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-          </svg>
-        </button>
-        <button class="icon-btn" aria-label="Add to favorites">
-          <!-- SVG Heart Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24">
-            <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
-        </button>
-      </div>
-      <img src = "' . $item['image_url'] . '"
-        alt="Classic Black Watch" class="product-img">
-      <div class="product-name">' . $item['name'] . '</div>
-      <div class="product-price">' . number_format($item['price'], 0) . ' VND</div>
-      <button class="buy-btn">Buy Now</button>
-    </div>';
+  $html_products_collections .= render_product_item($item);
 }
-
-
-;
-
 
 
 

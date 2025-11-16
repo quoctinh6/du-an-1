@@ -56,12 +56,23 @@ class Products
     return $this->db->query($sql, ...$params);
   }
 
-  function getProductById($id = null)
+  function getProductBySlug(string $slug = '')
   {
-    $sql = 'SELECT * FROM Products where id = ? and status = "published"';
-    return $this->db->queryOne($sql, $id);
+    $sql = 'SELECT * FROM Products where slug = ? and status = "published"';
+    return $this->db->queryOne($sql, $slug);
 
   }
+
+  function getVariantsById_product(int $id_product)
+  {
+    $sql = 'SELECT variants.*, sizes.name sizes, colors.name colors
+    FROM variants 
+    INNER JOIN sizes ON variants.size_id = sizes.id
+    INNER JOIN colors ON variants.color_id = colors.id
+    WHERE product_id = ?;';
+    return $this->db->query($sql, $id_product);
+  }
+
   function getProductsByColor_id($id)
   {
     $params = [];
