@@ -2,40 +2,38 @@
 <footer>
     <div class="footer-row">
         <div class="footer-col">
-            <div class="footer-col-head">SHOP</div>
+            <div class="footer-col-head">ZERO WATCH</div>
             <div class="footer-col-list">
-                <a class="footer-col-link" href="#">Men's Watches</a>
-                <a class="footer-col-link" href="#">Women's Watches</a>
-                <a class="footer-col-link" href="#">Luxury Collection</a>
-                <a class="footer-col-link" href="#">Limited Editions</a>
-                <a class="footer-col-link" href="#">Sale</a>
+                <a class="footer-col-link" href="#">Về zerowatch.vn</a>
+                <a class="footer-col-link" href="#">Phản ánh - Khiếu nại</a>
+                <a class="footer-col-link" href="#">Chứng nhận đại lí</a>
+                <a class="footer-col-link" href="#">Top list đồng hồ</a>
+                <a class="footer-col-link" href="#">Kiến thức đồng hồ</a>
             </div>
         </div>
         <div class="footer-col">
-            <div class="footer-col-head">SUPPORT</div>
+            <div class="footer-col-head">CHÍNH SÁCH CHUNG</div>
             <div class="footer-col-list">
-                <a class="footer-col-link" href="#">Shipping Info</a>
-                <a class="footer-col-link" href="#">Return Policy</a>
-                <a class="footer-col-link" href="#">Warranty</a>
-                <a class="footer-col-link" href="#">FAQs</a>
-                <a class="footer-col-link" href="#">Contact Support</a>
+                <a class="footer-col-link" href="#">Thông tin vận chuyển</a>
+                <a class="footer-col-link" href="#">Chính sách đổi trả</a>
+                <a class="footer-col-link" href="#">Bảo hành</a>
+                <a class="footer-col-link" href="#">Câu hỏi thường gặp</a>
+                <a class="footer-col-link" href="#">Thông tin trang TMĐT</a>
             </div>
         </div>
         <div class="footer-col">
-            <div class="footer-col-head">ABOUT</div>
+            <div class="footer-col-head">LIÊN HỆ</div>
             <div class="footer-col-list">
-                <a class="footer-col-link" href="#">Our Story</a>
-                <a class="footer-col-link" href="#">Press</a>
-                <a class="footer-col-link" href="#">Careers</a>
-                <a class="footer-col-link" href="#">Sustainability</a>
-                <a class="footer-col-link" href="#">Privacy Policy</a>
+                <a class="footer-col-link" href="#">Hotline 1: 0123456789</a>
+                <a class="footer-col-link" href="#">Hotline 2: 9484738439</a>
+                <a class="footer-col-link" href="#">Hotline 3: 0928485723</a>
             </div>
         </div>
     </div>
     <div class="footer-bottom">
-        &copy; 2025 DarkTime | All rights reserved. Crafted with <span style="color:var(--highlight);">precision</span>
-        and <span style="color:var(--accent);">passion</span>. <br>
-        Product images &copy; Unsplash. For demonstration purposes only.
+        &copy; 2025 ZERO WATCH | Shop được tạo bởi <span style="color:var(--highlight);">Sinh viên FPT</span>
+        và <span style="color:var(--accent);">Rolex.com</span>. <br>
+        Phản ánh chức năng và dịch vụ qua zalo: 0938447728
     </div>
 </footer>
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>Views/assets/js/script.js">

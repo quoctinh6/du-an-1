@@ -30,7 +30,7 @@ function render_product_item($item)
         <img src="$image_url" alt="$product_name" class="product-img">
         <div class="product-name">$product_name</div>
         <div class="product-price">$formatted_price</div>
-        <button class="buy-btn">Buy Now</button>
+        <button class="buy-btn">Mua ngay</button>
     </div>
     HTML;
 }
@@ -59,20 +59,20 @@ foreach ($productsCollections as $item) {
   <video autoplay muted loop playsinline src="<?php echo BASE_URL; ?>Views/assets/image/videobanner.mp4"></video>
   <div class="banner-content">
 
-    <div class="banner-title">Elevate Your Time</div>
+    <div class="banner-title">Điều Khiển Thời Gian</div>
     <!-- <div class="banner-desc">
         Discover luxury and precision—shop our curated collection of modern watches. <br>
         <span style="color:var(--accent);"><b>Flash Sale</b></span>: Exclusive deals, limited-time only!
       </div>-->
-    <button class="glass-button">Shop Now</button>
+    <button class="glass-button">Xem ngay</button>
   </div>
 </section>
 
 <!-- Section 1: Product Grid -->
 <section class="section scroll-reveal" id="featured-products">
   <div class="section-header">
-    <div class="section-title">Featured Watches</div>
-    <button class="section-action">All</button>
+    <div class="section-title">Đồng hồ bán chạy</div>
+    <button class="section-action">>></button>
   </div>
   <div class="product-grid">
     <!-- Product Box 1 -->
@@ -83,8 +83,8 @@ foreach ($productsCollections as $item) {
 <!-- Section 2: Trending Grid -->
 <section class="section scroll-reveal" id="trending-products">
   <div class="section-header">
-    <div class="section-title">Trending Now</div>
-    <button class="section-action">All</button>
+    <div class="section-title">Đồng hồ cơ</div>
+    <button class="section-action">>></button>
   </div>
   <div class="product-grid">
     <!-- Four Trending Product Boxes -->
@@ -95,15 +95,15 @@ foreach ($productsCollections as $item) {
 <!-- Section Banner (Full Width) -->
 <div class="mid-banner scroll-reveal dark-filter">
   <img src="<?php echo BASE_URL; ?>Views/assets/image/mainbanner1.png" alt="">
-  <div class="mid-banner-title">Elevate Your Time</div>
-  <button class="mid-banner-glass-button">Shop Now</button>
+  <div class="mid-banner-title">Đồng Hồ Rolex</div>
+  <button class="mid-banner-glass-button">Xem ngay</button>
 </div>
 
 <!-- Section 3: Best Collection Grid -->
 <section class="section scroll-reveal" id="best-collection">
   <div class="section-header">
-    <div class="section-title">Best Collections</div>
-    <button class="section-action">All</button>
+    <div class="section-title">Đồng hồ mới</div>
+    <button class="section-action">>></button>
   </div>
   <div class="product-grid">
     <!-- Four Best Collection Boxes -->
@@ -114,7 +114,7 @@ foreach ($productsCollections as $item) {
 <!-- Section 4: Blog/Article Grid -->
 <section class="section scroll-reveal" id="watch-blog">
   <div class="section-header">
-    <div class="section-title">Latest Articles</div>
+    <div class="section-title">Tin tức</div>
   </div>
   <div class="blog-grid">
     <!-- Box 1: Large Feature -->

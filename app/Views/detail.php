@@ -29,7 +29,7 @@
         <div class="product-dt-price">5000000 VND</div>
       </div>
       <div class="attribute-group">
-        <div class="attribute-label">Color</div>
+        <div class="attribute-label">Màu sắc</div>
         <div class="color-options">
           <button class="color-option-btn selected" aria-label="Black" data-color="black">
             <span class="color-swatch color-black"></span>
@@ -43,15 +43,15 @@
         </div>
       </div>
       <div class="attribute-group">
-        <div class="attribute-label">Type</div>
+        <div class="attribute-label">Kích thước</div>
         <div class="type-options">
-          <button class="type-option-btn selected">Standard</button>
-          <button class="type-option-btn">Sport</button>
-          <button class="type-option-btn">Luxury</button>
+          <button class="type-option-btn selected">38mm</button>
+          <button class="type-option-btn">41mm</button>
+          <button class="type-option-btn">42mm</button>
         </div>
       </div>
       <div class="quantity-group">
-        <div class="attribute-label">Quantity</div>
+        <div class="attribute-label">Số lượng</div>
         <div class="quantity-selector">
           <button class="quantity-btn" aria-label="Decrease quantity" id="decrementQty">-</button>
           <input type="number" readonly class="quantity-value" id="quantityInput" value="1" min="1">
@@ -59,8 +59,8 @@
         </div>
       </div>
       <div class="action-group">
-        <button class="glass-button">Buy Now</button>
-        <button class="cta-btn secondary">Add to Cart</button>
+        <button class="glass-button">Mua ngay</button>
+        <button class="cta-btn secondary">Thêm vào giỏ</button>
       </div>
     </div>
   </section>
@@ -110,7 +110,7 @@
 <section class="section scroll-reveal" id="trending-products">
   <div class="section-header">
     <div class="section-title">Sản phẩm liên quan</div>
-    <button class="section-action">Tất cả</button>
+    <button class="section-action">>></button>
   </div>
   <div class="product-grid">
     <!-- Four Trending Product Boxes -->
