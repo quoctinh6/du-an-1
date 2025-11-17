@@ -133,7 +133,7 @@
         alt="Rugged Travel Watch" class="product-img">
       <div class="product-name">Rugged Travel Watch</div>
       <div class="product-price">5000000 VND</div>
-      <button class="buy-btn">Buy Now</button>
+      <button class="buy-btn">Mua ngay</button>
     </div>
     <div class="product-box">
       <div class="product-icons">
@@ -154,7 +154,7 @@
         alt="Minimalist White Watch" class="product-img">
       <div class="product-name">Minimalist White Watch</div>
       <div class="product-price"><span class="product-old-price">9000000</span>5000000 VND</div>
-      <button class="buy-btn">Buy Now</button>
+      <button class="buy-btn">Mua ngay</button>
     </div>
     <div class="product-box">
       <div class="product-icons">
@@ -175,7 +175,7 @@
         alt="Rose Gold Watch" class="product-img">
       <div class="product-name">Rose Gold Watch</div>
       <div class="product-price">5000000 VND</div>
-      <button class="buy-btn">Buy Now</button>
+      <button class="buy-btn">Mua ngay</button>
     </div>
     <div class="product-box">
       <div class="product-icons">
@@ -196,7 +196,7 @@
         alt="Ceramic Blue Watch" class="product-img">
       <div class="product-name">Ceramic Blue Watch</div>
       <div class="product-price"><span class="product-old-price">9000000</span>5000000 VND</div>
-      <button class="buy-btn">Buy Now</button>
+      <button class="buy-btn">Mua ngay</button>
     </div>
   </div>
 </section>
