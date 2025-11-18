@@ -68,6 +68,22 @@ foreach ($productsCollections as $item) {
   </div>
 </section>
 
+<!-- Categories quick links -->
+<?php if (!empty($categories) && is_array($categories)) : ?>
+  <section class="section scroll-reveal" id="categories">
+    <div class="section-header">
+      <div class="section-title">Danh mục</div>
+    </div>
+    <div class="categories-row">
+      <?php foreach ($categories as $cat) : ?>
+        <a class="category-btn" href="index.php/products/index/<?= htmlspecialchars($cat['id']) ?>"><?= htmlspecialchars($cat['name']) ?></a>
+      <?php endforeach; ?>
+      <a class="category-btn" href="index.php/products/index">Tất cả</a>
+    </div>
+  </section>
+<?php endif; ?>
+
+
 <!-- Section 1: Product Grid -->
 <section class="section scroll-reveal" id="featured-products">
   <div class="section-header">
@@ -79,6 +95,7 @@ foreach ($productsCollections as $item) {
     <?= $html_products_featured ?>
   </div>
 </section>
+
 
 <!-- Section 2: Trending Grid -->
 <section class="section scroll-reveal" id="trending-products">
@@ -107,7 +124,7 @@ foreach ($productsCollections as $item) {
   </div>
   <div class="product-grid">
     <!-- Four Best Collection Boxes -->
-    <?= $html_products_Collections ?>
+    <?= $html_products_collections ?>
   </div>
 </section>
 
