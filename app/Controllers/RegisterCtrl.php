@@ -8,7 +8,6 @@ class RegisterCtrl
 
     public function __construct()
     {
-        $this->CourseModel = new Course();
         $this->UserModel = new Users();
     }
     public function index()

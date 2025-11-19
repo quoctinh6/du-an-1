@@ -69,16 +69,17 @@ foreach ($productsCollections as $item) {
 </section>
 
 <!-- Categories quick links -->
-<?php if (!empty($categories) && is_array($categories)) : ?>
+<?php if (!empty($categories) && is_array($categories)): ?>
   <section class="section scroll-reveal" id="categories">
     <div class="section-header">
       <div class="section-title">Danh mục</div>
     </div>
     <div class="categories-row">
-      <?php foreach ($categories as $cat) : ?>
-        <a class="category-btn" href="index.php/products/index/<?= htmlspecialchars($cat['id']) ?>"><?= htmlspecialchars($cat['name']) ?></a>
+      <?php foreach ($categories as $cat): ?>
+        <a class="category-btn"
+          href="index.php/products/category/<?= htmlspecialchars($cat['id']) ?>"><?= htmlspecialchars($cat['name']) ?></a>
       <?php endforeach; ?>
-      <a class="category-btn" href="index.php/products/index">Tất cả</a>
+      <a class="category-btn" href="index.php/products/category">Tất cả</a>
     </div>
   </section>
 <?php endif; ?>

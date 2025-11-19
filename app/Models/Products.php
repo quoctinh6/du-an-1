@@ -14,7 +14,7 @@ class Products
     return $this->db->query($sql);
   }
 
-  function getProducts(int $limit = 16, array $categories = [], array $brand = [], string $search = '')
+  function getProducts(int $limit = 16, array $categories_id = [], array $brand = [], string $search = '')
   {
     $sql = 'SELECT products.*, MIN(product_images.image_url) image_url, MIN(variants.price) price
     FROM Products 
@@ -24,10 +24,10 @@ class Products
     $where = [];
 
     //lọc thư mục 
-    if (!empty($categories)) {
-      $placeholders = implode(',', array_fill(0, count($categories), '?'));
+    if (!empty($categories_id)) {
+      $placeholders = implode(',', array_fill(0, count($categories_id), '?'));
       $where[] = 'category_id IN (' . $placeholders . ')';
-      $params = array_merge($params, $categories);
+      $params = array_merge($params, $categories_id);
     }
 
     // lọc hảng
@@ -46,13 +46,14 @@ class Products
     if ($where) {
       $sql .= ' where ' . implode(' and ', $where) . ' AND status = "published" GROUP BY products.id ';
     } else {
-      $sql .= 'AND status = "published" GROUP BY products.id ';
+      $sql .= ' AND status = "published" GROUP BY products.id ';
     }
 
     // Giới hạn số lượng
     if ($limit) {
       $sql .= " LIMIT " . intval($limit);
     }
+
     return $this->db->query($sql, ...$params);
   }
 

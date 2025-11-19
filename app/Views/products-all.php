@@ -6,9 +6,9 @@
 	<div class="container">
 		<h1><?= isset($categoryName) && $categoryName ? htmlspecialchars($categoryName) : 'Tất cả sản phẩm' ?></h1>
 
-		<?php if (!empty($products) && is_array($products)) : ?>
+		<?php if (!empty($products) && is_array($products)): ?>
 			<div class="product-grid">
-				<?php foreach ($products as $p) :
+				<?php foreach ($products as $p):
 					$name = $p['name'] ?? 'Sản phẩm';
 					$slug = $p['slug'] ?? ($p['id'] ?? '');
 					$price = $p['price'] ?? 0;
@@ -22,9 +22,9 @@
 					} else {
 						$img = BASE_URL . 'Views/assets/image/placeholder.png';
 					}
-				?>
+					?>
 					<div class="product-box">
-						<a href="index.php/products/detail/<?= $slug ?>">
+						<a href="<?= BASE_URL ?>index.php/products/detail/<?= $slug ?>">
 							<img class="product-img" src="<?= $img ?>" alt="<?= htmlspecialchars($name) ?>">
 							<div class="product-name"><?= htmlspecialchars($name) ?></div>
 							<div class="product-price"><?= number_format($price) ?>₫</div>
@@ -33,9 +33,8 @@
 					</div>
 				<?php endforeach; ?>
 			</div>
-		<?php else : ?>
+		<?php else: ?>
 			<p>Không có sản phẩm nào.</p>
 		<?php endif; ?>
 	</div>
 </main>
-
