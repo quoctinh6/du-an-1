@@ -11,7 +11,6 @@ class UserCtrl
 
     public function __construct()
     {
-        $this->CourseModel = new Course();
         $this->UsersModel = new Users();
         $this->LessonModel = new Lesson();
         $this->EnrollmeintModel = new Enrollments();
