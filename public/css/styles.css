@@ -266,7 +266,7 @@
     }
 
     .product-box {
-      background: black;
+      background: rgb(10, 10, 10);
       border-radius: var(--border-radius);
       /* box-shadow: 0 8px 32px 10px #4242421c, 0 2px 14px 0px #96969633; */
       padding: 0 0 1.2rem 0;
@@ -276,22 +276,16 @@
     cursor: pointer;
       /* Transition dài hơn một chút để chuyển động có vẻ "cố ý" hơn */
     transition: 
-        box-shadow 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), /* Dùng cubic-bezier để tạo hiệu ứng đàn hồi/giật */
-        transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+         /* Dùng cubic-bezier để tạo hiệu ứng đàn hồi/giật */
+        transform 0.2s,
         border 0.2s ease;
     }
     .product-box:hover {
     transform: 
-        scale(1.03) /* Phóng to nhẹ */
-        translateY(-10px) /* Nhấc lên cao */
+        /* scale(1.03) */
+        translateY(-12px) /* Nhấc lên cao */
         translateZ(15px); /* Đẩy về phía người xem (cần perspective trên container cha nếu muốn 3D thực sự) */
-    border: 1px solid rgba(255, 255, 255, 0.4); 
-    
-    box-shadow: 
-        /* Bóng sáng tập trung ở phía trên */
-        0 8px 12px 0 rgba(255, 255, 255, 0.1),
-        /* Bóng tối sắc nét phía dưới */
-        0 15px 30px -10px rgba(0, 0, 0, 0.8);
+    border: 0px solid rgba(255, 255, 255, 0.4);
     }
     .product-img {
       width: 100%;
@@ -466,7 +460,7 @@
     /* Blog/Article Section 4 */
     .blog-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: var(--grid-gap);
     }
     @media(max-width:1050px) {
@@ -474,21 +468,17 @@
     }
     .bloghover:hover {
     transform: 
-        scale(1.03) /* Phóng to nhẹ */
-        translateY(-10px) /* Nhấc lên cao */
+         /* Phóng to nhẹ */
+         /* Nhấc lên cao */
         translateZ(15px); /* Đẩy về phía người xem (cần perspective trên container cha nếu muốn 3D thực sự) */
-    border: 1px solid rgba(255, 255, 255, 0.4); 
+    border: 0px solid rgba(255, 255, 255, 0.4); 
     
-    box-shadow: 
-        /* Bóng sáng tập trung ở phía trên */
-        0 8px 12px 0 rgba(255, 255, 255, 0.1),
-        /* Bóng tối sắc nét phía dưới */
-        0 15px 30px -10px rgba(0, 0, 0, 0.8);
+    
     }
     .blog-feature {
       background: #111111;
       border-radius: var(--border-radius);
-      padding: 1.8rem 1.7rem 1.5rem 1.7rem;
+      padding: 0 0 1.5rem 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -496,8 +486,7 @@
       margin-bottom: 0;
     }
     .blog-feature-img {
-      width: 99%;
-      border-radius: calc(var(--border-radius) * 1.2);
+      width: 100%;
       object-fit: cover;
       margin-bottom: 0.8rem;
     }
@@ -507,15 +496,16 @@
       color: var(--white);
       text-align: left;
       margin: 0.45rem 0 0 0;
-      width: 100%;
+      width: 90%;
       letter-spacing: 0.7px;
     }
     .blog-feature-desc {
+      
       font-size: 1rem;
       color: #e4d5fd;
       opacity: 0.82;
       text-align: left;
-      width: 100%;
+      width: 90%;
     }
     /* Blog vertical list */
     .blog-list {
@@ -534,7 +524,7 @@
       cursor: pointer;
     }
     .blog-list-img {
-      width: 100px; height: 100px;
+      width: 120px; height: 120px;
       object-fit: cover;
       
     }
