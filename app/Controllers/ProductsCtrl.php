@@ -10,12 +10,46 @@ class ProductsCtrl
         include_once __DIR__ . "/../Models/Products.php";
         $this->productModel = new Products();
     }
-    public function index()
+    public function index($categoryId = null)
     {
+        // Nếu truyền categoryId (từ URL), lọc theo category
+        $categories = [];
+        $categoryName = null;
 
+        if ($categoryId !== null && $categoryId !== '') {
+            // nếu truyền slug thay vì id, user có thể truyền slug — simple numeric check
+            if (is_numeric($categoryId)) {
+                $categories = [(int)$categoryId];
+                // load tên danh mục (nếu cần hiển thị)
+                include_once __DIR__ . "/../Models/Category.php";
+                $catModel = new Category();
+                $allCats = $catModel->getAll();
+                foreach ($allCats as $c) {
+                    if ((int)$c['id'] === (int)$categoryId) {
+                        $categoryName = $c['name'];
+                        break;
+                    }
+                }
+            } else {
+                // nếu là slug: tìm id trong bảng categories
+                include_once __DIR__ . "/../Models/Category.php";
+                $catModel = new Category();
+                $allCats = $catModel->getAll();
+                foreach ($allCats as $c) {
+                    if ($c['slug'] === $categoryId) {
+                        $categories = [(int)$c['id']];
+                        $categoryName = $c['name'];
+                        break;
+                    }
+                }
+            }
+        }
 
-        // $produts = $this->productModel->getAll();
-        // var_dump($produts);
+        // Lấy sản phẩm, nếu $categories rỗng => lấy tất cả
+        $products = $this->productModel->getProducts(0, $categories);
+
+        // Hiển thị view danh sách sản phẩm (view có thể nhận $categoryName)
+        include_once("Views/products-all.php");
     }
     public function detail($slug)
     {

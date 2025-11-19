@@ -5,10 +5,13 @@ class PageCtrl
     // private $categoriesModel;
 
     private $productModel;
+    private $categoryModel;
     public function __construct()
     {
         include_once("Models/Products.php");
         $this->productModel = new Products();
+        include_once("Models/Category.php");
+        $this->categoryModel = new Category();
 
     }
     public function home()
@@ -19,6 +22,8 @@ class PageCtrl
         $productsTrending = $this->productModel->getProducts(4, [2]);
 
         $productsCollections = $this->productModel->getProducts(4, [3]);
+        // Lấy danh sách categories để hiển thị nút lọc trên trang chủ
+        $categories = $this->categoryModel->getAll();
         // var_dump($productsFeatured);
         include_once 'Views/home.php';
     }
