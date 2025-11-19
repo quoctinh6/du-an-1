@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap 5.3.2 CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      xintegrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons 1.11.3 CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    
+    <!-- Chart.js CDN (Cho biểu đồ) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+
+
+    <!-- SEO Tags -->
+    <title>FashionShop - Admin Panel</title>
+    <meta name="description" content="Khu vực quản trị website FashionShop." />
+
+    <!-- Custom CSS -->
+    <style>
+      /* =================================================== */
+      /* START: CSS KẾ THỪA TỪ TRANG KHÁCH HÀNG */
+      /* =================================================== */
+      :root {
+        --color-accent: rgb(155, 146, 38);
+        --color-accent-darker: rgb(135, 126, 33);
+        --color-text-main: #1a1a1a;
+        --color-text-subtle: #555555;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        color: var(--color-text-main);
+        /* Nền admin luôn là xám nhạt */
+        background-color: #f8f9fa;
+      }
+      /* Kế thừa style nút */
+      .btn-primary {
+        background-color: var(--color-accent);
+        border-color: var(--color-accent);
+        color: #ffffff;
+      }
+      .btn-primary:hover {
+        background-color: var(--color-accent-darker);
+        border-color: var(--color-accent-darker);
+        color: #ffffff;
+      }
+      .btn-outline-secondary {
+        color: var(--color-accent);
+        border-color: var(--color-accent);
+      }
+      .btn-outline-secondary:hover {
+        background-color: var(--color-accent);
+        color: #ffffff;
+      }
+
+      /* =================================================== */
+      /* END: CSS KẾ THỪA */
+      /* =================================================== */
+
+      /* 14. CSS MỚI CHO LAYOUT ADMIN */
+
+      /* SỬA: Sidebar cố định (Sticky Sidebar) */
+      #admin-sidebar {
+        min-height: 100vh; /* Chiều cao tối thiểu bằng màn hình */
+        background-color: #212529; /* Màu đen */
+        
+        /* KỸ THUẬT STICKY */
+        position: -webkit-sticky; /* Cho Safari */
+        position: sticky;
+        top: 0; /* Dính chặt vào đỉnh màn hình */
+        height: 100vh; /* Chiều cao cố định bằng màn hình để scroll bên trong nếu cần */
+        overflow-y: auto; /* Cho phép scroll dọc nếu menu quá dài */
+        z-index: 1000; /* Nổi lên trên */
+      }
+
+      #admin-sidebar .nav-link {
+        color: #adb5bd; /* Màu chữ xám */
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+      }
+      #admin-sidebar .nav-link i {
+        margin-right: 0.75rem;
+        width: 20px;
+        text-align: center;
+      }
+      #admin-sidebar .nav-link:hover {
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+      /* Style cho link "active" (đang ở trang đó) */
+      #admin-sidebar .nav-link.active {
+        color: #ffffff;
+        background-color: var(--color-accent); /* Dùng màu vàng */
+      }
+
+      #admin-sidebar .sidebar-heading {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: #6c757d;
+        padding: 0.5rem 1.5rem;
+        margin-top: 1rem;
+      }
+
+      .admin-top-nav {
+        background-color: #ffffff;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .admin-content {
+        padding: 2rem;
+      }
+      
+      /* Style cho thanh search "màu nâu" */
+      .admin-top-nav .form-control {
+        border-color: var(--color-accent);
+      }
+      .admin-top-nav .form-control:focus {
+        border-color: var(--color-accent-darker);
+        box-shadow: 0 0 0 0.25rem rgba(155, 146, 38, 0.25);
+      }
+
+      /* Style cho Bảng */
+      .admin-table img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 0.25rem;
+      }
+      .admin-table .badge {
+        font-size: 0.85rem;
+      }
+      
+      /* 16. CSS MỚI CHO DASHBOARD */
+      .kpi-card {
+         background-color: #ffffff;
+         border: 1px solid #dee2e6;
+         border-radius: 0.375rem;
+         padding: 1.5rem;
+      }
+      .kpi-card .card-value {
+         font-size: 2rem;
+         font-weight: 700;
+         color: var(--color-accent);
+      }
+      /* SỬA: Làm đậm và rõ tiêu đề KPI */
+      .kpi-card .card-title {
+         font-size: 0.9rem;
+         font-weight: 700; /* Đậm hơn */
+         color: #6c757d !important; /* Màu xám đậm hơn tí cho rõ */
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+      }
+      .kpi-card .kpi-icon { /* Đổi tên class cho khớp */
+         font-size: 2.5rem;
+         color: var(--color-accent);
+         opacity: 0.5;
+      }
+      /* SỬA: Fix lỗi icon hiển thị */
+      .kpi-card .card-icon { 
+         font-size: 2.5rem;
+         color: var(--color-accent);
+         opacity: 0.5;
+      }
+      
+      .dashboard-chart-card {
+         background-color: #ffffff;
+         border: 1px solid #dee2e6;
+         border-radius: 0.375rem;
+         padding: 1.5rem;
+      }
+      
+      /* SỬA: Làm đậm tiêu đề các Card lớn (Biểu đồ, Bảng) */
+      .dashboard-chart-card h5, .card-header {
+         font-weight: 700;
+         color: var(--color-text-main);
+         text-align: center; /* THÊM MỚI: Canh giữa theo yêu cầu */
+      }
+      
+      .list-group-item .product-info {
+        font-weight: 500;
+        color: var(--color-text-main);
+      }
+      .list-group-item .product-sales {
+        font-weight: 600;
+        color: var(--color-accent);
+      }
+      
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="d-flex">
+      <!-- CỘT 1: SIDEBAR (MENU TRÁI) -->
+      <!-- ĐÃ THÊM STYLE STICKY VÀO CSS CỦA ID NÀY -->
+      <nav id="admin-sidebar" class="col-lg-2 col-md-3 d-none d-md-block p-0">
+        <div class="position-sticky pt-3">
+          <!-- Logo/Brand Admin -->
+          <a
+            href="index.html"
+            class="d-block px-3 mb-3 text-white text-decoration-none fs-5"
+          >
+            <i class="bi bi-shop"></i>
+            <span><strong>Fashion</strong>Admin</span>
+          </a>
+
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <!-- Đây là trang hiện tại, nên có class 'active' -->
+              <a class="nav-link active" aria-current="page" href="admin-dashboard.html">
+                <i class="bi bi-speedometer2"></i>
+                Tổng quan
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="bi bi-receipt"></i>
+                Quản lý Đơn hàng
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="admin-products.html">
+                <i class="bi bi-box-seam"></i>
+                Quản lý Sản phẩm
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="bi bi-people"></i>
+                Khách hàng
+              </a>
+            </li>
+          </ul>
+
+          <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+            Tài khoản
+          </h6>
+          <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="bi bi-person-circle"></i>
+                Admin (Bạn)
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <i class="bi bi-box-arrow-left"></i>
+                Đăng xuất
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- CỘT 2: NỘI DUNG CHÍNH (HEADER + CONTENT) -->
+      <main class="col-lg-10 col-md-9 ms-sm-auto px-0">
+        <!-- HEADER (MENU NGANG) -->
+        <nav class="navbar navbar-expand-lg admin-top-nav shadow-sm sticky-top"> <!-- Thêm sticky-top cho header luôn -->
+          <div class="container-fluid">
+            <!-- Nút bật/tắt sidebar trên Mobile -->
+            <button
+              class="navbar-toggler d-md-none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#admin-sidebar"
+              aria-controls="admin-sidebar"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- SỬA: Đổi 'ms-md-4' (lệch) thành 'mx-auto' (ngay chính giữa) -->
+            <form class="d-flex mx-auto" style="width: 400px">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Tìm kiếm đơn hàng, sản phẩm..."
+                aria-label="Search"
+              />
+            </form>
+
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="bi bi-person-circle fs-4 align-middle"></i>
+                  <span class="d-none d-lg-inline align-middle ms-1"
+                    >Chào, Admin</span
+                  >
+                </a>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="navbarDropdown"
+                >
+                  <li>
+                    <a class="dropdown-item" href="index.html"
+                      >Xem trang khách</a
+                    >
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a class="dropdown-item" href="index.html">Đăng xuất</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- NỘI DUNG CHÍNH CỦA TRANG -->
+        <div class="admin-content">
+          <!-- Tiêu đề trang -->
+          <h1 class="h3 mb-4 fw-bold" style="color: var(--color-text-main)">
+            Tổng quan
+          </h1>
+          
+          <!-- 1. CÁC THẺ KPI -->
+          <div class="row g-4 mb-4">
+            <!-- Thẻ 1: Doanh thu -->
+            <div class="col-lg-3 col-md-6">
+              <div class="kpi-card d-flex align-items-center">
+                 <div class="flex-grow-1">
+                   <div class="card-title">DOANH THU HÔM NAY</div>
+                   <div class="card-value">12.500.000đ</div>
+                 </div>
+                 <i class="bi bi-cash-stack card-icon"></i>
+              </div>
+            </div>
+            <!-- Thẻ 2: Đơn hàng mới -->
+             <div class="col-lg-3 col-md-6">
+              <div class="kpi-card d-flex align-items-center">
+                 <div class="flex-grow-1">
+                   <div class="card-title">ĐƠN HÀNG MỚI</div>
+                   <div class="card-value">32</div>
+                 </div>
+                 <i class="bi bi-receipt card-icon"></i>
+              </div>
+            </div>
+            <!-- Thẻ 3: Khách hàng mới -->
+             <div class="col-lg-3 col-md-6">
+              <div class="kpi-card d-flex align-items-center">
+                 <div class="flex-grow-1">
+                   <div class="card-title">KHÁCH HÀNG MỚI</div>
+                   <div class="card-value">15</div>
+                 </div>
+                 <i class="bi bi-person-plus card-icon"></i>
+              </div>
+            </div>
+            <!-- Thẻ 4: Bán chạy nhất -->
+             <div class="col-lg-3 col-md-6">
+              <div class="kpi-card d-flex align-items-center">
+                 <div class="flex-grow-1">
+                   <div class="card-title">BÁN CHẠY NHẤT</div>
+                   <div class="card-value fs-5" style="color: var(--color-text-main);">Áo Khoác Nam Dù</div>
+                 </div>
+                 <i class="bi bi-star card-icon"></i>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 2. BIỂU ĐỒ (2 CỘT) -->
+          <div class="row g-4 mb-4">
+            <!-- Cột trái: Biểu đồ đường (Doanh thu) -->
+            <div class="col-lg-8">
+              <div class="dashboard-chart-card">
+                 <h5 class="mb-3">Doanh thu 30 ngày qua</h5>
+                 <!-- Canvas cho biểu đồ đường -->
+                 <canvas id="revenueChart"></canvas>
+              </div>
+            </div>
+            <!-- Cột phải: Biểu đồ tròn (Tỉ lệ) -->
+            <div class="col-lg-4">
+               <div class="dashboard-chart-card">
+                 <h5 class="mb-3">Tỉ lệ danh mục</h5>
+                 <!-- Canvas cho biểu đồ tròn -->
+                 <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 3. BẢNG (2 CỘT) -->
+           <div class="row g-4">
+             <!-- Cột trái: Đơn hàng mới nhất -->
+             <div class="col-lg-8">
+               <div class="dashboard-chart-card">
+                  <h5 class="mb-3">Đơn hàng mới nhất</h5>
+                  <table class="table table-hover align-middle admin-table">
+                    <thead class="table-light">
+                      <tr>
+                        <th scope="col">Mã Đơn</th>
+                        <th scope="col">Khách hàng</th>
+                        <th scope="col">Tổng tiền</th>
+                        <th scope="col">Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>#FS1005</strong></td>
+                        <td>Nguyễn Văn A</td>
+                        <td>1.750.000đ</td>
+                        <td><span class="badge bg-success">Đã giao</span></td>
+                      </tr>
+                       <tr>
+                        <td><strong>#FS1004</strong></td>
+                        <td>Trần Thị B</td>
+                        <td>1.200.000đ</td>
+                        <td><span class="badge bg-warning text-dark">Đang xử lý</span></td>
+                      </tr>
+                       <tr>
+                        <td><strong>#FS1003</strong></td>
+                        <td>Lê Văn C</td>
+                        <td>380.000đ</td>
+                        <td><span class="badge bg-danger">Đã hủy</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong>#FS1002</strong></td>
+                        <td>Phạm Thị D</td>
+                        <td>850.000đ</td>
+                        <td><span class="badge bg-primary">Đang giao</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+               </div>
+             </div>
+             <!-- Cột phải: Sản phẩm bán chạy -->
+             <div class="col-lg-4">
+                <div class="dashboard-chart-card">
+                  <h5 class="mb-3">Sản phẩm bán chạy</h5>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                      <span class="product-info">1. Áo Khoác Nam Dù</span>
+                      <span class="product-sales">120 sp</span>
+                    </li>
+                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                      <span class="product-info">2. Giày Ultraboost Adidas</span>
+                      <span class="product-sales">95 sp</span>
+                    </li>
+                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                      <span class="product-info">3. Quần Jeans Levi's 511</span>
+                      <span class="product-sales">88 sp</span>
+                    </li>
+                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                      <span class="product-info">4. Áo Hoodie Nike</span>
+                      <span class="product-sales">70 sp</span>
+                    </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                      <span class="product-info">5. Áo Sơ Mi Oxford</span>
+                      <span class="product-sales">55 sp</span>
+                    </li>
+                  </ul>
+               </div>
+             </div>
+           </div>
+          
+
+        </div>
+        <!-- end .admin-content -->
+      </main>
+      <!-- end .col-lg-10 -->
+    </div>
+    <!-- end .d-flex -->
+
+    <!-- Bootstrap 5.3.2 JS Bundle CDN -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      xintegrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    
+    <!-- JS Demo cho Biểu đồ -->
+    <script>
+      // Dữ liệu mẫu
+      const revenueData = {
+        labels: ["Ngày 1", "Ngày 5", "Ngày 10", "Ngày 15", "Ngày 20", "Ngày 25", "Ngày 30"],
+        datasets: [{
+          label: 'Doanh thu (VNĐ)',
+          data: [1500000, 2000000, 1800000, 3000000, 2500000, 4000000, 4500000],
+          fill: true,
+          backgroundColor: 'rgba(155, 146, 38, 0.1)',
+          borderColor: 'rgb(155, 146, 38)',
+          tension: 0.1
+        }]
+      };
+      
+      const categoryData = {
+        labels: [
+          'Áo Khoác',
+          'Quần Jeans',
+          'Giày',
+          'Áo Hoodie'
+        ],
+        datasets: [{
+          label: 'Tỉ lệ danh mục',
+          data: [40, 25, 20, 15],
+          backgroundColor: [
+            'rgb(155, 146, 38)', // Accent
+            'rgb(135, 126, 33)', // Accent Darker
+            '#6c757d', // Xám
+            '#adb5bd'  // Xám nhạt
+          ],
+          hoverOffset: 4
+        }]
+      };
+
+      // Khởi tạo biểu đồ khi DOM đã sẵn sàng
+      document.addEventListener("DOMContentLoaded", function() {
+        // Biểu đồ đường
+        const ctxRevenue = document.getElementById('revenueChart');
+        if (ctxRevenue) {
+          new Chart(ctxRevenue, {
+            type: 'line',
+            data: revenueData,
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'top',
+                },
+                title: {
+                  display: false,
+                  text: 'Doanh thu 30 ngày qua'
+                }
+              }
+            }
+          });
+        }
+        
+        // Biểu đồ tròn
+        const ctxCategory = document.getElementById('categoryChart');
+        if (ctxCategory) {
+           new Chart(ctxCategory, {
+            type: 'doughnut',
+            data: categoryData,
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                },
+                title: {
+                  display: false,
+                  text: 'Tỉ lệ danh mục'
+                }
+              }
+            }
+          });
+        }
+      });
+    </script>
+    
+  </body>
+</html>
