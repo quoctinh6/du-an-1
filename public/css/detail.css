@@ -6,13 +6,13 @@
       --accent: #000f38;
       --radius: 4px;
       --cta-gradient: linear-gradient(90deg,#22d3ee 0%,#374af7 100%);
-      --font-family: 'Montserrat', Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
     }
 
     body {
       background: var(--background);
       color: var(--foreground);
-      font-family: 'Montserrat', Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
       /* 1. Chỉ định URL của hình ảnh */
