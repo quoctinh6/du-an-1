@@ -66,7 +66,7 @@ class Products
 
   function getVariantsById_product(int $id_product)
   {
-    $sql = 'SELECT variants.*, sizes.name sizes, colors.name colors
+    $sql = 'SELECT variants.*, sizes.name sizes, colors.name colors, sizes.price price
     FROM variants 
     INNER JOIN sizes ON variants.size_id = sizes.id
     INNER JOIN colors ON variants.color_id = colors.id
