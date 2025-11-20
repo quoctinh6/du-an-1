@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 19, 2025 at 08:29 AM
+-- Generation Time: Nov 19, 2025 at 06:14 AM
 -- Server version: 8.0.44
 -- PHP Version: 8.3.16
 
@@ -406,7 +406,6 @@ INSERT INTO `shipping_methods` (`id`, `name`, `created_at`, `updated_at`) VALUES
 CREATE TABLE `sizes` (
   `id` bigint NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` decimal(15,2) NOT NULL DEFAULT '0.00',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -415,10 +414,10 @@ CREATE TABLE `sizes` (
 -- Dumping data for table `sizes`
 --
 
-INSERT INTO `sizes` (`id`, `name`, `price`, `created_at`, `updated_at`) VALUES
-(1, '40mm', 3500000.00, '2025-11-10 08:29:50', '2025-11-19 08:23:38'),
-(2, '42mm', 3500000.00, '2025-11-10 08:29:50', '2025-11-19 08:23:38'),
-(3, '38mm', 280000000.00, '2025-11-10 08:29:50', '2025-11-19 08:23:38');
+INSERT INTO `sizes` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, '40mm', '2025-11-10 08:29:50', '2025-11-10 08:29:50'),
+(2, '42mm', '2025-11-10 08:29:50', '2025-11-10 08:29:50'),
+(3, '38mm', '2025-11-10 08:29:50', '2025-11-10 08:29:50');
 
 -- --------------------------------------------------------
 
@@ -455,6 +454,7 @@ CREATE TABLE `variants` (
   `product_id` bigint NOT NULL,
   `color_id` bigint DEFAULT NULL,
   `size_id` bigint DEFAULT NULL,
+  `price` decimal(15,2) NOT NULL,
   `quantity` int NOT NULL DEFAULT '0',
   `sku` varchar(100) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
@@ -466,49 +466,39 @@ CREATE TABLE `variants` (
 -- Dumping data for table `variants`
 --
 
-INSERT INTO `variants` (`id`, `product_id`, `color_id`, `size_id`, `quantity`, `sku`, `image`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 0, 'TEST', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-1-750x500.jpg', '2025-11-14 12:13:58', '2025-11-19 08:02:09'),
-(6, 1, 1, 2, 50, 'CS-GA2100-BLK-40', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-3-750x500.jpg', '2025-11-10 09:00:19', '2025-11-18 14:11:29'),
-(7, 2, 5, 2, 5, 'RLX-DJ41-BLU-42', 'product-2-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(8, 3, 1, 2, 30, 'SK-SRPD-BLK-42', 'product-3-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(9, 3, 5, 2, 20, 'SK-SRPD-BLU-42', 'product-3-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(10, 4, 4, 3, 3, 'RLX-LDJ28-RG-38', 'product-4-rosegold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(11, 5, 3, 3, 100, 'CS-A168WG-GLD-38', 'product-5-gold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(12, 6, 5, 1, 15, 'SK-SSA343-BLU-40', 'product-6-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(13, 7, 1, 1, 75, 'CS-DW5600-BLK-40', 'product-7-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(14, 8, 1, 1, 2, 'RLX-SUBD-BLK-40', 'product-8-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(15, 9, 1, 2, 10, 'SK-SNE541-BLK-42', 'product-9-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(16, 10, 6, 3, 40, 'CS-BGD560-WHT-38', 'product-10-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(17, 11, 6, 1, 1, 'RLX-DAYTONA-WHT-40', 'product-11-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(18, 12, 1, 2, 0, 'SK-SKX007-BLK-42', 'product-12-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(19, 13, 2, 2, 25, 'CS-EFR526-SLV-42', 'product-13-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(20, 14, 5, 3, 3, 'RLX-OP36-BLU-38', 'product-14-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(21, 15, 1, 2, 5, 'SK-ASTRON-BLK-42', 'product-15-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(22, 16, 6, 1, 200, 'CS-MTPV006-WHT-40', 'product-16-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(23, 17, 5, 1, 1, 'RLX-GMTII-PEPSI-40', 'product-17-pepsi.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(24, 18, 1, 1, 18, 'SK-SRPE51-GRY-40', 'product-18-grey.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(25, 19, 1, 3, 500, 'CS-F91W-BLK-38', 'product-19-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(26, 20, 2, 2, 1, 'RLX-SKYD-SLV-42', 'product-20-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(27, 21, 6, 1, 4, 'GS-SBGA211-WHT-40', 'product-21-snowflake.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(28, 22, 1, 2, 12, 'CS-PRG600-BLK-42', 'product-22-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(29, 23, 1, 3, 3, 'RLX-EXP36-BLK-38', 'product-23-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(30, 24, 5, 3, 7, 'SK-SARB017-GRN-38', 'product-24-green.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(31, 25, 2, 2, 8, 'CS-GMWB5000-SLV-42', 'product-25-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(32, 26, 1, 1, 2, 'RLX-MILGAUSS-BLK-40', 'product-26-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(33, 27, 1, 2, 22, 'SK-SSK001-BLK-42', 'product-27-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(34, 28, 4, 3, 14, 'CS-SHEEN-RG-38', 'product-28-rosegold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(35, 29, 1, 1, 1, 'RLX-YM40-BLK-40', 'product-29-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(36, 30, 2, 3, 6, 'KS-SBPK-SLV-38', 'product-30-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(37, 1, 2, 1, 20, 'CS-GA2100-SLV-40', 'https://images.unsplash.com/photo-1456086272139-7d6b1047d1a2?auto=format&fit=crop&w=600&q=80', '2025-11-19 07:55:44', '2025-11-19 07:55:44'),
-(38, 1, 2, 2, 15, 'CS-GA2100-SLV-42', 'https://images.unsplash.com/photo-1456086272139-7d6b1047d1a2?auto=format&fit=crop&w=600&q=80', '2025-11-19 07:55:44', '2025-11-19 08:02:09'),
-(39, 1, 3, 1, 10, 'CS-GA2100-GLD-40', 'https://images.unsplash.com/photo-1518732714860-80c9b84c93fb?auto=format&fit=crop&w=600&q=80', '2025-11-19 07:55:44', '2025-11-19 07:55:44'),
-(40, 1, 3, 2, 8, 'CS-GA2100-GLD-42', 'https://images.unsplash.com/photo-1518732714860-80c9b84c93fb?auto=format&fit=crop&w=600&q=80', '2025-11-19 07:55:44', '2025-11-19 08:02:09'),
-(41, 1, 5, 1, 30, 'CS-GA2100-BLU-40', 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80', '2025-11-19 07:55:44', '2025-11-19 07:55:44'),
-(42, 1, 5, 2, 25, 'CS-GA2100-BLU-42', 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80', '2025-11-19 07:55:44', '2025-11-19 08:02:09'),
-(43, 1, 6, 3, 50, 'CS-GA2100-WHT-38', 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=400&q=80', '2025-11-19 07:55:44', '2025-11-19 07:55:44'),
-(44, 1, 6, 1, 40, 'CS-GA2100-WHT-40', 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=400&q=80', '2025-11-19 07:55:44', '2025-11-19 08:02:09'),
-(45, 1, 4, 3, 12, 'CS-GA2100-RGLD-38', 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=400&q=80', '2025-11-19 07:55:44', '2025-11-19 07:55:44'),
-(46, 1, 1, 3, 60, 'CS-GA2100-BLK-38', 'https://images.unsplash.com/photo-1518551937742-d7cb8f32a9b8?auto=format&fit=crop&w=600&q=80', '2025-11-19 07:55:44', '2025-11-19 08:02:09');
+INSERT INTO `variants` (`id`, `product_id`, `color_id`, `size_id`, `price`, `quantity`, `sku`, `image`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 500000000.00, 0, 'TEST', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-1-750x500.jpg', '2025-11-14 12:13:58', '2025-11-18 14:10:48'),
+(6, 1, 1, 2, 3500000.00, 50, 'CS-GA2100-BLK-40', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-3-750x500.jpg', '2025-11-10 09:00:19', '2025-11-18 14:11:29'),
+(7, 2, 5, 2, 350000000.00, 5, 'RLX-DJ41-BLU-42', 'product-2-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(8, 3, 1, 2, 7000000.00, 30, 'SK-SRPD-BLK-42', 'product-3-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(9, 3, 5, 2, 7200000.00, 20, 'SK-SRPD-BLU-42', 'product-3-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(10, 4, 4, 3, 280000000.00, 3, 'RLX-LDJ28-RG-38', 'product-4-rosegold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(11, 5, 3, 3, 1500000.00, 100, 'CS-A168WG-GLD-38', 'product-5-gold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(12, 6, 5, 1, 12500000.00, 15, 'SK-SSA343-BLU-40', 'product-6-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(13, 7, 1, 1, 1200000.00, 75, 'CS-DW5600-BLK-40', 'product-7-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(14, 8, 1, 1, 380000000.00, 2, 'RLX-SUBD-BLK-40', 'product-8-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(15, 9, 1, 2, 10500000.00, 10, 'SK-SNE541-BLK-42', 'product-9-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(16, 10, 6, 3, 1800000.00, 40, 'CS-BGD560-WHT-38', 'product-10-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(17, 11, 6, 1, 750000000.00, 1, 'RLX-DAYTONA-WHT-40', 'product-11-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(18, 12, 1, 2, 15000000.00, 0, 'SK-SKX007-BLK-42', 'product-12-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(19, 13, 2, 2, 2500000.00, 25, 'CS-EFR526-SLV-42', 'product-13-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(20, 14, 5, 3, 180000000.00, 3, 'RLX-OP36-BLU-38', 'product-14-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(21, 15, 1, 2, 45000000.00, 5, 'SK-ASTRON-BLK-42', 'product-15-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(22, 16, 6, 1, 800000.00, 200, 'CS-MTPV006-WHT-40', 'product-16-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(23, 17, 5, 1, 550000000.00, 1, 'RLX-GMTII-PEPSI-40', 'product-17-pepsi.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(24, 18, 1, 1, 8800000.00, 18, 'SK-SRPE51-GRY-40', 'product-18-grey.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(25, 19, 1, 3, 500000.00, 500, 'CS-F91W-BLK-38', 'product-19-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(26, 20, 2, 2, 1100000000.00, 1, 'RLX-SKYD-SLV-42', 'product-20-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(27, 21, 6, 1, 150000000.00, 4, 'GS-SBGA211-WHT-40', 'product-21-snowflake.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(28, 22, 1, 2, 9000000.00, 12, 'CS-PRG600-BLK-42', 'product-22-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(29, 23, 1, 3, 210000000.00, 3, 'RLX-EXP36-BLK-38', 'product-23-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(30, 24, 5, 3, 20000000.00, 7, 'SK-SARB017-GRN-38', 'product-24-green.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(31, 25, 2, 2, 13000000.00, 8, 'CS-GMWB5000-SLV-42', 'product-25-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(32, 26, 1, 1, 240000000.00, 2, 'RLX-MILGAUSS-BLK-40', 'product-26-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(33, 27, 1, 2, 13500000.00, 22, 'SK-SSK001-BLK-42', 'product-27-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(34, 28, 4, 3, 4200000.00, 14, 'CS-SHEEN-RG-38', 'product-28-rosegold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(35, 29, 1, 1, 820000000.00, 1, 'RLX-YM40-BLK-40', 'product-29-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(36, 30, 2, 3, 40000000.00, 6, 'KS-SBPK-SLV-38', 'product-30-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19');
 
 --
 -- Indexes for dumped tables
@@ -772,7 +762,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `variants`
 --
 ALTER TABLE `variants`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- Constraints for dumped tables
