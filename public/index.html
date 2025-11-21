@@ -16,19 +16,34 @@
   <!-- Header with Glassmorphism -->
   <header>
     <div class="header-container">
-      <div class="logo" style="color: white;"><a href="index.html"></a>Zero Watch</div>
+      <!-- Cột 1: Logo (Left) -->
+      <div class="logo" style="color: white;"><a href="index.html">Zero Watch</a></div> 
+      
+      <!-- Cột 2: Menu Navigation (Center) -->
       <nav>
-        <a href="index.html" class="active">Trang chủ</a>
-        <a href="favorites.html">Yêu thích</a>
-        <a href="cart.html">Giỏ <span>(1)</span></a>
+        <!-- Chỉnh sửa lại các menu link cho phù hợp hơn với bố cục 3 cột ở giữa -->
         <a href="product.html">Sản phẩm</a>
-        <a href="login.html">Đăng nhập</a>
+        <a href="favorites.html">Yêu thích</a>
+        <a href="login.html">Liên hệ</a>
       </nav>
+      
+      <!-- Cột 3: Actions (Right) -->
+      <div class="header-actions">
+        <!-- Nút Giỏ hàng (Có icon và viền) -->
+        <a href="cart.html" class="action-button cart-btn">
+          <!-- Icon Giỏ hàng (dùng SVG) -->
+          <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z"/></svg>
+          Giỏ hàng <span style="font-weight: 400;">(1)</span>
+        </a>
+        
+        <!-- Nút Đăng nhập (Không viền) -->
+        <a href="login.html" class="action-button login-btn">Đăng nhập</a>
+      </div>
     </div>
   </header>
-
+<main class="scroll-container">
   <!-- Main Banner Full Screen -->
-  <section class="main-banner">
+  <section class="main-banner ">
     <video autoplay muted loop playsinline src="./image/videobanner.mp4"></video>
     <div class="banner-content">
       
@@ -42,7 +57,7 @@
   </section>
       
   <!-- Section 1: Product Grid -->
-  <section class="section scroll-reveal" id="featured-products">
+  <section class="section scroll-reveal " id="featured-products">
     <div class="section-header">
       <div class="section-title">Đồng hồ bán chạy</div>
       <button class="section-action">>></button>
@@ -116,7 +131,7 @@
   </section>
 
   <!-- Section 2: Trending Grid -->
-  <section class="section scroll-reveal" id="trending-products">
+  <section class="section scroll-reveal " id="trending-products">
     <div class="section-header">
       <div class="section-title">Đồng hồ cơ</div>
       <button class="section-action">>></button>
@@ -183,14 +198,14 @@
   </section>
 
   <!-- Section Banner (Full Width) -->
-  <div class="mid-banner scroll-reveal dark-filter">
+  <div class="mid-banner scroll-reveal dark-filter ">
     <img src="./image/mainbanner1.png" alt="">
     <div class="mid-banner-title">Đồng Hồ Rolex</div>
     <button class="mid-banner-glass-button">Xem ngay</button>
   </div>
 
   <!-- Section 3: Best Collection Grid -->
-  <section class="section scroll-reveal" id="best-collection">
+  <section class="section scroll-reveal " id="best-collection">
     <div class="section-header">
       <div class="section-title">Đồng hồ mới</div>
       <button class="section-action">>></button>
@@ -257,7 +272,7 @@
   </section>
 
   <!-- Section 4: Blog/Article Grid -->
-  <section class="section scroll-reveal" id="watch-blog">
+  <section class="section scroll-reveal " id="watch-blog">
     <div class="section-header">
       <div class="section-title">Tin tức</div>
     </div>
@@ -308,7 +323,7 @@
   </section>
 
   <!-- Footer -->
-  <footer>
+  <footer class="">
     <div class="footer-row">
         <div class="footer-col">
             <div class="footer-col-head">ZERO WATCH</div>
@@ -345,6 +360,7 @@
         Phản ánh chức năng và dịch vụ qua zalo: 0938447728
     </div>
 </footer>
+
 <link rel="stylesheet" href="./js/script.js">
 <script src="./js/script.js"></script>
 </body>
