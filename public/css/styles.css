@@ -1,5 +1,4 @@
-
-    :root {
+:root {
       --bg: #000000;
       --accent: #000f38;
       --highlight: #ff9e00;
@@ -249,20 +248,227 @@
   background: linear-gradient(120deg, #7b2cbf 82%, #ff9e00 120%);
 } */
  
-    /* Product Grid */
+    /* Product Grid (General) */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: var(--grid-gap);
       margin-bottom: 0.1rem;
     }
+
+    /* ********************************************************** */
+    /* NEW PRODUCT PAGE LAYOUT STYLES */
+    /* ********************************************************** */
+
+    .product-page-section {
+        padding-top: 82px; /* Dành chỗ cho header cố định */
+        margin-top: 2rem; /* Giảm margin top để nội dung sát header hơn */
+    }
+
+    .product-page-container {
+        display: grid;
+        /* 1 cột cho sidebar (25%) và 3 cột cho sản phẩm (75%) */
+        grid-template-columns: 1fr 3fr; 
+        gap: var(--grid-gap);
+        align-items: start; /* Giúp sidebar không bị kéo dài hết chiều cao */
+    }
+
+    /* Sidebar/Filter Column */
+    .filter-sidebar {
+        background: #111111; /* Nền tối hơn so với nền body */
+        border-radius: var(--border-radius);
+        padding: 2.5rem 1.8rem;
+        position: sticky; /* Giữ bộ lọc cố định khi cuộn */
+        top: 100px; /* Cách header 100px */
+    }
+
+    .filter-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--highlight);
+        margin-bottom: 2rem;
+        border-bottom: 2px solid rgba(255, 158, 0, 0.1);
+        padding-bottom: 0.8rem;
+    }
+
+    .filter-group {
+        margin-bottom: 2rem;
+    }
+
+    .filter-group-title {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: var(--white);
+        margin-bottom: 1rem;
+    }
+    
+    /* Checkbox & Price Range Styling (Tương tự Dark Mode) */
+    .filter-checkbox-container {
+      display: block;
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      user-select: none;
+      color: #ccc;
+    }
+
+    .filter-checkbox-container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 18px;
+      width: 18px;
+      background-color: #333;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .filter-checkbox-container:hover input ~ .checkmark {
+      background-color: #555;
+    }
+
+    .filter-checkbox-container input:checked ~ .checkmark {
+      background-color: var(--highlight);
+    }
+
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    .filter-checkbox-container input:checked ~ .checkmark:after {
+      display: block;
+    }
+
+    .filter-checkbox-container .checkmark:after {
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid var(--bg);
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+    
+    /* Price Slider */
+    .price-range {
+        padding: 0.5rem 0.2rem 0 0.2rem;
+    }
+    .price-slider {
+        width: 100%;
+        height: 8px;
+        background: #333;
+        outline: none;
+        opacity: 0.7;
+        transition: opacity .2s;
+        -webkit-appearance: none;
+        appearance: none;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+    }
+
+    .price-slider:hover {
+        opacity: 1;
+    }
+
+    .price-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--highlight);
+        cursor: pointer;
+        box-shadow: 0 0 5px rgba(255, 158, 0, 0.5);
+    }
+
+    .price-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--highlight);
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 0 5px rgba(255, 158, 0, 0.5);
+    }
+
+    .price-values {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        color: #aaa;
+    }
+    #current-price-display {
+        color: var(--white);
+        font-weight: 600;
+    }
+    
+    /* Select Dropdown */
+    .filter-select {
+        width: 100%;
+        padding: 10px 15px;
+        border-radius: var(--border-radius);
+        background: #222;
+        color: var(--white);
+        border: 1px solid #444;
+        font-size: 1rem;
+        appearance: none; /* Bỏ giao diện mặc định */
+        cursor: pointer;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .filter-select:hover {
+        border-color: var(--highlight);
+    }
+    
+    /* Product Result Grid (3 cột) */
+    .product-result-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 cột sản phẩm */
+        gap: var(--grid-gap);
+        margin-bottom: 0.1rem;
+    }
+
+
+    /* ********************************************************** */
+    /* OLD STYLES (Kept for consistency) */
+    /* ********************************************************** */
+
     @media(max-width:1200px) {
       .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .product-page-container {
+        /* Chuyển từ 1/3 sang 1/1 khi màn hình nhỏ */
+        grid-template-columns: 1fr; 
+      }
+      .product-result-grid {
+        /* 2 cột sản phẩm khi màn hình nhỏ */
+        grid-template-columns: repeat(2, 1fr); 
+      }
+      .filter-sidebar {
+        position: relative; /* Bỏ sticky trên mobile */
+        top: 0;
+      }
     }
     @media(max-width:800px) {
       .product-grid { grid-template-columns: 1fr; }
       .section { width: 98vw; }
       .header-container, .footer-row { width: 98vw;}
+
+      .product-result-grid {
+        /* 1 cột sản phẩm trên mobile */
+        grid-template-columns: 1fr; 
+      }
     }
 
     .product-box {
@@ -666,4 +872,3 @@
     opacity: 1; 
     transform: translateY(0); /* Trở về vị trí gốc */
 }
-
