@@ -23,7 +23,7 @@
                 <a href="<?= BASE_URL ?>" class="active">Trang chủ</a>
                 <a href="favorites.html">Yêu thích</a>
                 <a href="cart.html">Giỏ <span>(1)</span></a>
-                <a href="contact.html">Liên hệ</a>
+                <a href="product.html">Sản phẩm</a>
                 <a href="login.html">Đăng nhập</a>
             </nav>
         </div>
