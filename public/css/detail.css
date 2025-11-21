@@ -16,19 +16,19 @@
       margin: 0;
       padding: 0;
       /* 1. Chỉ định URL của hình ảnh */
-    background-image: url('../image/bg2.png');
+    background-image: url('../image/background01.png');
     
     /* 2. Đảm bảo hình ảnh không lặp lại */
     background-repeat: no-repeat; 
     
     /* 3. Căn giữa hình ảnh */
-    /* background-position: center;  */
+    background-position: center; 
     
     /* 4. Quan trọng: Đảm bảo hình ảnh che phủ toàn bộ viewport */
-    /* background-size: cover;  */
+    background-size: cover; 
     
     /* 5. Giữ hình ảnh cố định khi cuộn */
-    /* background-attachment: fixed; */
+    background-attachment: fixed;
     }
     .product-section {
       width: 90vw;
