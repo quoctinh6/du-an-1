@@ -1,218 +1,329 @@
+:root {
+  --bg: #000000;
+  --accent: #000f38;
+  --highlight: #ff9e00;
+  --white: #f8f7fa;
+  --glass: rgba(0, 0, 0, 0.2);
+  --border-radius: 8px;
+  --section-width: 90vw;
+  --grid-gap: 2.4rem;
+}
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+/* Glassmorphic Header - GIỮ NGUYÊN MÀU SẮC GỐC */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 82px;
+  z-index: 120;
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 5px 24px 2px rgba(15, 15, 15, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0px;
+}
 
-    :root {
-      --bg: #000000;
-      --accent: #000f38;
-      --highlight: #ff9e00;
-      --white: #f8f7fa;
-      --glass: rgba(0,0,0, 0.20);
-      --border-radius: 8px;
-      --section-width: 90vw;
-      --grid-gap: 2.4rem;
-    }
-    body {
-      background: var(--bg);
-      color: var(--white);
-      font-family: 'Montserrat', Arial, sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    /* Glassmorphic Header */
-    header {
-      position: fixed;
-      top: 0; left: 0; width: 100vw;
-      height: 82px;
-      z-index: 120;
-      background: var(--glass);
-      backdrop-filter: blur(20px) saturate(180%);
-      box-shadow: 0 5px 24px 2px rgba(15, 15, 15, 0.14);
-      /* border-bottom: 2px solid rgba(218, 218, 218, 0.11); */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 0px;
-    }
-    .header-container {
-      width: var(--section-width);
-      max-width: 1650px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      color: var(--highlight);
-      user-select: none;
-    }
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 2.2rem;
-    }
-    nav a {
-      font-size: 1.07rem;
-      letter-spacing: 0.5px;
-      opacity: 0.93;
-      padding: 4px 0px;
-      transition: color 0.15s;
-      font-weight: 600;
-      border-bottom: 2px solid transparent;
-    }
-    nav a:hover,
-    nav a.active {
-      color: var(--white);
-      border-bottom: 3px solid var(--white);
-      border-radius: 4px;
-    }
+/* ÁP DỤNG CSS GRID 3 CỘT */
+.header-container {
+  width: var(--section-width);
+  max-width: 1650px;
 
-    /* Main Banner */
-    .main-banner {
-      width: 100vw;
-      height: 100vh;
-      background: linear-gradient(120deg, rgba(0, 0, 0, 0.2) 0%,rgba(0,0,0,0.3) 100%); /*url('videobanner.mp4') no-repeat center/cover*/
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      padding-top: 82px; /* header space */
-      box-sizing: border-box;
-      overflow: hidden;
-    }
-    .main-banner video {
-    position: absolute; 
-    top: 0; 
-    left: 0;
-    width: 100%; 
-    height: 100%;
-    object-fit: cover; 
-    z-index: -1;
-    }
-    .banner-content {
-      text-align: center;
-      padding-top: 0px;
-      max-width: 690px;
-      margin: 0 auto;
-      /* background: rgba(8,5,14, 0.25); */
-      /* border-radius: calc(var(--border-radius) * 2);
+  /* CHUYỂN SANG CSS GRID */
+  display: grid;
+  /* Chia làm 3 cột: 1fr (Logo - Left) - auto (Menu - Center) - 1fr (Actions - Right) */
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--highlight);
+  user-select: none;
+  /* Đảm bảo logo nằm sát trái trong cột 1 */
+  justify-self: start;
+}
+.logo a {
+  color: inherit;
+  text-decoration: none;
+  user-select: none;
+}
+
+/* Điều chỉnh Menu Navigation (Cột 2) */
+nav {
+  /* Menu nằm chính giữa trong cột 2 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2rem;
+}
+
+nav a {
+  font-size: 1.07rem;
+  letter-spacing: 0.5px;
+  opacity: 0.93;
+  padding: 4px 0px;
+  transition: color 0.15s;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+}
+nav a:hover,
+nav a.active {
+  color: var(--white);
+  border-bottom: 3px solid var(--white);
+  border-radius: 4px;
+}
+
+/* Thêm style cho phần Action (Giỏ hàng/Đăng nhập) (Cột 3) */
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Căn phải nội dung trong cột 3 */
+  gap: 1.5rem;
+}
+
+.action-button {
+  background: transparent;
+  border: none;
+  color: var(--white);
+  font-size: 1.07rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: var(--border-radius);
+  transition: background 0.15s;
+}
+
+/* Style cho nút 'Giỏ hàng' có viền */
+.cart-btn {
+  border: 1px solid var(--white);
+  background: transparent;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--border-radius);
+}
+
+.cart-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Style cho nút 'Đăng nhập' không viền */
+/* .login-btn {
+       
+    } */
+.login-btn:hover {
+  text-decoration: underline;
+}
+
+/* ********************************************************** */
+/* RESPONSIVE CHO HEADER */
+/* ********************************************************** */
+@media (max-width: 1050px) {
+  /* Trên tablet, giữ 3 cột với tỉ lệ cân bằng hơn */
+  .header-container {
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Trên mobile, chuyển sang 2 cột: Logo (trái) và Actions (phải). Ẩn Menu chính giữa */
+  .header-container {
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+  }
+  nav {
+    /* Ẩn menu chính giữa trên mobile */
+    display: none;
+  }
+  .logo {
+    font-size: 1.4rem;
+  }
+  .header-actions {
+    gap: 0.8rem;
+  }
+  .action-button {
+    font-size: 0.95rem;
+    padding: 6px 10px;
+  }
+  .cart-btn {
+    padding: 6px 12px;
+  }
+}
+
+/* Main Banner */
+.main-banner {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    120deg,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  ); /*url('videobanner.mp4') no-repeat center/cover*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-top: 82px; /* header space */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.main-banner video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+.banner-content {
+  text-align: center;
+  padding-top: 0px;
+  max-width: 690px;
+  margin: 0 auto;
+  /* background: rgba(8,5,14, 0.25); */
+  /* border-radius: calc(var(--border-radius) * 2);
       backdrop-filter: blur(8px);
       animation: fadeIn 1.4s; */
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(42px);}
-      to { opacity: 1; transform: none;}
-    }
-    .banner-title {
-      font-size: 3.4rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-      color: var(--white);
-      text-shadow: 0 6px 38px var(--accent);
-    }
-    .banner-desc {
-      font-size: 1.3rem;
-      line-height: 1.7;
-      color: #eae1f5;
-      margin-bottom: 2.7rem;
-    }
-    .banner-cta {
-      background: var(--accent);
-      color: var(--white);
-      border: none;
-      padding: 1rem 2.5rem;
-      font-size: 1.25rem;
-      font-weight: 600;
-      border-radius: var(--border-radius);
-      box-shadow: 0 8px 42px 2px var(--accent), 0 1px 8px 0px var(--highlight) inset;
-      cursor: pointer;
-      transition: box-shadow 0.17s, background 0.17s;
-    }
-    .banner-cta:hover {
-      box-shadow: 0 12px 40px 7px var(--highlight), 0 0px 0px 0px var(--accent);
-      background: var(--highlight);
-      color: var(--bg);
-    }
-    .glass-button {
-    /* Thiết lập cơ bản */
-    position: relative;
-    padding: 15px 30px;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.3s ease;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(42px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.banner-title {
+  font-size: 3.4rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--white);
+  text-shadow: 0 6px 38px var(--accent);
+}
+.banner-desc {
+  font-size: 1.3rem;
+  line-height: 1.7;
+  color: #eae1f5;
+  margin-bottom: 2.7rem;
+}
+.banner-cta {
+  background: var(--accent);
+  color: var(--white);
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 42px 2px var(--accent), 0 1px 8px 0px var(--highlight) inset;
+  cursor: pointer;
+  transition: box-shadow 0.17s, background 0.17s;
+}
+.banner-cta:hover {
+  box-shadow: 0 12px 40px 7px var(--highlight), 0 0px 0px 0px var(--accent);
+  background: var(--highlight);
+  color: var(--bg);
+}
+.glass-button {
+  /* Thiết lập cơ bản */
+  position: relative;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 
-    /* 1. HIỆU ỨNG KÍNH (GLASS MORPHISM) */
-    
-    /* Màu nền hơi trắng và trong suốt (opacity: 0.15) */
-    background: rgba(119, 119, 119, 0.15); 
-    
-    /* Tạo hiệu ứng mờ (Blur) - Phần quan trọng nhất */
-    backdrop-filter: blur(8px); 
-    -webkit-backdrop-filter: blur(8px); /* Hỗ trợ trình duyệt Safari */
-    
-    /* Đường viền mỏng và trong suốt */
-    border: 1px solid rgba(70, 70, 70, 0.2); 
-    
-    /* Màu chữ và Shadow nhẹ bên trong */
-    color: white; 
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  /* 1. HIỆU ỨNG KÍNH (GLASS MORPHISM) */
 
-    /* 2. HIỆU ỨNG NỔI (SHADOW) */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  /* Màu nền hơi trắng và trong suốt (opacity: 0.15) */
+  background: rgba(119, 119, 119, 0.15);
+
+  /* Tạo hiệu ứng mờ (Blur) - Phần quan trọng nhất */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* Hỗ trợ trình duyệt Safari */
+
+  /* Đường viền mỏng và trong suốt */
+  border: 1px solid rgba(70, 70, 70, 0.2);
+
+  /* Màu chữ và Shadow nhẹ bên trong */
+  color: white;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
+  /* 2. HIỆU ỨNG NỔI (SHADOW) */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 /* Hiệu ứng khi di chuột (Hover) */
 .glass-button:hover {
-    background: rgba(255, 255, 255, 0.25); /* Tăng độ sáng khi hover */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.25); /* Tăng độ sáng khi hover */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
 /* Hiệu ứng khi click (Active) */
 .glass-button:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
-    /* SECTIONS - Unified Wrapper */
-    .section {
-      width: var(--section-width);
-      max-width: 1450px;
-      margin: 0 auto;
-      margin-top: 5.5rem;
-      margin-bottom: 8rem;
-    }
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2.2rem;
-    }
-    .section-title {
-      font-size: 2.1rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 1.2px;
-      user-select: none;
-    }
-    .section-action {
-      background: var(--white);
-      color: var(--bg);
-      border: none;
-      border-radius: calc(var(--border-radius) * 0.8);
-      padding: 0.7rem 1.5rem;
-      font-size: 1.15rem;
-      font-weight: 600;
-      display: flex;
-      gap: 0.7rem;
-      align-items: center;
-      cursor: pointer;
-      /* box-shadow: 0 6px 12px 0px var(--bg); */
-      /* transition: background 0.17s, color 0.17s; */
-    }
+/* SECTIONS - Unified Wrapper */
+.section {
+  width: var(--section-width);
+  max-width: 1450px;
+  margin: 0 auto;
+  margin-top: 5.5rem;
+  margin-bottom: 8rem;
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.2rem;
+}
+.section-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 1.2px;
+  user-select: none;
+}
+.section-action {
+  background: var(--white);
+  color: var(--bg);
+  border: none;
+  border-radius: calc(var(--border-radius) * 0.8);
+  padding: 0.7rem 1.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  cursor: pointer;
+  /* box-shadow: 0 6px 12px 0px var(--bg); */
+  /* transition: background 0.17s, color 0.17s; */
+}
 
-    .section-action {
+.section-action {
   background: linear-gradient(120deg, var(--bg) 75%, #000000 100%);
   color: #f8f7fa;
   border: none;
@@ -222,21 +333,18 @@
   font-weight: 700;
   letter-spacing: 1px;
   cursor: pointer;
-  box-shadow:
-    0 2px 4px 0 #000000aa,   /* strong outer shadow for elevation */
-    0 2px 6px 1px #04000077,  /* base shadow for depth */
-    0 0.2em 0 #ffffffcc;      /*highlight orange rim at bottom */
-  transition:
-    box-shadow 0.15s cubic-bezier(.68,-0.55,.27,1.55),
-    transform 0.16s cubic-bezier(.68,-0.55,.27,1.55),
-    background 0.18s;
+  box-shadow: 0 2px 4px 0 #000000aa,
+    /* strong outer shadow for elevation */ 0 2px 6px 1px #04000077,
+    /* base shadow for depth */ 0 0.2em 0 #ffffffcc; /*highlight orange rim at bottom */
+  transition: box-shadow 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+    transform 0.16s cubic-bezier(0.68, -0.55, 0.27, 1.55), background 0.18s;
   will-change: box-shadow, transform, background;
   outline: none;
 }
-.section-action:hover, .section-action:focus {
-  box-shadow:
-    0 4px 16px 2px #ffffff30, /* brighter highlight on hover */
-    0 2px 10px 1px #2c71bfaa,
+.section-action:hover,
+.section-action:focus {
+  box-shadow: 0 4px 16px 2px #ffffff30,
+    /* brighter highlight on hover */ 0 2px 10px 1px #2c71bfaa,
     0 0.2em 0 rgb(241, 241, 241);
   transform: translateY(-2px) scale(1.03);
   background: linear-gradient(114deg, #000000 50%, #2e009b 100%);
@@ -248,432 +356,659 @@
   transform: translateY(1px) scale(0.99);
   background: linear-gradient(120deg, #7b2cbf 82%, #ff9e00 120%);
 } */
- 
-    /* Product Grid */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--grid-gap);
-      margin-bottom: 0.1rem;
-    }
-    @media(max-width:1200px) {
-      .product-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media(max-width:800px) {
-      .product-grid { grid-template-columns: 1fr; }
-      .section { width: 98vw; }
-      .header-container, .footer-row { width: 98vw;}
-    }
 
-    .product-box {
-      background: black;
-      border-radius: var(--border-radius);
-      /* box-shadow: 0 8px 32px 10px #4242421c, 0 2px 14px 0px #96969633; */
-      padding: 0 0 1.2rem 0;
-      position: relative;
-      overflow: hidden;
-      display: flex; flex-direction: column; align-items: center;
-    cursor: pointer;
-      /* Transition dài hơn một chút để chuyển động có vẻ "cố ý" hơn */
-    transition: 
-        box-shadow 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), /* Dùng cubic-bezier để tạo hiệu ứng đàn hồi/giật */
-        transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55),
-        border 0.2s ease;
-    }
-    .product-box:hover {
-    transform: 
-        scale(1.03) /* Phóng to nhẹ */
-        translateY(-10px) /* Nhấc lên cao */
-        translateZ(15px); /* Đẩy về phía người xem (cần perspective trên container cha nếu muốn 3D thực sự) */
-    border: 1px solid rgba(255, 255, 255, 0.4); 
-    
-    box-shadow: 
-        /* Bóng sáng tập trung ở phía trên */
-        0 8px 12px 0 rgba(255, 255, 255, 0.1),
-        /* Bóng tối sắc nét phía dưới */
-        0 15px 30px -10px rgba(0, 0, 0, 0.8);
-    }
-    .product-img {
-      width: 100%;
-      height: 260px;
-      object-fit: cover;
-      margin-bottom: 1.2rem;
-    }
-    .product-name {
-      font-size: 1.24rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 0.37rem;
-      text-align: center;
-    }
-    .product-price {
-      font-size: 1rem;
-      color: #ddd0ea;
-      margin-bottom: 1.13rem;
-      text-align: center;
-      opacity: 1;
-    }
-    .product-old-price{
-      padding-right: 1rem;
-      text-decoration: line-through;
-      font-size: 1rem;
-      color: #ddd0ea;
-      margin-bottom: 1.13rem;
-      text-align: center;
-      opacity: 0.70;
-    }
-    .buy-btn {
-    /* Cấu trúc cơ bản */
-    padding: 12px 25px;
-    font-size: 1em;
-    font-weight: 600;
-    cursor: pointer;
-    border-radius: 8px; 
-    letter-spacing: 0.5px;
-    
-    /* 1. HIỆU ỨNG TRONG SUỐT VÀ KHÔNG VIỀN */
-    
-    background-color: transparent; 
-    border: none; /* Bỏ viền hoàn toàn */
-    color: #ffffff; /* Màu chữ sáng */
-    
-    /* Transition mượt mà */
-    transition: all 0.3s ease-in-out;
-    }
-    .buy-btn:hover {
-    /* Đổ màu nền mờ nhẹ (sáng hơn) */
-    background-color: rgba(255, 255, 255, 0.15); 
-    
-    /* Thêm shadow nhẹ để button nổi lên và tạo chiều sâu */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 8px rgba(123, 44, 191, 0.3);
-    }
-
-    /* Hover Icons */
-    .product-icons {
-      position: absolute;
-      top: 12px; right: 14px;
-      display: flex;
-      gap: 0.7rem;
-      z-index: 6;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.26s cubic-bezier(.86,0,.07,1);
-    }
-    .product-box:hover .product-icons {
-      opacity: 1; pointer-events: auto;
-    }
-    .icon-btn {
-      background: var(--white);
-      color: var(--bg);
-      border-radius: 50%;
-      width: 36px; height: 36px;
-      /* border: 2px solid var(--bg); */
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.17rem;
-      box-shadow: 0 2px 10px 2px #7b2cbf2c;
-      cursor: pointer;
-      transition: background 0.18s, color 0.15s, border 0.2s;
-      outline: none;
-      border-style: solid;
-    }
-    .icon-btn:hover {
-      background: var(--bg);
-      color: var(--white);
-      border: 2px solid var(--white);
-    }
-
-    /* Section Banner between 2 and 3 */
-    .mid-banner {
-      width: 100vw; height: 52vh; max-height: 480px;
-      margin: 6rem 0 6rem 0;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 12px 48px 24px var(--bg), 0 0px 0px 0px var(--accent);
-      position: relative;
-      overflow: hidden;
-    }
-    .mid-banner-text {
-      background: rgba(45,16,71,0.27);
-      padding: 2.5rem 4rem;
-      border-radius: calc(var(--border-radius) * 1.4);
-      color: var(--white);
-      font-size: 2.1rem;
-      font-weight: 700;
-      box-shadow: 0 5px 24px 2px var(--accent);
-      text-align: center;
-      backdrop-filter: blur(12px);
-      max-width: 700px;
-      margin: 0 auto;
-      letter-spacing: 1px;
-    }
-    .mid-banner-title {
-      position: absolute;
-      font-size: 3.4rem;
-      font-weight: 800;
-      margin-bottom: 2rem;
-      color: var(--white);
-      text-shadow: 0 6px 38px var(--accent);
-    }
-    .mid-banner img{
-        width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    }
-    .dark-filter img {
-    filter: brightness(0.5) contrast(1.2);    
+/* Product Grid (General) */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gap);
+  margin-bottom: 0.1rem;
 }
-    .mid-banner-glass-button {
-    /* Thiết lập cơ bản */
-    position: absolute;
-    padding: 15px 30px;
-    margin-top: 7rem;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: all 0.3s ease;
 
-    /* 1. HIỆU ỨNG KÍNH (GLASS MORPHISM) */
-    
-    /* Màu nền hơi trắng và trong suốt (opacity: 0.15) */
-    background: rgba(119, 119, 119, 0.15); 
-    
-    /* Tạo hiệu ứng mờ (Blur) - Phần quan trọng nhất */
-    backdrop-filter: blur(8px); 
-    -webkit-backdrop-filter: blur(8px); /* Hỗ trợ trình duyệt Safari */
-    
-    /* Đường viền mỏng và trong suốt */
-    border: 1px solid rgba(70, 70, 70, 0.2); 
-    
-    /* Màu chữ và Shadow nhẹ bên trong */
-    color: white; 
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+/* ********************************************************** */
+/* NEW PRODUCT PAGE LAYOUT STYLES */
+/* ********************************************************** */
 
-    /* 2. HIỆU ỨNG NỔI (SHADOW) */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+.product-page-section {
+  padding-top: 82px; /* Dành chỗ cho header cố định */
+  margin-top: 2rem; /* Giảm margin top để nội dung sát header hơn */
+}
+
+.product-page-container {
+  display: grid;
+  /* 1 cột cho sidebar (25%) và 3 cột cho sản phẩm (75%) */
+  grid-template-columns: 1fr 3fr;
+  gap: var(--grid-gap);
+  align-items: start; /* Giúp sidebar không bị kéo dài hết chiều cao */
+}
+
+/* Sidebar/Filter Column */
+.filter-sidebar {
+  background: #111111; /* Nền tối hơn so với nền body */
+  border-radius: var(--border-radius);
+  padding: 2.5rem 1.8rem;
+  position: sticky; /* Giữ bộ lọc cố định khi cuộn */
+  top: 100px; /* Cách header 100px */
+}
+
+.filter-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--highlight);
+  margin-bottom: 2rem;
+  border-bottom: 2px solid rgba(255, 158, 0, 0.1);
+  padding-bottom: 0.8rem;
+}
+
+.filter-group {
+  margin-bottom: 2rem;
+}
+
+.filter-group-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+/* Checkbox & Price Range Styling (Tương tự Dark Mode) */
+.filter-checkbox-container {
+  display: block;
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  user-select: none;
+  color: #ccc;
+}
+
+.filter-checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #333;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.filter-checkbox-container:hover input ~ .checkmark {
+  background-color: #555;
+}
+
+.filter-checkbox-container input:checked ~ .checkmark {
+  background-color: var(--highlight);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.filter-checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.filter-checkbox-container .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--bg);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Price Slider */
+.price-range {
+  padding: 0.5rem 0.2rem 0 0.2rem;
+}
+.price-slider {
+  width: 100%;
+  height: 8px;
+  background: #333;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.price-slider:hover {
+  opacity: 1;
+}
+
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--highlight);
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(255, 158, 0, 0.5);
+}
+
+.price-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--highlight);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 5px rgba(255, 158, 0, 0.5);
+}
+
+.price-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+#current-price-display {
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Select Dropdown */
+.filter-select {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: var(--border-radius);
+  background: #222;
+  color: var(--white);
+  border: 1px solid #444;
+  font-size: 1rem;
+  appearance: none; /* Bỏ giao diện mặc định */
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.filter-select:hover {
+  border-color: var(--highlight);
+}
+
+/* Product Result Grid (3 cột) */
+.product-result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cột sản phẩm */
+  gap: var(--grid-gap);
+  margin-bottom: 0.1rem;
+}
+
+/* ********************************************************** */
+/* OLD STYLES (Kept for consistency) */
+/* ********************************************************** */
+
+@media (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .product-page-container {
+    /* Chuyển từ 1/3 sang 1/1 khi màn hình nhỏ */
+    grid-template-columns: 1fr;
+  }
+  .product-result-grid {
+    /* 2 cột sản phẩm khi màn hình nhỏ */
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .filter-sidebar {
+    position: relative; /* Bỏ sticky trên mobile */
+    top: 0;
+  }
+}
+@media (max-width: 800px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+  .section {
+    width: 98vw;
+  }
+  .header-container,
+  .footer-row {
+    width: 98vw;
+  }
+
+  .product-result-grid {
+    /* 1 cột sản phẩm trên mobile */
+    grid-template-columns: 1fr;
+  }
+}
+
+.product-box {
+  background: rgb(10, 10, 10);
+  border-radius: var(--border-radius);
+  /* box-shadow: 0 8px 32px 10px #4242421c, 0 2px 14px 0px #96969633; */
+  padding: 0 0 1.2rem 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  /* Transition dài hơn một chút để chuyển động có vẻ "cố ý" hơn */
+  transition: 
+         /* Dùng cubic-bezier để tạo hiệu ứng đàn hồi/giật */ transform
+      0.2s,
+    border 0.2s ease;
+}
+.product-box:hover {
+  transform: 
+        /* scale(1.03) */ translateY(-12px) /* Nhấc lên cao */
+    translateZ(15px); /* Đẩy về phía người xem (cần perspective trên container cha nếu muốn 3D thực sự) */
+  border: 0px solid rgba(255, 255, 255, 0.4);
+}
+.product-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  margin-bottom: 1.2rem;
+}
+.product-name {
+  font-size: 1.24rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.37rem;
+  text-align: center;
+}
+.product-price {
+  font-size: 1rem;
+  color: #ddd0ea;
+  margin-bottom: 1.13rem;
+  text-align: center;
+  opacity: 1;
+}
+.product-old-price {
+  padding-right: 1rem;
+  text-decoration: line-through;
+  font-size: 1rem;
+  color: #ddd0ea;
+  margin-bottom: 1.13rem;
+  text-align: center;
+  opacity: 0.7;
+}
+.buy-btn {
+  /* Cấu trúc cơ bản */
+  padding: 12px 25px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+
+  /* 1. HIỆU ỨNG TRONG SUỐT VÀ KHÔNG VIỀN */
+
+  background-color: transparent;
+  border: none; /* Bỏ viền hoàn toàn */
+  color: #ffffff; /* Màu chữ sáng */
+
+  /* Transition mượt mà */
+  transition: all 0.3s ease-in-out;
+}
+.buy-btn:hover {
+  /* Đổ màu nền mờ nhẹ (sáng hơn) */
+  background-color: rgba(255, 255, 255, 0.15);
+
+  /* Thêm shadow nhẹ để button nổi lên và tạo chiều sâu */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 8px rgba(123, 44, 191, 0.3);
+}
+
+/* Hover Icons */
+.product-icons {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  display: flex;
+  gap: 0.7rem;
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.26s cubic-bezier(0.86, 0, 0.07, 1);
+}
+.product-box:hover .product-icons {
+  opacity: 1;
+  pointer-events: auto;
+}
+.icon-btn {
+  background: var(--white);
+  color: var(--bg);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  /* border: 2px solid var(--bg); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.17rem;
+  box-shadow: 0 2px 10px 2px #7b2cbf2c;
+  cursor: pointer;
+  transition: background 0.18s, color 0.15s, border 0.2s;
+  outline: none;
+  border-style: solid;
+}
+.icon-btn:hover {
+  background: var(--bg);
+  color: var(--white);
+  border: 2px solid var(--white);
+}
+
+/* Section Banner between 2 and 3 */
+.mid-banner {
+  width: 100vw;
+  height: 52vh;
+  max-height: 480px;
+  margin: 6rem 0 6rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 48px 24px var(--bg), 0 0px 0px 0px var(--accent);
+  position: relative;
+  overflow: hidden;
+}
+.mid-banner-text {
+  background: rgba(45, 16, 71, 0.27);
+  padding: 2.5rem 4rem;
+  border-radius: calc(var(--border-radius) * 1.4);
+  color: var(--white);
+  font-size: 2.1rem;
+  font-weight: 700;
+  box-shadow: 0 5px 24px 2px var(--accent);
+  text-align: center;
+  backdrop-filter: blur(12px);
+  max-width: 700px;
+  margin: 0 auto;
+  letter-spacing: 1px;
+}
+.mid-banner-title {
+  position: absolute;
+  font-size: 3.4rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  color: var(--white);
+  text-shadow: 0 6px 38px var(--accent);
+}
+.mid-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.dark-filter img {
+  filter: brightness(0.5) contrast(1.2);
+}
+.mid-banner-glass-button {
+  /* Thiết lập cơ bản */
+  position: absolute;
+  padding: 15px 30px;
+  margin-top: 7rem;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+
+  /* 1. HIỆU ỨNG KÍNH (GLASS MORPHISM) */
+
+  /* Màu nền hơi trắng và trong suốt (opacity: 0.15) */
+  background: rgba(119, 119, 119, 0.15);
+
+  /* Tạo hiệu ứng mờ (Blur) - Phần quan trọng nhất */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* Hỗ trợ trình duyệt Safari */
+
+  /* Đường viền mỏng và trong suốt */
+  border: 1px solid rgba(70, 70, 70, 0.2);
+
+  /* Màu chữ và Shadow nhẹ bên trong */
+  color: white;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
+  /* 2. HIỆU ỨNG NỔI (SHADOW) */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 /* Hiệu ứng khi di chuột (Hover) */
 .mid-banner-glass-button:hover {
-    background: rgba(255, 255, 255, 0.25); /* Tăng độ sáng khi hover */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.25); /* Tăng độ sáng khi hover */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
 /* Hiệu ứng khi click (Active) */
 .mid-banner-glass-button:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
-    /* Blog/Article Section 4 */
-    .blog-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: var(--grid-gap);
-    }
-    @media(max-width:1050px) {
-      .blog-grid { grid-template-columns: 1fr; }
-    }
-    .bloghover:hover {
-    transform: 
-        scale(1.03) /* Phóng to nhẹ */
-        translateY(-10px) /* Nhấc lên cao */
-        translateZ(15px); /* Đẩy về phía người xem (cần perspective trên container cha nếu muốn 3D thực sự) */
-    border: 1px solid rgba(255, 255, 255, 0.4); 
-    
-    box-shadow: 
-        /* Bóng sáng tập trung ở phía trên */
-        0 8px 12px 0 rgba(255, 255, 255, 0.1),
-        /* Bóng tối sắc nét phía dưới */
-        0 15px 30px -10px rgba(0, 0, 0, 0.8);
-    }
-    .blog-feature {
-      background: #111111;
-      border-radius: var(--border-radius);
-      padding: 1.8rem 1.7rem 1.5rem 1.7rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.3rem;
-      margin-bottom: 0;
-    }
-    .blog-feature-img {
-      width: 99%;
-      border-radius: calc(var(--border-radius) * 1.2);
-      object-fit: cover;
-      margin-bottom: 0.8rem;
-    }
-    .blog-feature-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--white);
-      text-align: left;
-      margin: 0.45rem 0 0 0;
-      width: 100%;
-      letter-spacing: 0.7px;
-    }
-    .blog-feature-desc {
-      font-size: 1rem;
-      color: #e4d5fd;
-      opacity: 0.82;
-      text-align: left;
-      width: 100%;
-    }
-    /* Blog vertical list */
-    .blog-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
-      justify-content: flex-start;
-    }
-    .blog-list-item {
-      background: #111111;
-      border-radius: calc(var(--border-radius) * 0.8);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .blog-list-img {
-      width: 100px; height: 100px;
-      object-fit: cover;
-      
-    }
-    .blog-list-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-    .blog-list-title {
-      font-size: 1.04rem;
-      font-weight: 700;
-      color: var(--white);
-    }
-    .blog-list-desc {
-      font-size: 0.91rem;
-      color: #eee0d2;
-      opacity: 0.82;
-    }
-    .blog-list-btn{
-      width: 200px;
-      font-size: 1.04rem;
-    }
-    /* Footer */
-    footer {
-      margin-top: 7rem;
-      background: #070707;
-      padding-top: 3.6rem;
-    }
-    .footer-row {
-      width: var(--section-width);
-      max-width: 1370px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 4rem;
-    }
-    @media(max-width:970px) {
-      .footer-row { grid-template-columns: 1fr; }
-      .footer-col { margin-bottom: 2rem;}
-    }
-    .footer-col-head {
-      font-size: 1.35rem;
-      color: rgb(48, 79, 218);
-      font-weight: 700;
-      letter-spacing: 1px;
-      margin-bottom: 0.6rem;
-      
-    }
-    .footer-col-list {
-      display: flex; flex-direction: column; gap: 0.48rem;
-      margin-bottom: 0.6rem;
-    }
-    .footer-col-link {
-      font-size: 1rem;
-      color: #eee5ef;
-      opacity: 0.77;
-      transition: color 0.13s;
-      padding-left: 0.2rem;
-    }
-    .footer-col-link:hover {
-      color: var(--highlight); opacity: 1;
-    }
-
-    .footer-bottom {
-      background: #ffffff;
-      text-align: center;
-      color: var(--bg);
-      font-size: 0.8rem;
-      padding: 1.5rem 0 1.5rem 0;
-      letter-spacing: 0.8px;
-      margin-top: 3rem;
-      font-weight: 600;
-      box-shadow: 0 4px 28px 0px #7b2cbf42;
-    }
-
-    /* For Accessibility, Focus rings on interactive elements */
-    .icon-btn:focus, .buy-btn:focus, .section-action:focus, .banner-cta:focus {
-      outline: 2px solid var(--white);
-      outline-offset: 2px;
-    }
-
-    /* Scrollbar Styling (Webkit) */
-    ::-webkit-scrollbar {
-      width: 10px;
-      background: #000000;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #353535;
-      border-radius: var(--border-radius);
-    }
-    ::selection {
-      background: var(--accent);
-      color: var(--bg);
-    }
-  /* Định nghĩa chung cho vệt sáng */
-.gradient-blob {
-    position: absolute;
-    /* Dùng filter: blur để làm mờ gradient, tạo hiệu ứng phát sáng */
-    filter: blur(150px); 
-    opacity: 0.5; /* Làm giảm độ sáng, tạo hiệu ứng nhẹ nhàng */
-    border-radius: 50%; /* Tạo hình tròn/oval */
-    z-index: -2; /* Đặt dưới background chính */
+/* Blog/Article Section 4 */
+.blog-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--grid-gap);
+}
+@media (max-width: 1050px) {
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.bloghover:hover {
+  transform: 
+         /* Phóng to nhẹ */
+         /* Nhấc lên cao */ translateZ(
+    15px
+  ); /* Đẩy về phía người xem (cần perspective trên container cha nếu muốn 3D thực sự) */
+  border: 0px solid rgba(255, 255, 255, 0.4);
+}
+.blog-feature {
+  background: #111111;
+  border-radius: var(--border-radius);
+  padding: 0 0 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.3rem;
+  margin-bottom: 0;
+}
+.blog-feature-img {
+  width: 100%;
+  object-fit: cover;
+  margin-bottom: 0.8rem;
+}
+.blog-feature-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  text-align: left;
+  margin: 0.45rem 0 0 0;
+  width: 90%;
+  letter-spacing: 0.7px;
+}
+.blog-feature-desc {
+  font-size: 1rem;
+  color: #e4d5fd;
+  opacity: 0.82;
+  text-align: left;
+  width: 90%;
+}
+/* Blog vertical list */
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  justify-content: flex-start;
+}
+.blog-list-item {
+  background: #111111;
+  border-radius: calc(var(--border-radius) * 0.8);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+.blog-list-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+.blog-list-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.blog-list-title {
+  font-size: 1.04rem;
+  font-weight: 700;
+  color: var(--white);
+}
+.blog-list-desc {
+  font-size: 0.91rem;
+  color: #eee0d2;
+  opacity: 0.82;
+}
+.blog-list-btn {
+  width: 200px;
+  font-size: 1.04rem;
+}
+/* Footer */
+footer {
+  margin-top: 7rem;
+  background: #070707;
+  padding-top: 3.6rem;
+}
+.footer-row {
+  width: var(--section-width);
+  max-width: 1370px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4rem;
+}
+@media (max-width: 970px) {
+  .footer-row {
+    grid-template-columns: 1fr;
+  }
+  .footer-col {
+    margin-bottom: 2rem;
+  }
+}
+.footer-col-head {
+  font-size: 1.35rem;
+  color: rgb(48, 79, 218);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.6rem;
+}
+.footer-col-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.48rem;
+  margin-bottom: 0.6rem;
+}
+.footer-col-link {
+  font-size: 1rem;
+  color: #eee5ef;
+  opacity: 0.77;
+  transition: color 0.13s;
+  padding-left: 0.2rem;
+}
+.footer-col-link:hover {
+  color: var(--highlight);
+  opacity: 1;
 }
 
+.footer-bottom {
+  background: #ffffff;
+  text-align: center;
+  color: var(--bg);
+  font-size: 0.8rem;
+  padding: 1.5rem 0 1.5rem 0;
+  letter-spacing: 0.8px;
+  margin-top: 3rem;
+  font-weight: 600;
+  box-shadow: 0 4px 28px 0px #7b2cbf42;
+}
+
+/* For Accessibility, Focus rings on interactive elements */
+.icon-btn:focus,
+.buy-btn:focus,
+.section-action:focus,
+.banner-cta:focus {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+/* Scrollbar Styling (Webkit) */
+::-webkit-scrollbar {
+  width: 10px;
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: #353535;
+  border-radius: var(--border-radius);
+}
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+/* Định nghĩa chung cho vệt sáng */
 .gradient-blob {
-    position: absolute;
-    filter: blur(150px);
-    opacity: 0.4; 
-    border-radius: 50%;
-    z-index: -2;
-    /* Dùng cùng một animation để tạo chuyển động */
-    animation: subtleMove infinite alternate; 
-    transition: all 0.5s ease-in-out; /* Tạo chuyển đổi mượt mà */
+  position: absolute;
+  /* Dùng filter: blur để làm mờ gradient, tạo hiệu ứng phát sáng */
+  filter: blur(150px);
+  opacity: 0.5; /* Làm giảm độ sáng, tạo hiệu ứng nhẹ nhàng */
+  border-radius: 50%; /* Tạo hình tròn/oval */
+  z-index: -2; /* Đặt dưới background chính */
+}
+
+.gradient-blob {
+  position: absolute;
+  filter: blur(150px);
+  opacity: 0.4;
+  border-radius: 50%;
+  z-index: -2;
+  /* Dùng cùng một animation để tạo chuyển động */
+  animation: subtleMove infinite alternate;
+  transition: all 0.5s ease-in-out; /* Tạo chuyển đổi mượt mà */
 }
 
 /* Chỉ cần 1 keyframe cơ bản */
 @keyframes subtleMove {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(100px, -50px) scale(1.1); } /* Di chuyển nhẹ và lớn hơn 1 chút */
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(100px, -50px) scale(1.1);
+  } /* Di chuyển nhẹ và lớn hơn 1 chút */
 }
 
 /* Trạng thái ẨN ban đầu */
 .scroll-reveal {
-    /* 1. Giữ chỗ: Opacity 0 nhưng vẫn chiếm không gian */
-    opacity: 0; 
-    
-    /* 2. Hiệu ứng: Dịch chuyển xuống dưới 50px */
-    transform: translateY(50px); 
-    
-    /* 3. Chuyển đổi: Thiết lập thời gian chuyển đổi mượt mà */
-    transition: 
-        opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), /* Custom easing cho cảm giác mượt mà */
-        transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* 1. Giữ chỗ: Opacity 0 nhưng vẫn chiếm không gian */
+  opacity: 0;
+
+  /* 2. Hiệu ứng: Dịch chuyển xuống dưới 50px */
+  transform: translateY(50px);
+
+  /* 3. Chuyển đổi: Thiết lập thời gian chuyển đổi mượt mà */
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    /* Custom easing cho cảm giác mượt mà */ transform 0.8s
+      cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Trạng thái HIỆN khi được JS thêm class 'is-visible' */
 .scroll-reveal.is-visible {
-    opacity: 1; 
-    transform: translateY(0); /* Trở về vị trí gốc */
+  opacity: 1;
+  transform: translateY(0); /* Trở về vị trí gốc */
 }
-
