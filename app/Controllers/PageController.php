@@ -27,4 +27,10 @@ class PageCtrl
         // var_dump($productsFeatured);
         include_once 'Views/home.php';
     }
+
+    public function favorites() {
+        $productsFavorits = $this->productModel->getProducts(8, [0]);
+        
+        include_once "Views/products-favorite.php";
+    }
 }

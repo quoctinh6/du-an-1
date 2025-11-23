@@ -13,5 +13,4 @@ class Category
     $sql = "SELECT * FROM categories";
     return $this->db->query($sql);
   }
-  
 }
