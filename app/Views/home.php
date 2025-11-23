@@ -77,23 +77,6 @@ foreach ($productsCollections as $item) {
     </div>
   </section>
 
-<!-- Categories quick links -->
-<?php if (!empty($categories) && is_array($categories)): ?>
-  <section class="section scroll-reveal" id="categories">
-    <div class="section-header">
-      <div class="section-title">Danh mục</div>
-    </div>
-    <div class="categories-row">
-      <?php foreach ($categories as $cat): ?>
-        <a class="category-btn"
-          href="index.php/products/category/<?= htmlspecialchars($cat['id']) ?>"><?= htmlspecialchars($cat['name']) ?></a>
-      <?php endforeach; ?>
-      <a class="category-btn" href="index.php/products/category">Tất cả</a>
-    </div>
-  </section>
-<?php endif; ?>
-
-
 <!-- Section 1: Product Grid -->
 <section class="section scroll-reveal" id="featured-products">
   <div class="section-header">
