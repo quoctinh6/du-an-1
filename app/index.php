@@ -40,7 +40,7 @@ if (empty($parts[0])) {
         $act = $parts[1] ?? 'index';
 
         if (method_exists($ctrl, $act)) {
-            // Lấy các tham số (từ phần tử [2] trở đi)
+            // Lấy các tham số (từ phần tử 2] trở đi)
             $params = array_slice($parts, 2);
 
             // Gọi action với các tham số

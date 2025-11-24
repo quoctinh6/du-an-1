@@ -55,18 +55,27 @@ foreach ($productsCollections as $item) {
 
 ?>
 <!-- Main Banner Full Screen -->
-<section class="main-banner">
-  <video autoplay muted loop playsinline src="<?php echo BASE_URL; ?>Views/assets/image/videobanner.mp4"></video>
-  <div class="banner-content">
-
-    <div class="banner-title">Điều Khiển Thời Gian</div>
-    <!-- <div class="banner-desc">
+<section class="main-banner ">
+    <video autoplay muted loop playsinline src="<?php echo BASE_URL; ?>Views/assets/image/videobanner.mp4"></video>
+    <div class="banner-content">
+      
+      <div class="banner-title">Điều Khiển Thời Gian</div>
+      <!-- <div class="banner-desc">
         Discover luxury and precision—shop our curated collection of modern watches. <br>
         <span style="color:var(--accent);"><b>Flash Sale</b></span>: Exclusive deals, limited-time only!
       </div>-->
-    <button class="glass-button">Xem ngay</button>
-  </div>
-</section>
+      <!-- Thay thế button bằng hộp tìm kiếm Glassmorphism -->
+      <form class="search-box-glass">
+        <input type="text" placeholder="Tìm kiếm" class="search-input">
+        <button type="submit" class="search-button">
+            <!-- Icon kính lúp (Search) -->
+            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19.5l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            
+        </button>
+      </form>
+      
+    </div>
+  </section>
 
 <!-- Categories quick links -->
 <?php if (!empty($categories) && is_array($categories)): ?>
@@ -88,7 +97,7 @@ foreach ($productsCollections as $item) {
 <!-- Section 1: Product Grid -->
 <section class="section scroll-reveal" id="featured-products">
   <div class="section-header">
-    <div class="section-title">Đồng hồ bán chạy</div>
+    <div class="section-title">Đồng hồ nổi bật</div>
     <button class="section-action">>></button>
   </div>
   <div class="product-grid">
@@ -101,7 +110,7 @@ foreach ($productsCollections as $item) {
 <!-- Section 2: Trending Grid -->
 <section class="section scroll-reveal" id="trending-products">
   <div class="section-header">
-    <div class="section-title">Đồng hồ cơ</div>
+    <div class="section-title">Theo kịp thời đại</div>
     <button class="section-action">>></button>
   </div>
   <div class="product-grid">
@@ -120,7 +129,7 @@ foreach ($productsCollections as $item) {
 <!-- Section 3: Best Collection Grid -->
 <section class="section scroll-reveal" id="best-collection">
   <div class="section-header">
-    <div class="section-title">Đồng hồ mới</div>
+    <div class="section-title">Bộ sưu tập mới nhất</div>
     <button class="section-action">>></button>
   </div>
   <div class="product-grid">
