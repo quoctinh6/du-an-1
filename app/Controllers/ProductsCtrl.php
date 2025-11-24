@@ -22,15 +22,41 @@ class ProductsCtrl
     }
     public function detail($slug)
     {
-        // lấy miêu tả cơ bảng của sảng phẩm
-        $product_base = $this->productModel->getProductBySlug($slug);
+            $product_base = $this->productModel->getProductBySlug($slug);
+        
+            // Kiểm tra nếu sản phẩm tồn tại mới lấy biến thể
+            if($product_base) {
+                $product_variants = $this->productModel->getVariantsById_product($product_base['id']);
+                include_once("Views/detail.php");
+            } else {
+                echo "Sản phẩm không tồn tại";
+            }
+        
+    }
 
-        // lấy ảnh,giá của từng biến thể
-        $product_variants = $this->productModel->getVariantsById_product($product_base['id']);
+    function all() {
+        // 1. Lấy tham số từ URL (để bộ lọc bên View hoạt động)
+        $search = $_GET['search'] ?? '';
+        
+        // Xử lý Brand (URL gửi lên string, Model cần array)
+        $brand = [];
+        if (isset($_GET['brand']) && $_GET['brand'] != 'all') {
+            $brand = [$_GET['brand']];
+        }
 
-        // var_dump($product_variants);
+        // Xử lý Category
+        $category = [];
+        if (isset($_GET['category'])) {
+            $category = is_array($_GET['category']) ? $_GET['category'] : [$_GET['category']];
+        }
 
-        include_once("Views/detail.php");
+        // 2. Gọi Model để lấy dữ liệu
+        $products = $this->productModel->getProducts(16, $category, $brand, $search);
+
+        // 3. Lúc này biến $products đã có dữ liệu, include View vào nó mới hiện
+        include_once("Views/products.php");
+
+        include_once("Views/products.php");
     }
 }
 ?>

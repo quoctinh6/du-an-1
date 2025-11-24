@@ -106,3 +106,5 @@ document.addEventListener('DOMContentLoaded', () => {
       let val = Math.min(99, parseInt(qtyInput.value)+1);
       qtyInput.value = val;
     };
+
+    
