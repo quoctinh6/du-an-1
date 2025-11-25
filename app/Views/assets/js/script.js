@@ -53,3 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
     observer.observe(element);
   });
 });
+
+//Chuyển từ Home -> Categories
+
+const MovetoPages = () => {
+  
+}

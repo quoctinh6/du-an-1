@@ -1,282 +1,136 @@
-<!-- Product Page Main Content (Sử dụng lớp .section và .product-page-container) -->
+<?php
+// === HÀM RENDER HTML ===
+function renderProductCard($item) {
+    $base = defined('BASE_URL') ? BASE_URL : '';
+    // Xử lý link: Ưu tiên slug, nếu ko có thì dùng id
+    $slug = $item['slug'] ?? $item['id']; 
+    $detailLink = $base . "product/detail/" . $slug;
+    
+    // Xử lý giá tiền
+    $priceFormat = number_format($item['price'], 0, ',', '.') . ' VND';
+    
+    // SỬA 1: Dùng 'image_url' thay vì 'image' cho khớp với Model
+    $imgSrc = $item['image_url'] ?? 'default.png'; 
+    // Nếu ảnh chưa có đường dẫn đầy đủ (http...), nối thêm base url
+    if (!filter_var($imgSrc, FILTER_VALIDATE_URL)) {
+        $imgSrc = $base . "Views/assets/img/" . $imgSrc; 
+    }
+
+    // Xử lý giá cũ (chỉ hiện khi có giá trị và lớn hơn giá bán)
+    $oldPriceHtml = '';
+    if (!empty($item['old_price']) && $item['old_price'] > $item['price']) {
+        $oldFormat = number_format($item['old_price'], 0, ',', '.');
+        $oldPriceHtml = "<span class=\"product-old-price\">{$oldFormat}</span>";
+    }
+
+    return <<<HTML
+    <div class="product-box">
+        <div class="product-icons">
+            <button class="icon-btn" aria-label="Add to cart">
+                <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
+                </svg>
+            </button>
+            <button class="icon-btn" aria-label="Add to favorites">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+            </button>
+        </div>
+        <a href="{$detailLink}">
+            <img src="{$imgSrc}" alt="{$item['name']}" class="product-img">
+        </a>
+        <div class="product-name">{$item['name']}</div>
+        <div class="product-price">{$oldPriceHtml} {$priceFormat}</div>
+        <button class="buy-btn" onclick="window.location.href='{$detailLink}'">Mua ngay</button>
+    </div>
+HTML;
+}
+?>
+
+<!-- Product Page Main Content -->
 <section class="section product-page-section scroll-reveal" id="product-list">
     <div class="section-header">
         <div class="section-title">Khám Phá Toàn Bộ Bộ Sưu Tập</div>
     </div>
 
-    <!-- Bố cục Grid 4 cột: 1 cột cho bộ lọc, 3 cột cho sản phẩm -->
     <div class="product-page-container">
-
-        <!-- Cột 1: Bộ Lọc (Filter Sidebar) -->
-        <aside class="filter-sidebar">
+        <!-- SỬA 2: Thêm thẻ FORM bao quanh Sidebar để bộ lọc hoạt động -->
+        <form class="filter-sidebar" action="" method="GET">
             <h3 class="filter-title">Bộ Lọc Sản Phẩm</h3>
-
-            <!-- Lọc theo Danh mục -->
+            
+            <!-- 1. Lọc theo Danh mục -->
             <div class="filter-group">
                 <div class="filter-group-title">Danh Mục</div>
-                <label class="filter-checkbox-container">Đồng hồ cơ
-                    <input type="checkbox" checked="checked">
+                <!-- Thêm name="category[]" và value -->
+                <label class="filter-checkbox-container">Đồng hồ cơ (ID:1)
+                    <input type="checkbox" name="category[]" value="1" <?php echo (isset($_GET['category']) && in_array(1, $_GET['category'])) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
-                <label class="filter-checkbox-container">Đồng hồ thông minh
-                    <input type="checkbox">
+                <label class="filter-checkbox-container">Đồng hồ thông minh (ID:2)
+                    <input type="checkbox" name="category[]" value="2" <?php echo (isset($_GET['category']) && in_array(2, $_GET['category'])) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
-                <label class="filter-checkbox-container">Đồng hồ pin
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="filter-checkbox-container">Đồng hồ thể thao
-                    <input type="checkbox">
+                <label class="filter-checkbox-container">Đồng hồ pin (ID:3)
+                    <input type="checkbox" name="category[]" value="3" <?php echo (isset($_GET['category']) && in_array(3, $_GET['category'])) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
             </div>
 
-            <!-- Lọc theo Giá tiền -->
+            <!-- 2. Lọc theo Giá tiền -->
+            <!-- Lưu ý: Range slider cần JS để update số tiền, ở đây làm cơ bản -->
             <div class="filter-group">
                 <div class="filter-group-title">Khoảng Giá (VND)</div>
                 <div class="price-range">
-                    <!-- Thanh trượt giả lập cho giá tiền -->
-                    <input type="range" min="1000000" max="100000000" value="50000000" class="price-slider"
-                        id="price-range-slider">
+                    <input type="range" name="price_max" min="1000000" max="100000000" value="<?php echo $_GET['price_max'] ?? 50000000; ?>" class="price-slider" id="price-range-slider">
                     <div class="price-values">
                         <span>1 Triệu</span>
-                        <span id="current-price-display">50 Triệu</span>
+                        <span id="current-price-display">Max</span>
                         <span>100 Triệu</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Lọc theo Thương hiệu -->
+            <!-- 3. Lọc theo Thương hiệu -->
             <div class="filter-group">
                 <div class="filter-group-title">Thương Hiệu</div>
-                <select class="filter-select">
+                <!-- Thêm name="brand" -->
+                <select class="filter-select" name="brand">
                     <option value="all">Tất cả</option>
-                    <option value="rolex">Rolex</option>
-                    <option value="omega">Omega</option>
-                    <option value="seiko">Seiko</option>
-                    <option value="casio">Casio</option>
+                    <option value="1" <?php echo (isset($_GET['brand']) && $_GET['brand'] == 1) ? 'selected' : ''; ?>>Rolex (ID:1)</option>
+                    <option value="2" <?php echo (isset($_GET['brand']) && $_GET['brand'] == 2) ? 'selected' : ''; ?>>Omega (ID:2)</option>
+                    <option value="3" <?php echo (isset($_GET['brand']) && $_GET['brand'] == 3) ? 'selected' : ''; ?>>Seiko (ID:3)</option>
                 </select>
             </div>
-        </aside>
+            
+            <!-- Input ẩn để giữ từ khóa tìm kiếm nếu có -->
+            <?php if(isset($_GET['search'])): ?>
+                <input type="hidden" name="search" value="<?php echo htmlspecialchars($_GET['search']); ?>">
+            <?php endif; ?>
 
-        <!-- Cột 2-4: Danh sách Sản phẩm (Product Grid) -->
+            <div class="btn">
+                <button type="submit">Áp Dụng Lọc</button>
+                <a href="?remove_filter=1" style="display:block; text-align:center; margin-top:10px; font-size:12px;">Xóa bộ lọc</a>
+            </div>
+        </form>
+
+        <!-- Cột 2-4: Danh sách Sản phẩm -->
         <div class="product-result-grid">
+            <?php 
+            // === DEBUG CHECK: Nếu vẫn lỗi thì bỏ comment dòng dưới để kiểm tra ===
+            // var_dump($products); 
 
-            <!-- SẢN PHẨM MẪU 1 -->
-            <div class="product-box">
-                <div class="product-icons">
-                    <button class="icon-btn" aria-label="Add to cart">
-                        <!-- SVG Cart Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                        </svg>
-                    </button>
-                    <button class="icon-btn" aria-label="Add to favorites">
-                        <!-- SVG Heart Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </button>
-                </div>
-                <a href="detail.html">
-                    <img src="https://images.unsplash.com/photo-1579581177651-7c9808d4b29c?auto=format&fit=crop&w=400&q=80"
-                        alt="Đồng hồ Bạc Cao cấp" link="detail.html" class="product-img">
-                </a>
-                <div class="product-name">Luxury Silver Automatic</div>
-                <div class="product-price"><span class="product-old-price">18000000</span>12000000 VND</div>
-                <button class="buy-btn">Mua ngay</button>
-            </div>
-
-            <!-- SẢN PHẨM MẪU 2 -->
-            <div class="product-box">
-                <div class="product-icons">
-                    <button class="icon-btn" aria-label="Add to cart">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                        </svg>
-                    </button>
-                    <button class="icon-btn" aria-label="Add to favorites">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </button>
-                </div>
-                <a href="detail.html">
-                    <img src="https://images.unsplash.com/photo-1548170295-88d40733d7d7?auto=format&fit=crop&w=400&q=80"
-                        alt="Đồng hồ Dây Da Cổ điển" link="detail.html" class="product-img">
-                </a>
-                <div class="product-name">Classic Leather Strap</div>
-                <div class="product-price">8500000 VND</div>
-                <button class="buy-btn">Mua ngay</button>
-            </div>
-
-            <!-- SẢN PHẨM MẪU 3 -->
-            <div class="product-box">
-                <div class="product-icons">
-                    <button class="icon-btn" aria-label="Add to cart">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                        </svg>
-                    </button>
-                    <button class="icon-btn" aria-label="Add to favorites">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </button>
-                </div>
-                <a href="detail.html">
-                    <img src="https://images.unsplash.com/photo-1549488316-c98b68b75c5e?auto=format&fit=crop&w=400&q=80"
-                        alt="Đồng hồ Thể thao Chronograph" link="detail.html" class="product-img">
-                </a>
-                <div class="product-name">Sport Chronograph Blue</div>
-                <div class="product-price"><span class="product-old-price">15000000</span>10000000 VND</div>
-                <button class="buy-btn">Mua ngay</button>
-            </div>
-
-            <!-- Lặp lại để có thêm sản phẩm -->
-            <div class="product-box">
-                <div class="product-icons">
-                    <button class="icon-btn" aria-label="Add to cart">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                        </svg>
-                    </button>
-                    <button class="icon-btn" aria-label="Add to favorites">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </button>
-                </div>
-                <a href="detail.html">
-                    <img src="https://images.unsplash.com/photo-1587309990886-538740a3394b?auto=format&fit=crop&w=400&q=80"
-                        alt="Đồng hồ Vàng Hồng Sang Trọng" link="detail.html" class="product-img">
-                </a>
-                <div class="product-name">Elegant Rose Gold</div>
-                <div class="product-price">18000000 VND</div>
-                <button class="buy-btn">Mua ngay</button>
-            </div>
-
-            <div class="product-box">
-                <div class="product-icons">
-                    <button class="icon-btn" aria-label="Add to cart">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                        </svg>
-                    </button>
-                    <button class="icon-btn" aria-label="Add to favorites">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </button>
-                </div>
-                <a href="detail.html">
-                    <img src="https://images.unsplash.com/photo-1563868297771-427f71b12b54?auto=format&fit=crop&w=400&q=80"
-                        alt="Đồng hồ Lặn Màu Xanh" link="detail.html" class="product-img">
-                </a>
-                <div class="product-name">Blue Diver Professional</div>
-                <div class="product-price">25000000 VND</div>
-                <button class="buy-btn">Mua ngay</button>
-            </div>
-
-            <div class="product-box">
-                <div class="product-icons">
-                    <button class="icon-btn" aria-label="Add to cart">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                        </svg>
-                    </button>
-                    <button class="icon-btn" aria-label="Add to favorites">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </button>
-                </div>
-                <a href="detail.html">
-                    <img src="https://images.unsplash.com/photo-1542456041-94944d18efc8?auto=format&fit=crop&w=400&q=80"
-                        alt="Đồng hồ Digital Cao cấp" link="detail.html" class="product-img">
-                </a>
-                <div class="product-name">High-Tech Digital Watch</div>
-                <div class="product-price"><span class="product-old-price">6000000</span>4500000 VND</div>
-                <button class="buy-btn">Mua ngay</button>
-            </div>
-
-            <div class="product-box">
-                <div class="product-icons">
-                    <button class="icon-btn" aria-label="Add to cart">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                        </svg>
-                    </button>
-                    <button class="icon-btn" aria-label="Add to favorites">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </button>
-                </div>
-                <a href="detail.html">
-                    <img src="https://images.unsplash.com/photo-1560935398-e7f013d85d77?auto=format&fit=crop&w=400&q=80"
-                        alt="Đồng hồ Lịch Ngày Đơn giản" link="detail.html" class="product-img">
-                </a>
-                <div class="product-name">Minimal Date Watch</div>
-                <div class="product-price">9000000 VND</div>
-                <button class="buy-btn">Mua ngay</button>
-            </div>
-
-            <div class="product-box">
-                <div class="product-icons">
-                    <button class="icon-btn" aria-label="Add to cart">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                        </svg>
-                    </button>
-                    <button class="icon-btn" aria-label="Add to favorites">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </button>
-                </div>
-                <a href="detail.html">
-                    <img src="https://images.unsplash.com/photo-1549299403-12a1f26a7e93?auto=format&fit=crop&w=400&q=80"
-                        alt="Đồng hồ Phi công Dây NATO" link="detail.html" class="product-img">
-                </a>
-                <div class="product-name">Pilot NATO Strap</div>
-                <div class="product-price"><span class="product-old-price">8000000</span>6500000 VND</div>
-                <button class="buy-btn">Mua ngay</button>
-            </div>
-
+            if (!empty($products)) {
+                foreach ($products as $item) {
+                    echo renderProductCard($item);
+                }
+            } else {
+                echo "<div style='grid-column: 1/-1; text-align: center; padding: 50px;'>";
+                echo "<h3>Không tìm thấy sản phẩm nào.</h3>";
+                echo "<p>Vui lòng thử bỏ bớt bộ lọc hoặc kiểm tra lại kết nối Database.</p>";
+                echo "</div>";
+            }
+            ?>
         </div>
     </div>
 </section>
