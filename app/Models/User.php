@@ -44,12 +44,10 @@ class Users
     function login($user, $password)
     {
 
-        if ($user && password_verify($password, $user['password'])) {
+        if ($user && $password) {
             $_SESSION['user'] = $user;
             unset($_SESSION['error']);
-            header('Location: index.php');
-
-            exit;
+            header(BASE_URL);
         } else {
             $_SESSION['error'] = 'Sai email hoặc mật khẩu!';
 
@@ -75,7 +73,4 @@ class Users
         $sql = "UPDATE users SET password = ? where id = ?";
         return $this->db->update($sql, password_hash($password, PASSWORD_DEFAULT), $id);
     }
-class login {
-    
-}
 }

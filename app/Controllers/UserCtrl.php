@@ -11,22 +11,18 @@ class UserCtrl
 
     public function __construct()
     {
+        include_once __DIR__ . "/../Models/User.php";
         $this->UsersModel = new Users();
-        $this->LessonModel = new Lesson();
-        $this->EnrollmeintModel = new Enrollments();
     }
     public function login() {
-        if(($_SERVER['REQUEST_METHOD']) == 'POST') {
-            $username = $_POST['username_or_email'] ?? '';
-            $password = $_POST['password'] ?? '';
+        if($_SERVER['REQUEST_METHOD'] == "POST"){
+            $username = $_POST['username'];
+            $password = $_POST['password'];
 
-            if (($username == 'admin') && ($password == 123)) {
-                header('localtion' . BASE_URL);
-            }else{
-                $error = "Login Failed";
-            }
+            $this->UsersModel->login($username, $password);
         }
-    require_once './app/Views/login.php';
+            
+            include_once 'Views/login.php';
     }
 }
 ?>
