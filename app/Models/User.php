@@ -75,5 +75,7 @@ class Users
         $sql = "UPDATE users SET password = ? where id = ?";
         return $this->db->update($sql, password_hash($password, PASSWORD_DEFAULT), $id);
     }
-
+class login {
+    
+}
 }

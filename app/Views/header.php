@@ -39,7 +39,7 @@
                 </a>
 
                 <!-- Nút Đăng nhập (Không viền) -->
-                <a href="login.html" class="action-button login-btn">Đăng nhập</a>
+                <a href="<?= BASE_URL ?>index.php/login" class="action-button login-btn">Đăng nhập</a>
             </div>
         </div>
     </header>

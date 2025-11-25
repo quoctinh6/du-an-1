@@ -2154,3 +2154,115 @@ footer {
   }
 }/*# sourceMappingURL=style.css.map */
 
+.auth-main {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 70px; /* Bù khoảng cách Header */
+        padding-bottom: 50px;
+        margin: 0;
+        background: var(--bg); /* Giữ background */
+        width: 100%;
+    }
+    .auth-card {
+        width: 100%;
+        max-width: 420px;
+        padding: 3rem 2.5rem;
+        margin: 20px;
+        box-sizing: border-box;
+        
+        /* GLASS MORPHISM */
+        background: var(--glass); /* Sử dụng biến glass từ styles.css */
+        backdrop-filter: blur(15px) saturate(180%);
+        -webkit-backdrop-filter: blur(15px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .auth-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: var(--highlight); /* Màu Vàng */
+        text-shadow: 0 0 10px rgba(255, 158, 0, 0.4);
+    }
+    .auth-subtitle {
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 2rem;
+    }
+    /* Input Group Styles */
+    .input-group {
+        width: 100%;
+        margin-bottom: 1.2rem;
+        text-align: left;
+    }
+    .input-group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        color: var(--white);
+    }
+    .input-group input {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 1rem;
+        color: var(--white);
+        background: rgba(255, 255, 255, 0.1); /* Nền input trong suốt */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        outline: none;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+    }
+    .input-group input:focus {
+        border-color: var(--highlight);
+        box-shadow: 0 0 0 3px rgba(255, 158, 0, 0.3);
+        background: rgba(0, 0, 0, 0.3);
+    }
+    /* Button Styles (dựa trên styles.css) */
+    .auth-button {
+        width: 100%;
+        padding: 14px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        transition: all 0.3s ease;
+        
+        background: var(--highlight); /* Màu Vàng */
+        color: var(--bg); /* Màu Đen */
+        box-shadow: 0 5px 20px rgba(255, 158, 0, 0.4);
+    }
+    .auth-button:hover {
+        background: #ffc266;
+        box-shadow: 0 8px 25px rgba(255, 158, 0, 0.6);
+        transform: translateY(-2px);
+    }
+    .auth-footer-link {
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .auth-footer-link a {
+        color: var(--highlight);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
+    }
+    .auth-footer-link a:hover {
+        color: var(--white);
+        text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+        .auth-card { padding: 2rem 1.5rem; }
+    }
