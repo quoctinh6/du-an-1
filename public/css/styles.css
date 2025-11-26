@@ -449,164 +449,267 @@
     }
 
     /* Sidebar/Filter Column */
-    .filter-sidebar {
-        background: #111111; /* Nền tối hơn so với nền body */
-        border-radius: var(--border-radius);
-        padding: 2.5rem 1.8rem;
-        position: sticky; /* Giữ bộ lọc cố định khi cuộn */
-        top: 100px; /* Cách header 100px */
-    }
+    /* Sidebar Container */
+        .filter-sidebar {
+            background: #111111;
+            border-radius: var(--border-radius);
+            padding: 2.5rem 1.8rem;
+            width: 300px; /* Fixed width for demo */
+            /* position: sticky; 
+            top: 100px; */
+            height: fit-content;
+            border: 1px solid #222; /* Thêm viền nhẹ để tách biệt với nền đen */
+        }
 
-    .filter-title {
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: var(--highlight);
-        margin-bottom: 2rem;
-        border-bottom: 2px solid rgba(255, 158, 0, 0.1);
-        padding-bottom: 0.8rem;
-    }
+        .filter-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--highlight);
+            margin-top: 0;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(255, 158, 0, 0.1);
+            padding-bottom: 0.8rem;
+        }
 
-    .filter-group {
-        margin-bottom: 2rem;
-    }
+        .filter-group {
+            margin-bottom: 2rem;
+        }
 
-    .filter-group-title {
-        font-size: 1.15rem;
-        font-weight: 600;
-        color: var(--white);
-        margin-bottom: 1rem;
-    }
-    
-    /* Checkbox & Price Range Styling (Tương tự Dark Mode) */
-    .filter-checkbox-container {
-      display: block;
-      position: relative;
-      padding-left: 28px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      font-size: 1rem;
-      user-select: none;
-      color: #ccc;
-    }
+        .filter-group-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
 
-    .filter-checkbox-container input {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0;
-      width: 0;
-    }
+        /* Checkbox Styling */
+        .filter-checkbox-container {
+            display: block;
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            user-select: none;
+            color: #ccc;
+            transition: color 0.2s;
+        }
+        .filter-checkbox-container:hover {
+            color: var(--white);
+        }
 
-    .checkmark {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 18px;
-      width: 18px;
-      background-color: #333;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
+        .filter-checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
 
-    .filter-checkbox-container:hover input ~ .checkmark {
-      background-color: #555;
-    }
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 18px;
+            width: 18px;
+            background-color: #333;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
 
-    .filter-checkbox-container input:checked ~ .checkmark {
-      background-color: var(--highlight);
-    }
+        .filter-checkbox-container:hover input ~ .checkmark {
+            background-color: #555;
+        }
 
-    .checkmark:after {
-      content: "";
-      position: absolute;
-      display: none;
-    }
+        .filter-checkbox-container input:checked ~ .checkmark {
+            background-color: var(--highlight);
+        }
 
-    .filter-checkbox-container input:checked ~ .checkmark:after {
-      display: block;
-    }
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
 
-    .filter-checkbox-container .checkmark:after {
-      left: 6px;
-      top: 2px;
-      width: 5px;
-      height: 10px;
-      border: solid var(--bg);
-      border-width: 0 3px 3px 0;
-      transform: rotate(45deg);
-    }
-    
-    /* Price Slider */
-    .price-range {
-        padding: 0.5rem 0.2rem 0 0.2rem;
-    }
-    .price-slider {
-        width: 100%;
-        height: 8px;
-        background: #333;
-        outline: none;
-        opacity: 0.7;
-        transition: opacity .2s;
-        -webkit-appearance: none;
-        appearance: none;
-        margin-bottom: 1rem;
-        border-radius: 4px;
-    }
+        .filter-checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
 
-    .price-slider:hover {
-        opacity: 1;
-    }
+        .filter-checkbox-container .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 4px;
+            height: 9px;
+            border: solid var(--bg);
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
 
-    .price-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: var(--highlight);
-        cursor: pointer;
-        box-shadow: 0 0 5px rgba(255, 158, 0, 0.5);
-    }
+        /* Price Slider */
+        .price-range {
+            padding: 0.5rem 0.2rem 0 0.2rem;
+        }
+        .price-slider {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            outline: none;
+            opacity: 0.8;
+            transition: opacity .2s;
+            -webkit-appearance: none;
+            appearance: none;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
 
-    .price-slider::-moz-range-thumb {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: var(--highlight);
-        cursor: pointer;
-        border: none;
-        box-shadow: 0 0 5px rgba(255, 158, 0, 0.5);
-    }
+        .price-slider:hover {
+            opacity: 1;
+        }
 
-    .price-values {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.9rem;
-        color: #aaa;
-    }
-    #current-price-display {
-        color: var(--white);
-        font-weight: 600;
-    }
-    
-    /* Select Dropdown */
-    .filter-select {
-        width: 100%;
-        padding: 10px 15px;
-        border-radius: var(--border-radius);
-        background: #222;
-        color: var(--white);
-        border: 1px solid #444;
-        font-size: 1rem;
-        appearance: none; /* Bỏ giao diện mặc định */
-        cursor: pointer;
-        outline: none;
-        transition: border-color 0.2s;
-    }
-    .filter-select:hover {
-        border-color: var(--highlight);
-    }
-    
+        .price-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--highlight);
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(255, 158, 0, 0.4);
+        }
+
+        .price-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        #current-price-display {
+            color: var(--highlight);
+            font-weight: 700;
+        }
+
+        /* Select Dropdown */
+        .filter-select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            background: #222;
+            color: var(--white);
+            border: 1px solid #333;
+            font-size: 0.95rem;
+            appearance: none;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        .filter-select:hover, .filter-select:focus {
+            border-color: var(--highlight);
+        }
+
+        /* =========================================
+           CSS MỚI CHO CÁC PHẦN BỔ SUNG
+           ========================================= */
+
+        /* 1. Sidebar Search Box Styles */
+        .sidebar-search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #222;
+            border: 1px solid #333;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+        
+        /* Hiệu ứng focus vào ô tìm kiếm */
+        .sidebar-search-container:focus-within {
+            border-color: var(--highlight);
+            box-shadow: 0 0 0 1px rgba(255, 158, 0, 0.2);
+            background: #2a2a2a;
+        }
+
+        .sidebar-search-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--white);
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .sidebar-search-input::placeholder {
+            color: #666;
+        }
+
+        .sidebar-search-btn {
+            background: transparent;
+            border: none;
+            color: #888;
+            padding: 0 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .sidebar-search-btn:hover {
+            color: var(--highlight);
+        }
+
+        /* 2. Filter Action Buttons Styles */
+        .filter-actions-bottom {
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #333; /* Đường gạch ngang phân cách */
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-filter-action {
+            flex: 1; /* Chia đều 2 nút */
+            padding: 12px;
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        /* Nút Reset (Thứ cấp) */
+        .btn-reset {
+            background: transparent;
+            border: 1px solid #444;
+            color: #aaa;
+        }
+        .btn-reset:hover {
+            border-color: #fff;
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Nút Apply (Chính) */
+        .btn-apply {
+            background: var(--highlight);
+            border: 1px solid var(--highlight);
+            color: var(--bg); /* Chữ đen trên nền cam */
+            font-weight: 700;
+        }
+        .btn-apply:hover {
+            background: #e68e00; /* Màu cam đậm hơn chút khi hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 158, 0, 0.25);
+        }
+        .btn-apply:active {
+            transform: translateY(0);
+        }
+
     /* Product Result Grid (3 cột) */
     .product-result-grid {
         display: grid;

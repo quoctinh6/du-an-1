@@ -53,6 +53,18 @@
       <aside class="filter-sidebar">
         <h3 class="filter-title">Bộ Lọc Sản Phẩm</h3>
         
+        <!-- MỚI: Thanh tìm kiếm -->
+        <div class="filter-group">
+            <div class="filter-group-title">Tìm kiếm</div>
+            <div class="sidebar-search-container">
+                <input type="text" class="sidebar-search-input" placeholder="Tên sản phẩm...">
+                <button class="sidebar-search-btn" title="Tìm kiếm">
+                    <!-- Icon Search (SVG) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+        </div>
+
         <!-- Lọc theo Danh mục -->
         <div class="filter-group">
           <div class="filter-group-title">Danh Mục</div>
@@ -79,11 +91,11 @@
           <div class="filter-group-title">Khoảng Giá (VND)</div>
           <div class="price-range">
             <!-- Thanh trượt giả lập cho giá tiền -->
-            <input type="range" min="1000000" max="100000000" value="50000000" class="price-slider" id="price-range-slider">
+            <input type="range" min="1000000" max="100000000" value="50000000" step="1000000" class="price-slider" id="price-range-slider">
             <div class="price-values">
-              <span>1 Triệu</span>
-              <span id="current-price-display">50 Triệu</span>
-              <span>100 Triệu</span>
+              <span>1 Tr</span>
+              <span id="current-price-display">50 Tr</span>
+              <span>100 Tr</span>
             </div>
           </div>
         </div>
@@ -99,7 +111,14 @@
                 <option value="casio">Casio</option>
             </select>
         </div>
-      </aside>
+
+        <!-- MỚI: Nút thao tác -->
+        <div class="filter-actions-bottom">
+            <button class="btn-filter-action btn-reset">Thiết lập lại</button>
+            <button class="btn-filter-action btn-apply">Áp dụng</button>
+        </div>
+
+    </aside>
 
       <!-- Cột 2-4: Danh sách Sản phẩm (Product Grid) -->
       <div class="product-result-grid">
