@@ -57,3 +57,8 @@ if (empty($parts[0])) {
 }
 
 include_once "./Views/footer.php";
+
+?>
+<Script>
+    cosnt BASE_URL = <?= BASE_URL ?>
+</Script>

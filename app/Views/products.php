@@ -1,19 +1,15 @@
 <?php
 // === HÀM RENDER HTML ===
-function renderProductCard($item) {
-    $base = defined('BASE_URL') ? BASE_URL : '';
-    // Xử lý link: Ưu tiên slug, nếu ko có thì dùng id
-    $slug = $item['slug'] ?? $item['id']; 
-    $detailLink = $base . "product/detail/" . $slug;
-    
-    // Xử lý giá tiền
+function renderProducts($item)
+{
+    $slug = $item['slug'] ?? $item['id'];
+    $detailLink = BASE_URL . "index.php/products/detail/" . $slug;
+
     $priceFormat = number_format($item['price'], 0, ',', '.') . ' VND';
-    
-    // SỬA 1: Dùng 'image_url' thay vì 'image' cho khớp với Model
-    $imgSrc = $item['image_url'] ?? 'default.png'; 
-    // Nếu ảnh chưa có đường dẫn đầy đủ (http...), nối thêm base url
+
+    $imgSrc = $item['image_url'] ?? 'default.png';
     if (!filter_var($imgSrc, FILTER_VALIDATE_URL)) {
-        $imgSrc = $base . "Views/assets/img/" . $imgSrc; 
+        $imgSrc = BASE_URL . "Views/assets/img/" . $imgSrc;
     }
 
     // Xử lý giá cũ (chỉ hiện khi có giá trị và lớn hơn giá bán)
@@ -46,6 +42,20 @@ function renderProductCard($item) {
     </div>
 HTML;
 }
+function renderBrands($item)
+{
+    $currentBrand = $_GET['brand'] ?? '';
+
+    $isSelected = ($currentBrand == $item['id']) ? 'selected' : '';
+
+    return <<<HTML
+    <option value="{$item['id']}" {$isSelected}>
+        {$item['name']}
+    </option>
+HTML;
+}
+
+
 ?>
 
 <!-- Product Page Main Content -->
@@ -56,39 +66,61 @@ HTML;
 
     <div class="product-page-container">
         <!-- SỬA 2: Thêm thẻ FORM bao quanh Sidebar để bộ lọc hoạt động -->
+        <?php
+        // Chuẩn hoá selected categories từ GET: có thể là array hoặc chuỗi '1,2'
+        $selected_categories = [];
+        if (isset($_GET['category'])) {
+            if (is_array($_GET['category'])) {
+                $selected_categories = $_GET['category'];
+            } else {
+                $selected_categories = array_filter(array_map('trim', explode(',', $_GET['category'])));
+            }
+        }
+        ?>
         <form class="filter-sidebar" action="" method="GET">
             <h3 class="filter-title">Bộ Lọc Sản Phẩm</h3>
-            
+            <input type="text" name="search" class="search-input" placeholder="Tìm kiếm sản phẩm..."
+                value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+
             <!-- 1. Lọc theo Danh mục -->
             <div class="filter-group">
                 <div class="filter-group-title">Danh Mục</div>
                 <!-- Thêm name="category[]" và value -->
                 <label class="filter-checkbox-container">Đồng hồ cơ (ID:1)
-                    <input type="checkbox" name="category[]" value="1" <?php echo (isset($_GET['category']) && in_array(1, $_GET['category'])) ? 'checked' : ''; ?>>
+                    <input type="checkbox" class="category-checkbox" value="1" <?php echo in_array('1', $selected_categories) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
                 <label class="filter-checkbox-container">Đồng hồ thông minh (ID:2)
-                    <input type="checkbox" name="category[]" value="2" <?php echo (isset($_GET['category']) && in_array(2, $_GET['category'])) ? 'checked' : ''; ?>>
+                    <input type="checkbox" class="category-checkbox" value="2" <?php echo in_array('2', $selected_categories) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
                 <label class="filter-checkbox-container">Đồng hồ pin (ID:3)
-                    <input type="checkbox" name="category[]" value="3" <?php echo (isset($_GET['category']) && in_array(3, $_GET['category'])) ? 'checked' : ''; ?>>
+                    <input type="checkbox" class="category-checkbox" value="3" <?php echo in_array('3', $selected_categories) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
             </div>
 
             <!-- 2. Lọc theo Giá tiền -->
             <!-- Lưu ý: Range slider cần JS để update số tiền, ở đây làm cơ bản -->
-            <div class="filter-group">
-                <div class="filter-group-title">Khoảng Giá (VND)</div>
-                <div class="price-range">
-                    <input type="range" name="price_max" min="1000000" max="100000000" value="<?php echo $_GET['price_max'] ?? 50000000; ?>" class="price-slider" id="price-range-slider">
-                    <div class="price-values">
-                        <span>1 Triệu</span>
-                        <span id="current-price-display">Max</span>
-                        <span>100 Triệu</span>
+            <div class="filter-group price-filter-modern">
+                <!-- <div class="filter-group-title">Khoảng Giá</div>
+
+                <div class="price-inputs">
+                    <div class="input-wrapper">
+                        <span class="currency">₫</span>
+                        <input type="number" id="price-min-input" value="1000000" min="1000000" class="input-price">
                     </div>
-                </div>
+                    <span class="separator">-</span>
+                    <div class="input-wrapper">
+                        <span class="currency">₫</span>
+                        <input type="number" id="price-max-input" name="price_max"
+                            value="<?php echo $_GET['price_max'] ?? 50000000; ?>" max="100000000" class="input-price">
+                    </div>
+                </div> -->
+
+
+
+
             </div>
 
             <!-- 3. Lọc theo Thương hiệu -->
@@ -97,32 +129,34 @@ HTML;
                 <!-- Thêm name="brand" -->
                 <select class="filter-select" name="brand">
                     <option value="all">Tất cả</option>
-                    <option value="1" <?php echo (isset($_GET['brand']) && $_GET['brand'] == 1) ? 'selected' : ''; ?>>Rolex (ID:1)</option>
-                    <option value="2" <?php echo (isset($_GET['brand']) && $_GET['brand'] == 2) ? 'selected' : ''; ?>>Omega (ID:2)</option>
-                    <option value="3" <?php echo (isset($_GET['brand']) && $_GET['brand'] == 3) ? 'selected' : ''; ?>>Seiko (ID:3)</option>
+                    <?php
+                    if ($brands) {
+                        foreach ($brands as $item) {
+                            echo renderBrands($item);
+                        }
+                    }
+                    ?>
                 </select>
             </div>
-            
-            <!-- Input ẩn để giữ từ khóa tìm kiếm nếu có -->
-            <?php if(isset($_GET['search'])): ?>
-                <input type="hidden" name="search" value="<?php echo htmlspecialchars($_GET['search']); ?>">
-            <?php endif; ?>
+
+            <!-- Hidden consolidated category input (will receive comma-separated ids) -->
+            <input type="hidden" name="category" id="category-hidden" value="">
 
             <div class="btn">
                 <button type="submit">Áp Dụng Lọc</button>
-                <a href="?remove_filter=1" style="display:block; text-align:center; margin-top:10px; font-size:12px;">Xóa bộ lọc</a>
+                <a href="?" style="display:block; text-align:center; margin-top:10px; font-size:12px;">Xóa bộ lọc</a>
             </div>
         </form>
 
         <!-- Cột 2-4: Danh sách Sản phẩm -->
         <div class="product-result-grid">
-            <?php 
+            <?php
             // === DEBUG CHECK: Nếu vẫn lỗi thì bỏ comment dòng dưới để kiểm tra ===
             // var_dump($products); 
-
+            
             if (!empty($products)) {
                 foreach ($products as $item) {
-                    echo renderProductCard($item);
+                    echo renderProducts($item);
                 }
             } else {
                 echo "<div style='grid-column: 1/-1; text-align: center; padding: 50px;'>";
