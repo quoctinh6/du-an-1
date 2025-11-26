@@ -1,8 +1,5 @@
 <?php
-// ... (include, session_start, ...)
-
-// Lấy URL từ biến 'url' (do .htaccess tạo ra)
-// Lấy URL từ PATH_INFO (mọi thứ sau index.php/)
+session_start();
 $url = $_SERVER['PATH_INFO'] ?? '';
 
 // Xóa dấu / ở đầu (nếu có)

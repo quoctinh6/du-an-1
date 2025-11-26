@@ -47,7 +47,8 @@ class Users
         if ($user && $password) {
             $_SESSION['user'] = $user;
             unset($_SESSION['error']);
-            header(BASE_URL);
+            header("Location: " . BASE_URL);
+            exit();
         } else {
             $_SESSION['error'] = 'Sai email hoặc mật khẩu!';
 

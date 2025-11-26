@@ -39,11 +39,12 @@
                 </a>
 
                 <!-- Nút Đăng nhập (Không viền) -->
-                <?php 
-                    if(isset($_SESSION['user'])) {
-                ?>
-                    <a href="<?= BASE_URL ?>index.php/User/login" class="action-button login-btn">Xin chào <?= $_SESSION['user'] ?>?></a>
-                <?php } else{ ?>
+                <?php
+                if (isset($_SESSION['user'])) {
+                    ?>
+                    <a href="<?= BASE_URL ?>index.php/User/login" class="action-button login-btn">Xin chào
+                        <?= $_SESSION['user'] ?></a>
+                <?php } else { ?>
                     <a href="<?= BASE_URL ?>index.php/User/login" class="action-button login-btn">Đăng nhập</a>
                 <?php } ?>
             </div>
