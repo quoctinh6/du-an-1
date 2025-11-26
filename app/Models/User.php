@@ -31,29 +31,57 @@ class Users
         $sql = 'SELECT * FROM users where id in (' . $placeholder . ' ) ';
         return $this->db->queryOne($sql, ...$id);
     }
-    function creUser($name, $email, $phone, $password, $role = 'student')
+    function creUser($name, $email, $phone, $password, $confirm_password)
     {
+        // 1. Validate dữ liệu
+        if (empty($name) || empty($email) || empty($phone) || empty($password)) {
+            $_SESSION['error'] = 'Vui lòng điền đầy đủ thông tin.';
+            header("Location: /register");
+            exit();
+        }
+        if ($password !== $confirm_password) {
+            $_SESSION['error'] = 'Mật khẩu xác nhận không khớp.';
+            header("Location: /register");
+            exit();
+        }
         if (strlen($phone) < 9) {
-            return $_SESSION['error'] = 'Số điện thoại chưa đúng';
+            $_SESSION['error'] = 'Số điện thoại không hợp lệ.';
+            header("Location: /register");
+            exit();
+        }
+        // Kiểm tra email đã tồn tại chưa
+        $existingUser = $this->getByEmail($email);
+        
+        if ($existingUser) {
+            $_SESSION['error'] = 'Email đã được sử dụng.';
+            header("Location: " . BASE_URL . "index.php/User/login");
+            exit();
         }
 
-        $sql = " INSERT INTO `users`( `name`, `email`, `password`, `phone`, `role`) VALUES (?,?,?,?,?) ";
-        return $this->db->query($sql, $name, $email, $password, $phone, $role);
+        // 2. Mã hóa mật khẩu
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = " INSERT INTO `users`( `name`, `email`, `password`, `phone_number`) VALUES (?,?,?,?) ";
+        $this->db->query($sql, $name, $email, $hashed_password, $phone);
+
+        $_SESSION['success'] = 'Đăng ký tài khoản thành công! Vui lòng đăng nhập.';
+        header("Location:" . BASE_URL . "index.php/User/login");
+        exit();
     }
 
-    function login($user, $password)
+    function login($user, $is_password_correct)
     {
 
-        if ($user && $password) {
-            $_SESSION['user'] = $user;
-            unset($_SESSION['error']);
-            header("Location: " . BASE_URL);
-            exit();
-        } else {
-            $_SESSION['error'] = 'Sai email hoặc mật khẩu!';
-
-        }
-
+        if ($user && password_verify($is_password_correct, $user['password'])) {
+    $_SESSION['user'] = $user;
+    unset($_SESSION['error']);
+    var_dump(BASE_URL);
+    // Đã sửa dòng này: Thêm dấu nháy bao quanh đường dẫn và nối chuỗi đúng
+    header("Location: " . BASE_URL) ; 
+    exit();
+} else {
+    $_SESSION['error'] = 'Sai email hoặc mật khẩu!';
+}
     }
 
     function getByEmail($email)

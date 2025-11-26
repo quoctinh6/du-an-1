@@ -22,6 +22,16 @@ if (empty($parts[0])) {
     include_once "./Controllers/PageController.php";
     $ctrl = new PageCtrl();
     $ctrl->home();
+} else if ($parts[0] == 'register') {
+    // TRƯỜNG HỢP ĐẶC BIỆT: ĐĂNG KÝ
+    include_once "./Controllers/UserCtrl.php";
+    $ctrl = new UserCtrl();
+    $ctrl->register();
+} else if ($parts[0] == 'login') {
+    // TRƯỜNG HỢP ĐẶC BIỆT: ĐĂNG NHẬP
+    include_once "./Controllers/UserCtrl.php";
+    $ctrl = new UserCtrl();
+    $ctrl->login();
 } else {
     // TRƯỜNG HỢP 2: CÓ CONTROLLER
 
