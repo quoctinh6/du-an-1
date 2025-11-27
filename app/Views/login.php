@@ -25,7 +25,7 @@
 
         <!-- Link chuyển sang trang Đăng ký -->
         <div class="auth-footer-link">
-            Bạn chưa có tài khoản? <a href="register.html">Đăng ký ngay</a>
+            Bạn chưa có tài khoản? <a href="<?= BASE_URL ?>index.php/User/register">Đăng ký ngay</a>
         </div>
     </div>
 </main>

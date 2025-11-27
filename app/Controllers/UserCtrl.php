@@ -15,14 +15,36 @@ class UserCtrl
         $this->UsersModel = new Users();
     }
     public function login() {
-        if($_SERVER['REQUEST_METHOD'] == "POST"){
-            $username = $_POST['username'];
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $email = $_POST['email'];
             $password = $_POST['password'];
 
-            $this->UsersModel->login($username, $password);
+            $user = $this->UsersModel->getByEmail($email);
+
+            // Kiểm tra user có tồn tại và mật khẩu khớp không
+            if ($user && password_verify($password, $user['password'])) {
+                $this->UsersModel->login($user, true);
+            } else {
+                $this->UsersModel->login(null, false);
+            }
         }
             
-            include_once 'Views/login.php';
+        include_once 'Views/login.php';
+    }
+
+    public function register() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $name = $_POST['name'] ?? '';
+            $email = $_POST['email'] ?? '';
+            $phone = $_POST['phone'] ?? '';
+            $password = $_POST['password'] ?? '';
+            $confirm_password = $_POST['confirm_password'] ?? '';
+
+            // Gọi phương thức creUser từ model
+            $this->UsersModel->creUser($name, $email, $phone, $password, $confirm_password);
+        }
+        // Hiển thị view đăng ký
+        include_once 'Views/register.php';
     }
 }
 ?>
