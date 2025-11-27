@@ -60,5 +60,5 @@ include_once "./Views/footer.php";
 
 ?>
 <Script>
-    cosnt BASE_URL = <?= BASE_URL ?>
+    const BASE_URL = <?= BASE_URL ?>
 </Script>
