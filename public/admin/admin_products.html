@@ -28,8 +28,9 @@
       /* START: CSS KẾ THỪA TỪ TRANG KHÁCH HÀNG */
       /* =================================================== */
       :root {
-        --color-accent: rgb(155, 146, 38);
-        --color-accent-darker: rgb(135, 126, 33);
+        /* CẬP NHẬT MÀU CHỦ ĐẠO MỚI */
+        --color-accent: #000f38;
+        --color-accent-darker: #000826;
         --color-text-main: #1a1a1a;
         --color-text-subtle: #555555;
       }
@@ -122,7 +123,8 @@
       }
       .admin-top-nav .form-control:focus {
         border-color: var(--color-accent-darker);
-        box-shadow: 0 0 0 0.25rem rgba(155, 146, 38, 0.25);
+        /* CẬP NHẬT SHADOW MÀU MỚI */
+        box-shadow: 0 0 0 0.25rem rgba(0, 15, 56, 0.25);
       }
 
       /* Style cho Bảng Sản phẩm */
@@ -172,34 +174,34 @@
             href="index.html"
             class="d-block px-3 mb-3 text-white text-decoration-none fs-5"
           >
-            <i class="bi bi-shop"></i>
-            <span><strong>Fashion</strong>Admin</span>
+            
+            <span><strong>ZEROWATCH</strong>Admin</span>
           </a>
 
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link" href="admin-dashboard.html">
+              <!-- Đây là trang hiện tại, nên có class 'active' -->
+              <a class="nav-link" aria-current="page" href="admin.html">
                 <i class="bi bi-speedometer2"></i>
                 Tổng quan
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin-orders.html">
+              <a class="nav-link" href="admin_orders.html">
                 <i class="bi bi-receipt"></i>
                 Quản lý Đơn hàng
               </a>
             </li>
             <li class="nav-item">
-              <!-- SỬA: ĐÂY LÀ TRANG ACTIVE -->
-              <a class="nav-link active" aria-current="page" href="admin-products.html">
+              <a class="nav-link active" href="admin_products.html">
                 <i class="bi bi-box-seam"></i>
                 Quản lý Sản phẩm
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="admin_account.html">
                 <i class="bi bi-people"></i>
-                Khách hàng
+                Tài khoản
               </a>
             </li>
           </ul>
@@ -209,7 +211,7 @@
           </h6>
           <ul class="nav flex-column mb-2">
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="user_profile.html">
                 <i class="bi bi-person-circle"></i>
                 Admin (Bạn)
               </a>
