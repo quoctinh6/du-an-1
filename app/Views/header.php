@@ -42,8 +42,8 @@
                 <?php
                 if (isset($_SESSION['user'])) {
                     ?>
-                    <a href="<?= BASE_URL ?>index.php/User/login" class="action-button login-btn">Xin chào
-                        <?= $_SESSION['user'] ?></a>
+                    <a href="<?= BASE_URL ?>index.php/User/info" class="action-button login-btn">Xin chào
+                        <?= $_SESSION['user']['name'] ?></a>
                 <?php } else { ?>
                     <a href="<?= BASE_URL ?>index.php/User/login" class="action-button login-btn">Đăng nhập</a>
                 <?php } ?>
