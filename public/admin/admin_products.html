@@ -19,10 +19,10 @@
     />
 
     <!-- SEO Tags -->
-    <title>FashionShop - Quản lý Đơn hàng</title>
+    <title>FashionShop - Quản lý Sản phẩm</title>
     <meta name="description" content="Khu vực quản trị website FashionShop." />
 
-    <!-- Custom CSS (Y hệt các trang admin khác) -->
+    <!-- Custom CSS -->
     <style>
       /* =================================================== */
       /* START: CSS KẾ THỪA TỪ TRANG KHÁCH HÀNG */
@@ -117,31 +117,6 @@
         padding: 2rem;
       }
       
-      /* SỬA: Style cho nhóm nút lọc mới */
-      .filter-buttons .btn {
-        border-radius: 20px; /* Bo tròn như viên thuốc (Pill) cho đẹp */
-        padding: 0.375rem 1rem;
-        font-weight: 500;
-        font-size: 0.9rem;
-      }
-      /* Tinh chỉnh nút outline để nó khớp màu chủ đạo */
-      .filter-buttons .btn-outline-secondary {
-        color: var(--color-text-subtle);
-        border-color: #dee2e6;
-        background-color: #fff;
-      }
-      .filter-buttons .btn-outline-secondary:hover {
-        border-color: var(--color-accent);
-        color: var(--color-accent);
-        /* CẬP NHẬT MÀU NỀN HOVER NHẠT */
-        background-color: rgba(0, 15, 56, 0.05);
-      }
-      .filter-buttons .btn-primary {
-         /* Nút đang active */
-         background-color: var(--color-accent);
-         border-color: var(--color-accent);
-      }
-      
       /* Style cho thanh search "màu nâu" */
       .admin-top-nav .form-control {
         border-color: var(--color-accent);
@@ -152,7 +127,7 @@
         box-shadow: 0 0 0 0.25rem rgba(0, 15, 56, 0.25);
       }
 
-      /* Style cho Bảng */
+      /* Style cho Bảng Sản phẩm */
       .admin-table img {
         width: 60px;
         height: 60px;
@@ -161,11 +136,6 @@
       }
       .admin-table .badge {
         font-size: 0.85rem;
-      }
-      
-      /* 17. CSS MỚI CHO QUẢN LÝ ĐƠN HÀNG */
-      .order-status-select {
-          min-width: 150px;
       }
       
       /* Phân trang (Kế thừa từ categories.html) */
@@ -211,19 +181,19 @@
           <ul class="nav flex-column">
             <li class="nav-item">
               <!-- Đây là trang hiện tại, nên có class 'active' -->
-              <a class="nav-link " aria-current="page" href="admin.html">
+              <a class="nav-link" aria-current="page" href="admin.html">
                 <i class="bi bi-speedometer2"></i>
                 Tổng quan
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="admin_orders.html">
+              <a class="nav-link" href="admin_orders.html">
                 <i class="bi bi-receipt"></i>
                 Quản lý Đơn hàng
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin_products.html">
+              <a class="nav-link active" href="admin_products.html">
                 <i class="bi bi-box-seam"></i>
                 Quản lý Sản phẩm
               </a>
@@ -259,7 +229,7 @@
       <!-- CỘT 2: NỘI DUNG CHÍNH (HEADER + CONTENT) -->
       <main class="col-lg-10 col-md-9 ms-sm-auto px-0">
         <!-- HEADER (MENU NGANG) -->
-        <nav class="navbar navbar-expand-lg admin-top-nav shadow-sm sticky-top"> 
+        <nav class="navbar navbar-expand-lg admin-top-nav shadow-sm sticky-top">
           <div class="container-fluid">
             <!-- Nút bật/tắt sidebar trên Mobile -->
             <button
@@ -279,7 +249,7 @@
               <input
                 class="form-control me-2"
                 type="search"
-                placeholder="Tìm kiếm đơn hàng..."
+                placeholder="Tìm kiếm sản phẩm..."
                 aria-label="Search"
               />
             </form>
@@ -320,142 +290,188 @@
 
         <!-- NỘI DUNG CHÍNH CỦA TRANG -->
         <div class="admin-content">
-          <!-- Tiêu đề trang -->
-           <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
-            <h1 class="h3 mb-0 fw-bold" style="color: var(--color-text-main);">Quản lý Đơn hàng</h1>
-             
-             <!-- SỬA: THAY BỘ LỌC SELECT BẰNG DANH SÁCH NÚT (GIỐNG TRANG CHỦ) -->
-             <div class="d-flex flex-wrap gap-2 filter-buttons">
-                <!-- Nút Tất cả (Đang chọn) -->
-                <button class="btn btn-primary">Tất cả</button>
-                
-                <!-- Các nút lọc khác -->
-                <button class="btn btn-outline-secondary">Đang xử lý</button>
-                <button class="btn btn-outline-secondary">Đang giao</button>
-                <button class="btn btn-outline-secondary">Đã giao</button>
-                <button class="btn btn-outline-secondary">Đã hủy</button>
-                
-                <!-- Nút Xuất Excel (Tách ra 1 chút bằng ms-2) -->
-                <button class="btn btn-outline-dark ms-2">
-                  <i class="bi bi-download me-1"></i> Xuất Excel
-                </button>
-             </div>
-             
+          <!-- Tiêu đề trang & Nút Thêm -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0 fw-bold" style="color: var(--color-text-main)">
+              Quản lý Sản phẩm
+            </h1>
+            <a href="admin-add-product.html" class="btn btn-primary">
+               <i class="bi bi-plus-lg me-2"></i>Thêm sản phẩm mới
+            </a>
           </div>
           
-          <!-- Bảng Đơn Hàng -->
+          <!-- Bộ lọc nhanh (Giống trang Đơn hàng nhưng cho SP) -->
+           <div class="card shadow-sm mb-4">
+             <div class="card-body">
+               <div class="row g-3">
+                 <div class="col-md-4">
+                   <select class="form-select" aria-label="Lọc danh mục">
+                      <option selected>Tất cả danh mục</option>
+                      <option value="1">Áo Khoác</option>
+                      <option value="2">Quần Jeans</option>
+                      <option value="3">Giày</option>
+                    </select>
+                 </div>
+                 <div class="col-md-4">
+                    <select class="form-select" aria-label="Lọc trạng thái">
+                      <option selected>Tất cả trạng thái</option>
+                      <option value="1">Đang bán</option>
+                      <option value="2">Hết hàng</option>
+                      <option value="3">Ẩn</option>
+                    </select>
+                 </div>
+                  <div class="col-md-4 text-md-end">
+                    <button class="btn btn-outline-secondary w-100 w-md-auto">
+                      <i class="bi bi-funnel me-1"></i> Lọc
+                    </button>
+                 </div>
+               </div>
+             </div>
+           </div>
+
+          <!-- Bảng Sản Phẩm -->
           <div class="card shadow-sm">
             <div class="card-body">
-               <div class="table-responsive">
-                  <table class="table table-hover align-middle admin-table">
-                    <thead class="table-light">
-                      <tr>
-                        <th scope="col">Mã đơn</th>
-                        <th scope="col">Khách hàng</th>
-                        <th scope="col">Ngày đặt</th>
-                        <th scope="col">Tổng tiền</th>
-                        <th scope="col">Trạng thái</th>
-                        <th scope="col" class="text-end">Hành động</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                      <!-- Đơn hàng 1 -->
-                      <tr>
-                        <td><strong>#FS1005</strong></td>
-                        <td>
-                          <div>Nguyễn Văn A</div>
-                          <small class="text-muted">0901234567</small>
-                        </td>
-                        <td>15/11/2025</td>
-                        <td>1.750.000đ</td>
-                        <td><span class="badge bg-success">Đã giao</span></td>
-                        <td class="text-end">
-                           <button class="btn btn-sm btn-outline-primary">
-                             <i class="bi bi-eye"></i> Xem
-                           </button>
-                        </td>
-                      </tr>
-                      
-                      <!-- Đơn hàng 2 -->
-                       <tr>
-                        <td><strong>#FS1004</strong></td>
-                        <td>
-                          <div>Trần Thị B</div>
-                          <small class="text-muted">0912345678</small>
-                        </td>
-                        <td>10/11/2025</td>
-                        <td>1.200.000đ</td>
-                        <td><span class="badge bg-warning text-dark">Đang xử lý</span></td>
-                        <td class="text-end">
-                           <button class="btn btn-sm btn-outline-primary">
-                             <i class="bi bi-eye"></i> Xem
-                           </button>
-                        </td>
-                      </tr>
-                      
-                      <!-- Đơn hàng 3 -->
-                       <tr>
-                        <td><strong>#FS1003</strong></td>
-                        <td>
-                          <div>Lê Văn C</div>
-                          <small class="text-muted">0987654321</small>
-                        </td>
-                        <td>05/11/2025</td>
-                        <td>380.000đ</td>
-                        <td><span class="badge bg-danger">Đã hủy</span></td>
-                        <td class="text-end">
-                           <button class="btn btn-sm btn-outline-primary">
-                             <i class="bi bi-eye"></i> Xem
-                           </button>
-                        </td>
-                      </tr>
-                      
-                      <!-- Đơn hàng 4 -->
-                       <tr>
-                        <td><strong>#FS1002</strong></td>
-                        <td>
-                          <div>Phạm Thị D</div>
-                          <small class="text-muted">0933333333</small>
-                        </td>
-                        <td>01/11/2025</td>
-                        <td>850.000đ</td>
-                        <td><span class="badge bg-primary">Đang giao</span></td>
-                        <td class="text-end">
-                           <button class="btn btn-sm btn-outline-primary">
-                             <i class="bi bi-eye"></i> Xem
-                           </button>
-                        </td>
-                      </tr>
-                      
-                      <!-- Đơn hàng 5 -->
-                       <tr>
-                        <td><strong>#FS1001</strong></td>
-                        <td>
-                          <div>Vũ Đình E</div>
-                          <small class="text-muted">0909090909</small>
-                        </td>
-                        <td>28/10/2025</td>
-                        <td>650.000đ</td>
-                        <td><span class="badge bg-success">Đã giao</span></td>
-                        <td class="text-end">
-                           <button class="btn btn-sm btn-outline-primary">
-                             <i class="bi bi-eye"></i> Xem
-                           </button>
-                        </td>
-                      </tr>
-                      
-                    </tbody>
-                  </table>
-               </div>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle admin-table">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col" style="width: 80px;">Ảnh</th>
+                      <th scope="col">Tên sản phẩm</th>
+                      <th scope="col">Giá bán</th>
+                      <th scope="col">Kho</th>
+                      <th scope="col">Trạng thái</th>
+                      <th scope="col" class="text-end">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    <!-- Sản phẩm 1 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1005/100/100" alt="Áo Khoác Nam Dù">
+                      </td>
+                      <td>
+                        <div class="fw-bold">Áo Khoác Nam Dù</div>
+                        <small class="text-muted">Danh mục: Áo Khoác</small>
+                      </td>
+                      <td>450.000đ</td>
+                      <td>150</td>
+                      <td><span class="badge bg-success">Đang bán</span></td>
+                      <td class="text-end">
+                         <a href="admin-edit-product.html" class="btn btn-sm btn-outline-primary me-1">
+                           <i class="bi bi-pencil"></i> Sửa
+                         </a>
+                         <button class="btn btn-sm btn-outline-danger">
+                           <i class="bi bi-trash"></i> Xóa
+                         </button>
+                      </td>
+                    </tr>
+                    
+                    <!-- Sản phẩm 2 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1011/100/100" alt="Quần Jeans Levi's">
+                      </td>
+                      <td>
+                        <div class="fw-bold">Quần Jeans Levi's 511</div>
+                        <small class="text-muted">Danh mục: Quần Jeans</small>
+                      </td>
+                      <td>650.000đ</td>
+                      <td>85</td>
+                      <td><span class="badge bg-success">Đang bán</span></td>
+                      <td class="text-end">
+                         <a href="admin-edit-product.html" class="btn btn-sm btn-outline-primary me-1">
+                           <i class="bi bi-pencil"></i> Sửa
+                         </a>
+                         <button class="btn btn-sm btn-outline-danger">
+                           <i class="bi bi-trash"></i> Xóa
+                         </button>
+                      </td>
+                    </tr>
+                    
+                    <!-- Sản phẩm 3 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1018/100/100" alt="Áo Hoodie Nike">
+                      </td>
+                      <td>
+                        <div class="fw-bold">Áo Hoodie Nike Sportswear</div>
+                        <small class="text-muted">Danh mục: Áo Hoodie</small>
+                      </td>
+                      <td>850.000đ</td>
+                      <td>0</td>
+                      <td><span class="badge bg-danger">Hết hàng</span></td>
+                      <td class="text-end">
+                         <a href="admin-edit-product.html" class="btn btn-sm btn-outline-primary me-1">
+                           <i class="bi bi-pencil"></i> Sửa
+                         </a>
+                         <button class="btn btn-sm btn-outline-danger">
+                           <i class="bi bi-trash"></i> Xóa
+                         </button>
+                      </td>
+                    </tr>
+                    
+                    <!-- Sản phẩm 4 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1025/100/100" alt="Giày Ultraboost">
+                      </td>
+                      <td>
+                        <div class="fw-bold">Giày Ultraboost Adidas</div>
+                        <small class="text-muted">Danh mục: Giày</small>
+                      </td>
+                      <td>1.200.000đ</td>
+                      <td>12</td>
+                      <td><span class="badge bg-warning text-dark">Sắp hết</span></td>
+                      <td class="text-end">
+                         <a href="admin-edit-product.html" class="btn btn-sm btn-outline-primary me-1">
+                           <i class="bi bi-pencil"></i> Sửa
+                         </a>
+                         <button class="btn btn-sm btn-outline-danger">
+                           <i class="bi bi-trash"></i> Xóa
+                         </button>
+                      </td>
+                    </tr>
+                    
+                    <!-- Sản phẩm 5 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1033/100/100" alt="Áo Sơ Mi Oxford">
+                      </td>
+                      <td>
+                        <div class="fw-bold">Áo Sơ Mi Nam Oxford</div>
+                        <small class="text-muted">Danh mục: Áo Sơ Mi</small>
+                      </td>
+                      <td>380.000đ</td>
+                      <td>200</td>
+                      <td><span class="badge bg-secondary">Ẩn</span></td>
+                      <td class="text-end">
+                         <a href="admin-edit-product.html" class="btn btn-sm btn-outline-primary me-1">
+                           <i class="bi bi-pencil"></i> Sửa
+                         </a>
+                         <button class="btn btn-sm btn-outline-danger">
+                           <i class="bi bi-trash"></i> Xóa
+                         </button>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          
+
           <!-- Phân trang -->
-          <nav aria-label="Orders pagination" class="d-flex justify-content-center mt-4">
+          <nav
+            aria-label="Products pagination"
+            class="d-flex justify-content-center mt-4"
+          >
             <ul class="pagination">
               <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trước</a>
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true"
+                  >Trước</a
+                >
               </li>
               <li class="page-item active" aria-current="page">
                 <a class="page-link" href="#">1</a>
@@ -467,7 +483,6 @@
               </li>
             </ul>
           </nav>
-
         </div>
         <!-- end .admin-content -->
       </main>

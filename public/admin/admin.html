@@ -32,8 +32,10 @@
       /* START: CSS KẾ THỪA TỪ TRANG KHÁCH HÀNG */
       /* =================================================== */
       :root {
-        --color-accent: rgb(155, 146, 38);
-        --color-accent-darker: rgb(135, 126, 33);
+        /* Đã thay đổi theo yêu cầu */
+        --color-accent: #000f38; 
+        /* Tạo màu tối hơn một chút cho hiệu ứng hover dựa trên #000f38 */
+        --color-accent-darker: #000826; 
         --color-text-main: #1a1a1a;
         --color-text-subtle: #555555;
       }
@@ -100,7 +102,7 @@
       /* Style cho link "active" (đang ở trang đó) */
       #admin-sidebar .nav-link.active {
         color: #ffffff;
-        background-color: var(--color-accent); /* Dùng màu vàng */
+        background-color: var(--color-accent); /* Dùng màu chủ đạo mới */
       }
 
       #admin-sidebar .sidebar-heading {
@@ -120,13 +122,14 @@
         padding: 2rem;
       }
       
-      /* Style cho thanh search "màu nâu" */
+      /* Style cho thanh search */
       .admin-top-nav .form-control {
         border-color: var(--color-accent);
       }
       .admin-top-nav .form-control:focus {
         border-color: var(--color-accent-darker);
-        box-shadow: 0 0 0 0.25rem rgba(155, 146, 38, 0.25);
+        /* Đã cập nhật shadow sang hệ màu #000f38 (R0 G15 B56) */
+        box-shadow: 0 0 0 0.25rem rgba(0, 15, 56, 0.25);
       }
 
       /* Style cho Bảng */
@@ -208,34 +211,34 @@
             href="index.html"
             class="d-block px-3 mb-3 text-white text-decoration-none fs-5"
           >
-            <i class="bi bi-shop"></i>
-            <span><strong>Fashion</strong>Admin</span>
+            
+            <span><strong>ZEROWATCH</strong>Admin</span>
           </a>
 
           <ul class="nav flex-column">
             <li class="nav-item">
               <!-- Đây là trang hiện tại, nên có class 'active' -->
-              <a class="nav-link active" aria-current="page" href="admin-dashboard.html">
+              <a class="nav-link active" aria-current="page" href="admin.html">
                 <i class="bi bi-speedometer2"></i>
                 Tổng quan
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="admin_orders.html">
                 <i class="bi bi-receipt"></i>
                 Quản lý Đơn hàng
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin-products.html">
+              <a class="nav-link" href="admin_products.html">
                 <i class="bi bi-box-seam"></i>
                 Quản lý Sản phẩm
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="admin_account.html">
                 <i class="bi bi-people"></i>
-                Khách hàng
+                Tài khoản
               </a>
             </li>
           </ul>
@@ -338,7 +341,7 @@
                    <div class="card-title">DOANH THU HÔM NAY</div>
                    <div class="card-value">12.500.000đ</div>
                  </div>
-                 <i class="bi bi-cash-stack card-icon"></i>
+                 <!-- <i class="bi bi-cash-stack card-icon"></i> -->
               </div>
             </div>
             <!-- Thẻ 2: Đơn hàng mới -->
@@ -491,8 +494,10 @@
           label: 'Doanh thu (VNĐ)',
           data: [1500000, 2000000, 1800000, 3000000, 2500000, 4000000, 4500000],
           fill: true,
-          backgroundColor: 'rgba(155, 146, 38, 0.1)',
-          borderColor: 'rgb(155, 146, 38)',
+          // Đã cập nhật sang màu #000f38 với độ trong suốt 0.1
+          backgroundColor: 'rgba(0, 15, 56, 0.1)',
+          // Đã cập nhật sang màu #000f38
+          borderColor: '#000f38',
           tension: 0.1
         }]
       };
@@ -508,8 +513,8 @@
           label: 'Tỉ lệ danh mục',
           data: [40, 25, 20, 15],
           backgroundColor: [
-            'rgb(155, 146, 38)', // Accent
-            'rgb(135, 126, 33)', // Accent Darker
+            '#000f38', // Accent mới
+            '#000826', // Accent Darker mới
             '#6c757d', // Xám
             '#adb5bd'  // Xám nhạt
           ],
