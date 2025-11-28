@@ -238,7 +238,7 @@
       background: #616161;
     }
 
-    /* Quantity selector */
+    /* === [ĐÃ CHỈNH SỬA] MỤC SỐ LƯỢNG === */
     .quantity-group {
       display: flex;
       flex-direction: column;
@@ -264,7 +264,7 @@
       font-size: 1.14rem;
       font-weight: bold;
       cursor: pointer;
-      display: inline-flex;
+      display: inline-flex; /* Dùng flex để căn giữa dấu +/- */
       align-items: center;
       justify-content: center;
       transition: background .2s;
@@ -276,13 +276,22 @@
     .quantity-value {
       width: 38px;
       height: 30px;
-      text-align: center;
+      text-align: center; /* Căn giữa số */
       font-size: 1.16rem;
       background: transparent;
       color: var(--foreground);
       border: none;
       outline: none;
       font-weight: 600;
+      /* Ẩn nút mũi tên tăng giảm trên Firefox */
+      -moz-appearance: textfield;
+      appearance: none;
+    }
+    /* Ẩn nút mũi tên tăng giảm trên Chrome/Safari/Edge */
+    .quantity-value::-webkit-outer-spin-button,
+    .quantity-value::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     /* CTA buttons */
