@@ -461,23 +461,18 @@ nav a.active {
 }
 
 /* Sidebar/Filter Column */
-/* Sidebar Container */
 .filter-sidebar {
-  background: #111111;
+  background: #111111; /* Nền tối hơn so với nền body */
   border-radius: var(--border-radius);
   padding: 2.5rem 1.8rem;
-  width: 300px; /* Fixed width for demo */
-  /* position: sticky; 
-            top: 100px; */
-  height: fit-content;
-  border: 1px solid #222; /* Thêm viền nhẹ để tách biệt với nền đen */
+  position: sticky; /* Giữ bộ lọc cố định khi cuộn */
+  top: 100px; /* Cách header 100px */
 }
 
 .filter-title {
   font-size: 1.6rem;
   font-weight: 700;
   color: var(--highlight);
-  margin-top: 0;
   margin-bottom: 2rem;
   border-bottom: 2px solid rgba(255, 158, 0, 0.1);
   padding-bottom: 0.8rem;
@@ -494,20 +489,16 @@ nav a.active {
   margin-bottom: 1rem;
 }
 
-/* Checkbox Styling */
+/* Checkbox & Price Range Styling (Tương tự Dark Mode) */
 .filter-checkbox-container {
   display: block;
   position: relative;
   padding-left: 28px;
   margin-bottom: 12px;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 1rem;
   user-select: none;
   color: #ccc;
-  transition: color 0.2s;
-}
-.filter-checkbox-container:hover {
-  color: var(--white);
 }
 
 .filter-checkbox-container input {
@@ -550,10 +541,10 @@ nav a.active {
 .filter-checkbox-container .checkmark:after {
   left: 6px;
   top: 2px;
-  width: 4px;
-  height: 9px;
+  width: 5px;
+  height: 10px;
   border: solid var(--bg);
-  border-width: 0 2px 2px 0;
+  border-width: 0 3px 3px 0;
   transform: rotate(45deg);
 }
 
@@ -563,10 +554,10 @@ nav a.active {
 }
 .price-slider {
   width: 100%;
-  height: 6px;
+  height: 8px;
   background: #333;
   outline: none;
-  opacity: 0.8;
+  opacity: 0.7;
   transition: opacity 0.2s;
   -webkit-appearance: none;
   appearance: none;
@@ -581,146 +572,51 @@ nav a.active {
 .price-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--highlight);
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(255, 158, 0, 0.4);
+  box-shadow: 0 0 5px rgba(255, 158, 0, 0.5);
+}
+
+.price-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--highlight);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 5px rgba(255, 158, 0, 0.5);
 }
 
 .price-values {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
-  color: #888;
+  font-size: 0.9rem;
+  color: #aaa;
 }
 #current-price-display {
-  color: var(--highlight);
-  font-weight: 700;
+  color: var(--white);
+  font-weight: 600;
 }
 
 /* Select Dropdown */
 .filter-select {
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 15px;
   border-radius: var(--border-radius);
   background: #222;
   color: var(--white);
-  border: 1px solid #333;
-  font-size: 0.95rem;
-  appearance: none;
+  border: 1px solid #444;
+  font-size: 1rem;
+  appearance: none; /* Bỏ giao diện mặc định */
   cursor: pointer;
   outline: none;
   transition: border-color 0.2s;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1em;
 }
-.filter-select:hover,
-.filter-select:focus {
+.filter-select:hover {
   border-color: var(--highlight);
-}
-
-/* =========================================
-           CSS MỚI CHO CÁC PHẦN BỔ SUNG
-           ========================================= */
-
-/* 1. Sidebar Search Box Styles */
-.sidebar-search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: #222;
-  border: 1px solid #333;
-  border-radius: var(--border-radius);
-  transition: all 0.3s ease;
-}
-
-/* Hiệu ứng focus vào ô tìm kiếm */
-.sidebar-search-container:focus-within {
-  border-color: var(--highlight);
-  box-shadow: 0 0 0 1px rgba(255, 158, 0, 0.2);
-  background: #2a2a2a;
-}
-
-.sidebar-search-input {
-  width: 100%;
-  background: transparent;
-  border: none;
-  color: var(--white);
-  padding: 12px 15px;
-  font-size: 0.95rem;
-  outline: none;
-}
-
-.sidebar-search-input::placeholder {
-  color: #666;
-}
-
-.sidebar-search-btn {
-  background: transparent;
-  border: none;
-  color: #888;
-  padding: 0 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s;
-}
-
-.sidebar-search-btn:hover {
-  color: var(--highlight);
-}
-
-/* 2. Filter Action Buttons Styles */
-.filter-actions-bottom {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #333; /* Đường gạch ngang phân cách */
-  display: flex;
-  gap: 12px;
-}
-
-.btn-filter-action {
-  flex: 1; /* Chia đều 2 nút */
-  padding: 12px;
-  border-radius: var(--border-radius);
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  outline: none;
-}
-
-/* Nút Reset (Thứ cấp) */
-.btn-reset {
-  background: transparent;
-  border: 1px solid #444;
-  color: #aaa;
-}
-.btn-reset:hover {
-  border-color: #fff;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-/* Nút Apply (Chính) */
-.btn-apply {
-  background: var(--highlight);
-  border: 1px solid var(--highlight);
-  color: var(--bg); /* Chữ đen trên nền cam */
-  font-weight: 700;
-}
-.btn-apply:hover {
-  background: #e68e00; /* Màu cam đậm hơn chút khi hover */
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 158, 0, 0.25);
-}
-.btn-apply:active {
-  transform: translateY(0);
 }
 
 /* Product Result Grid (3 cột) */
@@ -729,6 +625,135 @@ nav a.active {
   grid-template-columns: repeat(3, 1fr); /* 3 cột sản phẩm */
   gap: var(--grid-gap);
   margin-bottom: 0.1rem;
+}
+
+/* ********************************************************** */
+/* LOGIN/REGISTER FORM STYLES (NEW) */
+/* ********************************************************** */
+
+/* Wrapper để căn giữa form trên toàn bộ viewport */
+.auth-main {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 70px; /* Bù khoảng cách Header */
+  padding-bottom: 50px;
+  margin: 0;
+  background: var(--bg);
+  width: 100%;
+}
+
+/* Form Card (Glassmorphism Container) */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 3rem 2.5rem;
+  margin: 20px;
+  box-sizing: border-box;
+
+  /* GLASS MORPHISM - SỬ DỤNG BIẾN GLASS CỦA TRANG CHỦ */
+  background: var(--glass);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.auth-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: var(--highlight); /* Màu Vàng */
+  text-shadow: 0 0 10px rgba(255, 158, 0, 0.4);
+}
+
+.auth-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2rem;
+}
+
+/* Input Group Styles */
+.input-group {
+  width: 100%;
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--white);
+}
+.input-group input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1rem;
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.1); /* Nền input trong suốt */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+.input-group input:focus {
+  border-color: var(--highlight);
+  box-shadow: 0 0 0 3px rgba(255, 158, 0, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Auth Button (Sử dụng phong cách nổi bật của Highlight) */
+.auth-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+
+  background: var(--highlight); /* Màu Vàng */
+  color: var(--bg); /* Màu Đen */
+  box-shadow: 0 5px 20px rgba(255, 158, 0, 0.4);
+}
+.auth-button:hover {
+  background: #ffc266;
+  box-shadow: 0 8px 25px rgba(255, 158, 0, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Footer Link */
+.auth-footer-link {
+  font-size: 0.9rem;
+  margin-top: 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+.auth-footer-link a {
+  color: var(--highlight);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+.auth-footer-link a:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .auth-card {
+    padding: 2rem 1.5rem;
+  }
 }
 
 /* ********************************************************** */

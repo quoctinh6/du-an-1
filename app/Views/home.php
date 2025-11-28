@@ -76,9 +76,8 @@ foreach ($productsCollections as $item) {
         <span style="color:var(--accent);"><b>Flash Sale</b></span>: Exclusive deals, limited-time only!
       </div>-->
     <!-- Thay thế button bằng hộp tìm kiếm Glassmorphism -->
-    <form class="search-box-glass" action="<?php echo BASE_URL; ?>index.php/products/all" method="GET">
-      <input type="text" name="search" placeholder="Tìm kiếm" class="search-input"
-        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+    <form class="search-box-glass">
+      <input type="text" placeholder="Tìm kiếm" class="search-input">
       <button type="submit" class="search-button">
         <!-- Icon kính lúp (Search) -->
         <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 24 24">

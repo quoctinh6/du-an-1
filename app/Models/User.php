@@ -51,7 +51,7 @@ class Users
         }
         // Kiểm tra email đã tồn tại chưa
         $existingUser = $this->getByEmail($email);
-        
+
         if ($existingUser) {
             $_SESSION['error'] = 'Email đã được sử dụng.';
             header("Location: " . BASE_URL . "index.php/User/login");
@@ -73,15 +73,15 @@ class Users
     {
 
         if ($user && password_verify($is_password_correct, $user['password'])) {
-    $_SESSION['user'] = $user;
-    unset($_SESSION['error']);
-    var_dump(BASE_URL);
-    // Đã sửa dòng này: Thêm dấu nháy bao quanh đường dẫn và nối chuỗi đúng
-    header("Location: " . BASE_URL) ; 
-    exit();
-} else {
-    $_SESSION['error'] = 'Sai email hoặc mật khẩu!';
-}
+            $_SESSION['user'] = $user;
+            unset($_SESSION['error']);
+            var_dump(BASE_URL);
+            // Đã sửa dòng này: Thêm dấu nháy bao quanh đường dẫn và nối chuỗi đúng
+            header("Location: " . BASE_URL);
+            exit();
+        } else {
+            $_SESSION['error'] = 'Sai email hoặc mật khẩu!';
+        }
     }
 
     function getByEmail($email)
