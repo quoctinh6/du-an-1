@@ -1,7 +1,7 @@
 <main class="auth-main">
     <div class="auth-card">
         <div class="auth-title">Đăng Nhập</div>
-        <div class="auth-subtitle"><?= $_SESSION['error'] ?></div>
+        <div class="auth-subtitle"><?= $_SESSION['error'] ?? '' ?></div>
 
         <form method="POST" style="width: 100%;">
 
@@ -32,5 +32,5 @@
 
 <?php
 
-var_dump($_SESSION['user']);
+
 ?>

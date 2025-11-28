@@ -7,7 +7,6 @@ class Users
     {
         $this->db = new Database();
     }
-
     function getAll()
     {
         $sql = "SELECT * FROM users";
@@ -92,14 +91,30 @@ class Users
 
     function updateUser($id, $name, $email, $phone)
     {
-
-        $sql = "UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?";
-        header("location:index.php?pg=user&tab=profile");
+        $sql = "UPDATE users SET name = ?, email = ?, phone_number = ? WHERE id = ?";
         return $this->db->update($sql, $name, $email, $phone, $id);
     }
+
     function updatePassword($id, $password)
     {
-        $sql = "UPDATE users SET password = ? where id = ?";
+        $sql = "UPDATE users SET password = ? WHERE id = ?";
         return $this->db->update($sql, password_hash($password, PASSWORD_DEFAULT), $id);
+    }
+
+    // Verify mật khẩu hiện tại
+    function verifyPassword($id, $password)
+    {
+        $user = $this->getById($id);
+        if ($user) {
+            return password_verify($password, $user['password']);
+        }
+        return false;
+    }
+
+    // Cập nhật thông tin người dùng
+    function updateProfile($id, $name, $email, $phone_number)
+    {
+        $sql = "UPDATE users SET name = ?, email = ?, phone_number = ?, updated_at = NOW() WHERE id = ?";
+        return $this->db->update($sql, $name, $email, $phone_number, $id);
     }
 }
