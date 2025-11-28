@@ -42,7 +42,7 @@ class ProductsCtrl
 
     }
 
-    function all()
+    function index()
     {
 
         $brands = $this->BrandModel->getAll();
