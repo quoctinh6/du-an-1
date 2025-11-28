@@ -1,193 +1,134 @@
+<!-- Cart Content -->
 <main class="cart-main">
     <div class="cart-container">
         <!-- CỘT 1: DANH SÁCH SẢN PHẨM (2/3 CHIỀU RỘNG) -->
         <div class="cart-list-wrapper">
-            <div class="cart-list-title">Giỏ hàng của bạn</div>
+            <div class="cart-list-title">Giỏ hàng của bạn
+        
+            <?php if (!empty($cart)) : ?>
 
-            <!-- Cart items will be rendered here from localStorage -->
-            <div id="cart-items"></div>
+                <?php foreach ($cart as $id => $item) : ?>
+                    <div class="cart-item">
+                        <img src="<?= $item['image'] ?>" class="cart-item-img" alt="">
+
+                        <div class="cart-item-details">
+                            <div class="cart-item-name"><?= $item['name'] ?></div>
+
+                            <!-- thêm vào biến thể ở đây -->
+                        </div>
+
+
+                        <div class="cart-item-controls">
+                            <!-- ==== Form cập nhật số lượng ở đây ==== -->
+                            <div class="quantity-control">
+                                <!-- Nút giảm -->
+                                <form action="<?= BASE_URL ?>index.php/cart/update" method="POST" style="display: inline;">
+                                    <input type="hidden" name="id" value="<?= $id ?>">
+                                    <input type="hidden" name="type" value="dec">
+                                    <button type="submit" class="qty-btn"> - </button>
+                                </form>
+
+                                <!-- Hiển thị số đang có -->
+                                <input type="number" value="<?= $item['quantity'] ?>" readonly class="qty-input">
+
+
+                                <!-- Nút tằng -->
+                                <form action="<?= BASE_URL ?>index.php/cart/update" method="POST" style="display: inline;">
+                                    <input type="hidden" name="id" value="<?= $id ?>">
+                                    <input type="hidden" name="type" value="inc">
+                                    <button type="submit" class="qty-btn"> + </button>
+                                </form>
+                            </div>
+                            
+                            
+                            <!-- Xóa sản phẩm -->
+                            <a href="<?= BASE_URL ?>index.php/cart/remove/<?= $id ?>" class="cart-item-remove">Xóa</a>
+
+                            <!-- Thành tiền -->
+                            <div class="cart-item-price">
+                                <?= number_format($item['price'] * $item['quantity'])?>đ
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+
+                <?php else :?>
+                    <!-- Nếu hàm rỗng -->
+                    <p>Giỏ hàng trống trơn!!</p>
+                <?php endif;?>
+            </div>
         </div>
 
-        <!-- CỘT 2: TẠM TÍNH (1/3 CHIỀU RỘNG) -->
-        <div class="cart-summary-wrapper">
-            <div class="cart-summary-title">Tạm tính</div>
-
-            <!-- Chi tiết tạm tính -->
-            <div class="summary-row">
-                <span class="label">Tổng tiền hàng</span>
-                <span class="value" id="subtotal-value">đ0</span>
+        <!-- SẢN PHẨM 2: The Mirror
+        <div class="cart-item">
+          <!-- Sử dụng placeholder image -->
+          <!-- <img src="https://placehold.co/100x100/111111/ff9e00?text=Watch+2" onerror="this.onerror=null;this.src='https://placehold.co/100x100/111111/ff9e00?text=Watch+2';" alt="The Mirror" class="cart-item-img">
+          
+          <div class="cart-item-details">
+            <div class="cart-item-name">The Mirror</div>
+            <div class="cart-item-meta">
+              Size: 50ml • Màu: Trắng <br>
+              Mã SP: SP-002
             </div>
-
-            <!-- Voucher -->
-            <div class="voucher-section">
-                <select class="voucher-select">
-                    <option value="">-- Chọn voucher --</option>
-                    <option value="GIAMGIA10">GIAMGIA10 (Giảm 10%)</option>
-                    <option value="FREESHIP">FREESHIP (Miễn phí vận chuyển)</option>
-                </select>
-                <button class="apply-btn">Áp dụng</button>
+          </div>
+          
+          <div class="cart-item-controls">
+            <span class="cart-item-meta" style="margin-right: 1.5rem;">SL:</span>
+            <div class="quantity-control">
+              <button class="qty-btn" aria-label="Giảm số lượng">-</button>
+              <input type="number" value="1" min="1" class="qty-input">
+              <button class="qty-btn" aria-label="Tăng số lượng">+</button>
             </div>
+            <button class="cart-item-remove" aria-label="Xóa sản phẩm">
+              Icon Thùng rác (Delete)
+              <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            </button>
+            <div class="cart-item-price">đ5.100.000</div>
+          </div>
+        </div>
+        </div>-->
 
-            <!-- Phí vận chuyển -->
-            <div class="summary-row">
-                <span class="label">Phí vận chuyển</span>
-                <span class="value" id="shipping-value">đ0</span>
-            </div>
+    <!-- CỘT 2: TẠM TÍNH (1/3 CHIỀU RỘNG) -->
+    <div class="cart-summary-wrapper">
+        <div class="cart-summary-title">Tạm tính</div>
 
-            <!-- Tổng đơn hàng (Total) -->
-            <div class="summary-total summary-row">
-                <span class="label">Tổng đơn hàng</span>
-                <span class="value" id="total-value">đ0</span>
-            </div>
+        <!-- Chi tiết tạm tính -->
+        <div class="summary-row">
+            <span class="label">Tổng tiền hàng</span>
+            <span class="value"><?= number_format($subtotal) ?>đ</span>
+        </div>
 
-            <!-- Nút hành động -->
-            <div class="cart-actions-group">
-                <button class="btn-checkout"><a id="checkout-link" href="checkout.html">Tiếp tục thanh toán</a></button>
-                <a href="index.html" class="btn-continue" style="text-align: center;">Tiếp tục mua sắm</a>
-            </div>
+        <!-- Voucher -->
+        <div class="voucher-section">
+            <select class="voucher-select">
+                <option value="">-- Chọn voucher --</option>
+                <option value="GIAMGIA10">GIAMGIA10 (Giảm 10%)</option>
+                <option value="FREESHIP">FREESHIP (Miễn phí vận chuyển)</option>
+            </select>
+            <button class="apply-btn">Áp dụng</button>
+        </div>
+        
+        <!-- Phí vận chuyển -->
+        <div class="summary-row">
+            <span class="label">Phí vận chuyển</span>
+            <span class="value">đ30.000</span>
+        </div>
 
-            <div class="cart-note">
-                Chú ý: Giá trên chưa bao gồm VAT. <br>
-                Có thể thay đổi số lượng hoặc xóa sản phẩm trước khi thanh toán.
-            </div>
+        <!-- Tổng đơn hàng (Total) -->
+        <div class="summary-total summary-row">
+            <span class="label">Tổng đơn hàng</span>
+            <span class="value"><?= number_format($total)?>đ</span>
+        </div>
+
+        <!-- Nút hành động -->
+        <div class="cart-actions-group">
+            <button class="btn-checkout"><a href="checkout.html">Tiếp tục thanh toán</a></button>
+            <a href="<?= BASE_URL ?>index.php/checkout" class="btn-continue" style="text-align: center;">Tiếp tục mua sắm</a>
+        </div>
+        
+        <div class="cart-note">
+            Chú ý: Giá trên chưa bao gồm VAT. <br>
+            Có thể thay đổi số lượng hoặc xóa sản phẩm trước khi thanh toán.
         </div>
     </div>
 </main>
-<script>
-    // Cart render + behavior using localStorage 'cart' key
-    (function () {
-        function formatVND(num) {
-            if (isNaN(num)) num = 0;
-            return 'đ' + new Intl.NumberFormat('vi-VN').format(num);
-        }
-
-        function loadCart() {
-            try {
-                return JSON.parse(localStorage.getItem('cart')) || [];
-            } catch (e) {
-                return [];
-            }
-        }
-
-        function saveCart(cart) {
-            localStorage.setItem('cart', JSON.stringify(cart));
-            // update global cart count if element exists
-            const el = document.getElementById('cart-count');
-            if (el) el.innerText = cart.reduce((s, i) => s + (i.quantity || 0), 0);
-        }
-
-        function calcTotals(cart) {
-            const subtotal = cart.reduce((s, item) => s + (Number(item.price) || 0) * (Number(item.quantity) || 0), 0);
-            // simple shipping rule: free over 1,000,000 else 30000
-            const shipping = subtotal > 1000000 ? 0 : 30000;
-            return { subtotal, shipping, total: subtotal + shipping };
-        }
-
-        function renderEmpty() {
-            const container = document.getElementById('cart-items');
-            container.innerHTML = '<div class="empty-cart" style="padding:2rem;text-align:center;">Giỏ hàng trống. <a href="<?php echo BASE_URL; ?>">Tiếp tục mua sắm</a></div>';
-        }
-
-        function renderCart() {
-            const cart = loadCart();
-            const container = document.getElementById('cart-items');
-            if (!container) return;
-            container.innerHTML = '';
-            if (!cart || cart.length === 0) { renderEmpty(); updateSummary(0, 0, 0); return; }
-
-            cart.forEach((item, idx) => {
-                const itemTotal = (Number(item.price) || 0) * (Number(item.quantity) || 0);
-                const div = document.createElement('div');
-                div.className = 'cart-item';
-                div.dataset.index = idx;
-                div.innerHTML = `
-                    <img src="${item.image || 'https://placehold.co/100x100/111111/ff9e00?text=No+Image'}" alt="${escapeHtml(item.name || '')}" class="cart-item-img" onerror="this.onerror=null;this.src='https://placehold.co/100x100/111111/ff9e00?text=No+Image';" />
-                    <div class="cart-item-details">
-                        <div class="cart-item-name">${escapeHtml(item.name || '')}</div>
-                        <div class="cart-item-meta">Mã SP: ${escapeHtml(item.id || '')}</div>
-                    </div>
-                    <div class="cart-item-controls">
-                        <span class="cart-item-meta" style="margin-right: 1.5rem;">SL:</span>
-                        <div class="quantity-control">
-                            <button class="qty-btn" data-action="dec" aria-label="Giảm số lượng">-</button>
-                            <input type="number" value="${Number(item.quantity || 1)}" min="1" class="qty-input" />
-                            <button class="qty-btn" data-action="inc" aria-label="Tăng số lượng">+</button>
-                        </div>
-                        <button class="cart-item-remove" aria-label="Xóa sản phẩm">🗑</button>
-                        <div class="cart-item-price">${formatVND(itemTotal)}</div>
-                    </div>
-                `;
-
-                // bind events
-                const decBtn = div.querySelector('button[data-action="dec"]');
-                const incBtn = div.querySelector('button[data-action="inc"]');
-                const qtyInput = div.querySelector('.qty-input');
-                const removeBtn = div.querySelector('.cart-item-remove');
-
-                decBtn.addEventListener('click', () => {
-                    let q = Number(qtyInput.value) || 1; q = Math.max(1, q - 1); qtyInput.value = q; updateQty(idx, q);
-                });
-                incBtn.addEventListener('click', () => {
-                    let q = Number(qtyInput.value) || 1; q = q + 1; qtyInput.value = q; updateQty(idx, q);
-                });
-                qtyInput.addEventListener('change', () => {
-                    let q = Number(qtyInput.value) || 1; if (q < 1) q = 1; qtyInput.value = q; updateQty(idx, q);
-                });
-
-                removeBtn.addEventListener('click', () => {
-                    removeItem(idx);
-                });
-
-                container.appendChild(div);
-            });
-
-            const totals = calcTotals(cart);
-            updateSummary(totals.subtotal, totals.shipping, totals.total);
-            saveCart(cart); // persist any normalization
-        }
-
-        function updateQty(index, quantity) {
-            const cart = loadCart();
-            if (!cart[index]) return;
-            cart[index].quantity = Number(quantity);
-            saveCart(cart);
-            renderCart();
-        }
-
-        function removeItem(index) {
-            const cart = loadCart();
-            if (!cart[index]) return;
-            cart.splice(index, 1);
-            saveCart(cart);
-            renderCart();
-        }
-
-        function updateSummary(subtotal, shipping, total) {
-            const elSub = document.getElementById('subtotal-value');
-            const elShip = document.getElementById('shipping-value');
-            const elTotal = document.getElementById('total-value');
-            if (elSub) elSub.innerText = formatVND(subtotal);
-            if (elShip) elShip.innerText = formatVND(shipping);
-            if (elTotal) elTotal.innerText = formatVND(total);
-        }
-
-        function escapeHtml(str) {
-            return String(str).replace(/[&<>\"']/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', '\'': '&#39;' })[m]; });
-        }
-
-        // init
-        document.addEventListener('DOMContentLoaded', function () {
-            renderCart();
-
-            // Wire apply voucher button (basic demo logic)
-            const applyBtn = document.querySelector('.apply-btn');
-            if (applyBtn) {
-                applyBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    alert('Voucher áp dụng tạm thời (demo)');
-                });
-            }
-        });
-
-    })();
-</script>

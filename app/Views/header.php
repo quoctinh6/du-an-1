@@ -1,3 +1,12 @@
+<?php
+    $cart_count = 0;
+    if(isset($_SESSION['cart'])) {
+        foreach($_SESSION['cart'] as $item){
+            $cart_count += $item['quantity'];
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,14 +37,14 @@
             <!-- Cột 3: Actions (Right) -->
             <div class="header-actions">
                 <!-- Nút Giỏ hàng (Có icon và viền) -->
-                <a href="<?= BASE_URL; ?>index.php/products/cart" class="action-button cart-btn">
+                <a href="<?= BASE_URL; ?>index.php/cart" class="action-button cart-btn">
                     <!-- Icon Giỏ hàng (dùng SVG) -->
                     <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor"
                         viewBox="0 0 24 24">
                         <path
                             d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
                     </svg>
-                    Giỏ hàng <span id="cart-count" style="font-weight: 400;">0</span>
+                    Giỏ hàng <span id="header-cart-count" style="font-weight: 400;">(<?= $cart_count ?>)</span>
                 </a>
 
                 <!-- Nút Đăng nhập (Không viền) -->

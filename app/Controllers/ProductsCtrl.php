@@ -73,10 +73,5 @@ class ProductsCtrl
 
         include_once("Views/products.php");
     }
-    function cart()
-    {
-        include_once("Views/cart.php");
-    }
-
 }
 ?>

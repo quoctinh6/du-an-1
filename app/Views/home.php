@@ -32,7 +32,7 @@ function render_product_item($item)
     <div class="product-box">
         <div class="product-icons">
             <!-- Nút thêm vào giỏ (Form submit để xử lý PHP) -->
-            <form action="index.php/cart/add" method="POST" style="display:inline;">
+            <form action="index.php/cart/add" method="POST" style="display:inline;" class="form-add-to-cart">
                 <input type="hidden" name="id" value="$product_id">
                 <input type="hidden" name="name" value="$product_name">
                 <input type="hidden" name="price" value="$product_price">
@@ -208,3 +208,39 @@ if(!empty($productsCollections)) {
   </section>
 
 </main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    //Tìm tất cả các form có class "form-add-to-cart" 
+    const forms = document.querySelectorAll(".form-add-to-cart");
+
+    form.forEach(from => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Chặn chuyển trang
+
+        const formData = new FormData(form);
+
+        //Tự thêm biến "is_ajax" vào đây
+        formData.append('is_ajax', '1');
+
+        //Gừi ngầm (Fetch)
+        fetch(form.action, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+          //Hiện Alert
+          alert("Đã thêm vào giỏ hành thành công!!!");
+
+          //Cập nhật số trên header(Nếu có)
+          const headerCount = document.getElementsById('header-cart-count');
+          if(headerCount) {
+            headerCount.innerText = '(' + data + ')';
+          }
+        })
+        .catch(err => console.error(err));
+      })
+    })
+  });
+</script>
