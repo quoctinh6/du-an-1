@@ -15,26 +15,29 @@ $parts = explode('/', $url);
 define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 
 // === LOGIC ĐIỀU HƯỚNG MỚI ==
-include_once "./Views/header.php";
+
 if (empty($parts[0])) {
     // TRƯỜNG HỢP 1: TRANG CHỦ
     // Nếu $url rỗng, $parts[0] cũng rỗng
+    include_once "./Views/header.php";
     include_once "./Controllers/PageController.php";
     $ctrl = new PageCtrl();
     $ctrl->home();
-} else if ($parts[0] == 'register') {
-    // TRƯỜNG HỢP ĐẶC BIỆT: ĐĂNG KÝ
-    include_once "./Controllers/UserCtrl.php";
-    $ctrl = new UserCtrl();
-    $ctrl->register();
-} else if ($parts[0] == 'login') {
-    // TRƯỜNG HỢP ĐẶC BIỆT: ĐĂNG NHẬP
-    include_once "./Controllers/UserCtrl.php";
-    $ctrl = new UserCtrl();
-    $ctrl->login();
+    include_once "./Views/footer.php";
+
+} elseif ($parts[0] == 'Admin') {
+
+    include_once "./Views/admin/header.php";
+    include_once "./Controllers/AdminCtrl.php";
+    $ctrl = new AdminCtrl();
+    $act = $parts[1] ?? 'index';
+    $params = array_slice($parts, 2);
+    // Gọi action với các tham số
+    $ctrl->$act(...$params);
+
 } else {
     // TRƯỜNG HỢP 2: CÓ CONTROLLER
-
+    include_once "./Views/header.php";
     $controllerName = ucfirst($parts[0]) . "Ctrl"; // Vd: "ProductCtrl"
     $controllerFile = "./Controllers/" . $controllerName . ".php";
 
@@ -61,9 +64,10 @@ if (empty($parts[0])) {
         echo "Error 404: Controller '$controllerName' not found";
         exit;
     }
+    include_once "./Views/footer.php";
 }
 
-include_once "./Views/footer.php";
+
 
 ?>
 <Script>

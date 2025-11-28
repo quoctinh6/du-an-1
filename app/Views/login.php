@@ -8,8 +8,7 @@
             <!-- Tên đăng nhập (hoặc Email) -->
             <div class="input-group">
                 <label for="login-username-email">Tên đăng nhập hoặc Email</label>
-                <input type="text" id="login-username-email" name="username"
-                    placeholder="Nhập tên đăng nhập hoặc email của bạn" required>
+                <input type="text" id="login-username-email" name="username" placeholder="nhập email của bạn" required>
             </div>
 
             <!-- Mật khẩu -->
