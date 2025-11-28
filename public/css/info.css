@@ -682,23 +682,43 @@
       margin-bottom: 0.4rem;
       color: var(--white);
     }
-    .input-group input {
+
+    /* === [UPDATE: Áp dụng style cho cả input và textarea] === */
+    .input-group input,
+    .input-group textarea {
       width: 100%;
       padding: 12px 15px;
       font-size: 1rem;
       color: var(--white);
-      background: rgba(255, 255, 255, 0.1); /* Nền input trong suốt */
+      
+      /* Làm nền trong suốt hơn chút cho đẹp (giống style glass) */
+      background: rgba(255, 255, 255, 0.05); 
+      
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       outline: none;
       box-sizing: border-box;
       transition: all 0.3s ease;
+      
+      /* Quan trọng: Đồng bộ font chữ cho textarea */
+      font-family: inherit; 
     }
-    .input-group input:focus {
+
+    /* === [UPDATE: Style riêng cho textarea] === */
+    .input-group textarea {
+        resize: vertical; /* Chỉ cho phép kéo giãn chiều dọc */
+        min-height: 100px; /* Chiều cao mặc định đẹp hơn */
+        line-height: 1.5; /* Giãn dòng cho dễ đọc */
+    }
+
+    /* === [UPDATE: Hiệu ứng Focus cho cả input và textarea] === */
+    .input-group input:focus,
+    .input-group textarea:focus {
       border-color: var(--highlight);
-      box-shadow: 0 0 0 3px rgba(255, 158, 0, 0.3);
-      background: rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0 0 3px rgba(255, 158, 0, 0.25); /* Glow mềm hơn */
+      background: rgba(0, 0, 0, 0.4); /* Nền tối hơn khi focus để dễ đọc */
     }
+
 
     /* Auth Button (Sử dụng phong cách nổi bật của Highlight) */
     .auth-button {
