@@ -122,7 +122,7 @@
 
         <!-- Nút hành động -->
         <div class="cart-actions-group">
-            <button class="btn-checkout"><a href="checkout.html">Tiếp tục thanh toán</a></button>
+            <button class="btn-checkout"><a href="<?= BASE_URL ?>index.php/checkout">Tiếp tục thanh toán</a></button>
             <a href="<?= BASE_URL ?>index.php/checkout" class="btn-continue" style="text-align: center;">Tiếp tục mua sắm</a>
         </div>
         
