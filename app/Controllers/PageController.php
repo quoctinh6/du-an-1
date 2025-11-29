@@ -6,6 +6,7 @@ class PageCtrl
 
     private $productModel;
     private $categoryModel;
+
     public function __construct()
     {
         include_once("Models/Products.php");
@@ -16,6 +17,7 @@ class PageCtrl
     }
     public function home()
     {
+
 
         $productsFeatured = $this->productModel->getProducts(4, [1]);
 
@@ -28,9 +30,10 @@ class PageCtrl
         include_once 'Views/home.php';
     }
 
-    public function favorites() {
+    public function favorites()
+    {
         $productsFavorits = $this->productModel->getProducts(8, [0]);
-        
+
         include_once "Views/products-favorite.php";
     }
 }

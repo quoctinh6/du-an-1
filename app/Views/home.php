@@ -1,34 +1,33 @@
 <?php
 $html_products_featured = '';
-
 function render_product_item($item)
 {
-    // Định dạng giá tiền
-    $formatted_price = number_format($item['price'], 0, ',', '.') . ' VND';
-    $product_id = htmlspecialchars($item['id']);
-    $product_price = htmlspecialchars($item['price']);
-    // Bảo mật & Xử lý đường dẫn ảnh
-    $image_url = htmlspecialchars($item['image_url']);
-    
-    // Nếu ảnh chưa có đường dẫn đầy đủ, nối thêm đường dẫn gốc
-    // (Tuỳ vào dữ liệu trong DB của bạn lưu full link hay tên file)
-    if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
-        $image_url = BASE_URL . 'Views/assets/img/' . $image_url; 
-        // Lưu ý: Kiểm tra lại folder ảnh của bạn là 'image' hay 'img' trong assets
-    }
+  // Định dạng giá tiền
+  $formatted_price = number_format($item['price'], 0, ',', '.') . ' VND';
+  $product_id = htmlspecialchars($item['id']);
+  $product_price = htmlspecialchars($item['price']);
+  // Bảo mật & Xử lý đường dẫn ảnh
+  $image_url = htmlspecialchars($item['image_url']);
 
-    $product_name = htmlspecialchars($item['name']);
-    $detail_url = BASE_URL . 'index.php/products/detail/' . htmlspecialchars($item['slug'] ?? $item['id']);
+  // Nếu ảnh chưa có đường dẫn đầy đủ, nối thêm đường dẫn gốc
+  // (Tuỳ vào dữ liệu trong DB của bạn lưu full link hay tên file)
+  if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
+    $image_url = BASE_URL . 'Views/assets/img/' . $image_url;
+    // Lưu ý: Kiểm tra lại folder ảnh của bạn là 'image' hay 'img' trong assets
+  }
 
-    // Xử lý giá cũ (nếu có)
-    $old_price_html = '';
-    if (!empty($item['old_price']) && $item['old_price'] > $item['price']) {
-        $formatted_old = number_format($item['old_price'], 0, ',', '.');
-        $old_price_html = "<span class=\"product-old-price\">{$formatted_old}</span>";
-    }
+  $product_name = htmlspecialchars($item['name']);
+  $detail_url = BASE_URL . 'index.php/products/detail/' . htmlspecialchars($item['slug'] ?? $item['id']);
 
-    // HTML của 1 sản phẩm (Giống cấu trúc index.html)
-    return <<<HTML
+  // Xử lý giá cũ (nếu có)
+  $old_price_html = '';
+  if (!empty($item['old_price']) && $item['old_price'] > $item['price']) {
+    $formatted_old = number_format($item['old_price'], 0, ',', '.');
+    $old_price_html = "<span class=\"product-old-price\">{$formatted_old}</span>";
+  }
+
+  // HTML của 1 sản phẩm (Giống cấu trúc index.html)
+  return <<<HTML
     <div class="product-box">
         <div class="product-icons">
             <!-- Nút thêm vào giỏ (Form submit để xử lý PHP) -->
@@ -66,24 +65,24 @@ HTML;
 
 // Render các danh sách sản phẩm
 $html_products_featured = '';
-if(!empty($productsFeatured)) {
-    foreach ($productsFeatured as $item) {
-        $html_products_featured .= render_product_item($item);
-    }
+if (!empty($productsFeatured)) {
+  foreach ($productsFeatured as $item) {
+    $html_products_featured .= render_product_item($item);
+  }
 }
 
 $html_products_trending = '';
-if(!empty($productsTrending)) {
-    foreach ($productsTrending as $item) {
-        $html_products_trending .= render_product_item($item);
-    }
+if (!empty($productsTrending)) {
+  foreach ($productsTrending as $item) {
+    $html_products_trending .= render_product_item($item);
+  }
 }
 
 $html_products_collections = '';
-if(!empty($productsCollections)) {
-    foreach ($productsCollections as $item) {
-        $html_products_collections .= render_product_item($item);
-    }
+if (!empty($productsCollections)) {
+  foreach ($productsCollections as $item) {
+    $html_products_collections .= render_product_item($item);
+  }
 }
 ?>
 
@@ -91,27 +90,30 @@ if(!empty($productsCollections)) {
 <!-- Lưu ý: Không có thẻ <header> và <footer> vì index.php đã include rồi -->
 
 <main class="scroll-container">
-  
+
   <!-- Main Banner Full Screen -->
   <section class="main-banner">
     <!-- Sửa đường dẫn video theo BASE_URL -->
     <video autoplay muted loop playsinline src="<?= BASE_URL ?>Views/assets/image/videobanner.mp4"></video>
     <div class="banner-content">
-      
+
       <div class="banner-title">Điều Khiển Thời Gian</div>
-      
+
       <!-- Hộp tìm kiếm Glassmorphism (Đã tích hợp chức năng tìm kiếm PHP) -->
       <form class="search-box-glass" action="<?= BASE_URL ?>index.php/products/all" method="GET">
         <input type="text" name="search" placeholder="Tìm kiếm" class="search-input">
         <button type="submit" class="search-button">
-            <!-- Icon kính lúp -->
-            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19.5l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <!-- Icon kính lúp -->
+          <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19.5l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+          </svg>
         </button>
       </form>
-      
+
     </div>
   </section>
-      
+
   <!-- Section 1: Product Grid (Featured) -->
   <section class="section scroll-reveal" id="featured-products">
     <div class="section-header">
@@ -141,7 +143,8 @@ if(!empty($productsCollections)) {
     <!-- Sửa đường dẫn ảnh banner -->
     <img src="<?= BASE_URL ?>Views/assets/image/mainbanner1.png" alt="Rolex Banner">
     <div class="mid-banner-title">Đồng Hồ Rolex</div>
-    <button class="mid-banner-glass-button" onclick="window.location.href='<?= BASE_URL ?>index.php/products/all'">Xem ngay</button>
+    <button class="mid-banner-glass-button" onclick="window.location.href='<?= BASE_URL ?>index.php/products/all'">Xem
+      ngay</button>
   </div>
 
   <!-- Section 3: Best Collection Grid -->
@@ -164,17 +167,20 @@ if(!empty($productsCollections)) {
     <div class="blog-grid">
       <!-- Box 1: Large Feature -->
       <div class="blog-feature bloghover">
-        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Watch Trends 2025" class="blog-feature-img">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+          alt="Watch Trends 2025" class="blog-feature-img">
         <div class="blog-feature-title">Watch Trends 2025</div>
         <div class="blog-feature-desc">
-          Uncover the boldest looks and next-gen technologies for wristwatches in 2025: smart chronos, eco-friendly, and classic revivals.
+          Uncover the boldest looks and next-gen technologies for wristwatches in 2025: smart chronos, eco-friendly, and
+          classic revivals.
         </div>
       </div>
       <!-- Box 2: Vertical List -->
       <div class="blog-list">
         <!-- Blog Item 1 -->
         <div class="blog-list-item bloghover">
-          <img src="https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=400&q=80" class="blog-list-img" alt="Wind Your Watch">
+          <img src="https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=400&q=80"
+            class="blog-list-img" alt="Wind Your Watch">
           <div class="blog-list-info">
             <div class="blog-list-title">How to Wind Your Watch</div>
             <div class="blog-list-desc">
@@ -184,7 +190,8 @@ if(!empty($productsCollections)) {
         </div>
         <!-- Blog Item 2 -->
         <div class="blog-list-item bloghover">
-          <img src="https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80" class="blog-list-img" alt="Watch Care">
+          <img src="https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80"
+            class="blog-list-img" alt="Watch Care">
           <div class="blog-list-info">
             <div class="blog-list-title">Watch Care 101</div>
             <div class="blog-list-desc">
@@ -194,7 +201,8 @@ if(!empty($productsCollections)) {
         </div>
         <!-- Blog Item 3 -->
         <div class="blog-list-item bloghover">
-          <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=400&q=80" class="blog-list-img" alt="Choosing the Right Fit">
+          <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=400&q=80"
+            class="blog-list-img" alt="Choosing the Right Fit">
           <div class="blog-list-info">
             <div class="blog-list-title">Choosing the Right Fit</div>
             <div class="blog-list-desc">
@@ -210,37 +218,107 @@ if(!empty($productsCollections)) {
 </main>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    //Tìm tất cả các form có class "form-add-to-cart" 
+  document.addEventListener('DOMContentLoaded', function () {
+    // Tìm tất cả các form có class "form-add-to-cart" 
     const forms = document.querySelectorAll(".form-add-to-cart");
 
-    form.forEach(from => {
-      form.addEventListener('submit', function(e) {
+    forms.forEach(form => {  // ✅ Sửa: for...of thành forEach, 'from' thành 'form'
+      form.addEventListener('submit', function (e) {
         e.preventDefault(); // Chặn chuyển trang
 
         const formData = new FormData(form);
+        formData.append('is_ajax', '1'); // Thêm flag AJAX
 
-        //Tự thêm biến "is_ajax" vào đây
-        formData.append('is_ajax', '1');
-
-        //Gừi ngầm (Fetch)
+        // Gửi ngầm (Fetch)
         fetch(form.action, {
           method: 'POST',
           body: formData
         })
-        .then(response => response.text())
-        .then(data => {
-          //Hiện Alert
-          alert("Đã thêm vào giỏ hành thành công!!!");
+          .then(response => response.text())
+          .then(data => {
+            // ✅ Hiển thị thông báo thành công
+            showToast("✅ Đã thêm vào giỏ hàng!", "success");
 
-          //Cập nhật số trên header(Nếu có)
-          const headerCount = document.getElementsById('header-cart-count');
-          if(headerCount) {
-            headerCount.innerText = '(' + data + ')';
-          }
-        })
-        .catch(err => console.error(err));
-      })
-    })
+            // ✅ Cập nhật số lượng trên header (nếu có)
+            const headerCount = document.getElementById('header-cart-count');
+            if (headerCount) {
+              // Parse số lượng từ response
+              const currentCount = parseInt(headerCount.innerText.replace(/\D/g, '')) || 0;
+              headerCount.innerText = '(' + (currentCount + 1) + ')';
+            }
+
+            // ✅ Cập nhật localStorage cart (tuỳ chọn)
+            updateLocalStorageCart(new Object(formData));
+          })
+          .catch(err => {
+            console.error(err);
+            showToast("❌ Lỗi khi thêm vào giỏ hàng!", "error");
+          });
+      });
+    });
   });
+
+  // ✅ Hàm hiển thị thông báo Toast
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      z-index: 9999;
+      animation: slideIn 0.3s ease-out;
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // ✅ Hàm cập nhật localStorage (nếu muốn lưu giỏ hàng phía client)
+  function updateLocalStorageCart(formData) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    const item = {
+      id: formData.get('id'),
+      name: formData.get('name'),
+      price: parseFloat(formData.get('price')),
+      image: formData.get('image'),
+      quantity: parseInt(formData.get('quantity')) || 1
+    };
+
+    // Kiểm tra sản phẩm đã có trong giỏ chưa
+    const existingItem = cart.find(p => p.id == item.id);
+    if (existingItem) {
+      existingItem.quantity += item.quantity;
+    } else {
+      cart.push(item);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
 </script>
+
+<!-- ✅ CSS Animation cho Toast -->
+<style>
+  @keyframes slideIn {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .toast {
+    animation: slideIn 0.3s ease-out !important;
+  }
+</style>
