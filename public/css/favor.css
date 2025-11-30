@@ -1,0 +1,73 @@
+/* FAVORITES PAGE CUSTOM STYLES
+   Kế thừa layout từ styles.css (Product Page), file này chỉ chứa các tùy biến đặc thù
+*/
+
+/* Tùy chỉnh tiêu đề Sidebar cho trang Yêu thích */
+.favor-sidebar .filter-title {
+    color: var(--white); /* Màu trắng thay vì màu cam highlight */
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* =========================================================
+   LOGIC NÚT XÓA YÊU THÍCH (Heart -> X Hover Effect)
+   ========================================================= */
+
+/* Định kiểu cho nút xóa yêu thích trong Product Box */
+.remove-favor-btn {
+    /* Màu nền đỏ nhạt để cảnh báo đây là nút xóa/quan trọng */
+    background: rgba(255, 71, 87, 0.1); 
+    border: 1px solid rgba(255, 71, 87, 0.3);
+    color: #ff4757; /* Màu đỏ */
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Mặc định: Hiển thị trái tim (icon-heart), Ẩn dấu X (icon-close) */
+.remove-favor-btn .icon-heart {
+    display: block;
+    transform: scale(1);
+    transition: transform 0.2s ease;
+}
+
+.remove-favor-btn .icon-close {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Khi Hover vào nút */
+.remove-favor-btn:hover {
+    background: #ff4757; /* Nền đỏ đậm */
+    color: var(--white); /* Icon chuyển màu trắng */
+    border-color: #ff4757;
+    box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+}
+
+/* Ẩn trái tim và hiện dấu X khi hover */
+.remove-favor-btn:hover .icon-heart {
+    display: none;
+}
+
+.remove-favor-btn:hover .icon-close {
+    display: block;
+    animation: fadeInIcon 0.2s forwards;
+}
+
+@keyframes fadeInIcon {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Tùy chỉnh thêm cho Product Box trong trang Favor nếu cần */
+.favor-product-box {
+    /* Có thể thêm viền màu khác để phân biệt danh sách yêu thích */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.favor-product-box:hover {
+    /* Hiệu ứng hover mạnh hơn chút */
+    border-color: rgba(255, 158, 0, 0.3);
+}
