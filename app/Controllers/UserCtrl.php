@@ -138,6 +138,7 @@ class UserCtrl
         $addresses = $this->AddressModel->getAddressesByUserId($user_id);
         $OrderModel = $this->OrderModel; // Pass model vào view
 
+
         include_once "Views/info.php";
     }
 

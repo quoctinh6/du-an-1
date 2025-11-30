@@ -35,7 +35,17 @@ class ProductsCtrl
         // Kiểm tra nếu sản phẩm tồn tại mới lấy biến thể
         if ($product_base) {
             $product_variants = $this->productModel->getVariantsById_product($product_base['id']);
+
+            // Lấy 4 sản phẩm liên quan cùng danh mục
+            $products_similar = $this->productModel->getProducts(4, [$product_base['category_id']]);
+
+            // Lọc bỏ sản phẩm hiện tại khỏi danh sách liên quan
+            $products_similar = array_filter($products_similar, function ($p) use ($product_base) {
+                return $p['id'] != $product_base['id'];
+            });
+
             include_once("Views/detail.php");
+
         } else {
             echo "Sản phẩm không tồn tại";
         }

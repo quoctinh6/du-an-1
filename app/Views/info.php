@@ -101,7 +101,7 @@
                     <?php if (empty($orders)): ?>
                         <div style="text-align: center; padding: 40px; color: #999;">
                             <p>Bạn chưa có đơn hàng nào.</p>
-                            <a href="<?php echo BASE_URL; ?>index.php/products/all" class="glass-button"
+                            <a href="<?php echo BASE_URL; ?>index.php/products" class="glass-button"
                                 style="display: inline-block; margin-top: 15px; background: rgba(119, 119, 119, 0.15); backdrop-filter: blur(8px); border: 1px solid rgba(70, 70, 70, 0.2); padding: 12px 24px; border-radius: 8px; color: #fff; text-decoration: none; font-weight: 600;">
                                 Bắt đầu mua sắm
                             </a>
@@ -151,7 +151,8 @@
                                             alt="<?php echo htmlspecialchars($first_item['product_name']); ?>" class="order-img">
                                         <div class="order-details">
                                             <div class="order-product-name">
-                                                <?php echo htmlspecialchars($first_item['product_name']); ?></div>
+                                                <?php echo htmlspecialchars($first_item['product_name']); ?>
+                                            </div>
                                             <div class="order-meta">
                                                 Phân loại:
                                                 <?php
@@ -177,7 +178,8 @@
                                 </div>
                                 <div class="order-footer">
                                     <div class="order-total">Ngày đặt:
-                                        <span><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></span></div>
+                                        <span><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></span>
+                                    </div>
                                     <div class="order-actions">
                                         <a href="<?php echo BASE_URL; ?>index.php/Products/detail/<?php echo htmlspecialchars($first_item['slug'] ?? '#'); ?>"
                                             class="outline-btn">Chi Tiết</a>

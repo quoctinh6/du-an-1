@@ -1,4 +1,20 @@
 // Example: icon-button click logic, you can expand this for cart/wishlist features
+// 2. BIẾN TOÀN CỤC
+const dom = {
+  mainImg: document.getElementById("mainProductImage"),
+  thumbArea: document.getElementById("productThumbnails"),
+  colorContainer: document.getElementById("colorContainer"),
+  sizeContainer: document.getElementById("sizeContainer"),
+  price: document.querySelector(".product-dt-price"),
+  sku: document.querySelector(".product-sku"),
+  qtyInput: document.getElementById("quantityInput"),
+  outOfStockLabel: document.getElementById("outOfStockLabel"),
+  btnBuy: document.querySelector(".glass-button"),
+  btnAddToCart: document.querySelector(".cta-btn.secondary"),
+  btnNavLeft: document.querySelector(".gallery-nav-btn.left"),
+  btnNavRight: document.querySelector(".gallery-nav-btn.right"),
+};
+
 document.querySelectorAll(".icon-btn").forEach((btn) => {
   btn.addEventListener("click", function () {
     this.classList.toggle("active");

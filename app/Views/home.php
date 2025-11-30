@@ -3,208 +3,190 @@ $html_products_featured = '';
 
 function render_product_item($item)
 {
-    // Định dạng giá tiền
-    $formatted_price = number_format($item['price'], 0, ',', '.') . ' VND';
-    $product_id = htmlspecialchars($item['id']);
-    $product_price = htmlspecialchars($item['price']);
-    // Bảo mật & Xử lý đường dẫn ảnh
-    $image_url = htmlspecialchars($item['image_url']);
-    
-    // Nếu ảnh chưa có đường dẫn đầy đủ, nối thêm đường dẫn gốc
-    // (Tuỳ vào dữ liệu trong DB của bạn lưu full link hay tên file)
-    if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
-        $image_url = BASE_URL . 'Views/assets/img/' . $image_url; 
-        // Lưu ý: Kiểm tra lại folder ảnh của bạn là 'image' hay 'img' trong assets
-    }
 
-    $product_name = htmlspecialchars($item['name']);
-    $detail_url = BASE_URL . 'index.php/products/detail/' . htmlspecialchars($item['slug'] ?? $item['id']);
+  // Định dạng giá tiền
+  $formatted_price = number_format($item['price'], 0) . ' VND';
+  $product_id = htmlspecialchars($item['id']);
+  $product_price = htmlspecialchars($item['price']);
+  // Bảo mật: Dùng htmlspecialchars để tránh lỗi XSS
+  $image_url = htmlspecialchars($item['image_url']);
+  $product_name = htmlspecialchars($item['name']);
+  $detail_url = 'index.php/products/detail/' . htmlspecialchars($item['slug']);
 
-    // Xử lý giá cũ (nếu có)
-    $old_price_html = '';
-    if (!empty($item['old_price']) && $item['old_price'] > $item['price']) {
-        $formatted_old = number_format($item['old_price'], 0, ',', '.');
-        $old_price_html = "<span class=\"product-old-price\">{$formatted_old}</span>";
-    }
-
-    // HTML của 1 sản phẩm (Giống cấu trúc index.html)
-    return <<<HTML
-    <div class="product-box">
+  // Dùng Heredoc (<<<HTML) để viết code HTML dễ nhìn hơn
+  return <<<HTML
+    <div class="product-box" >
         <div class="product-icons">
-            <!-- Nút thêm vào giỏ (Form submit để xử lý PHP) -->
-            <form action="index.php/cart/add" method="POST" style="display:inline;">
-                <input type="hidden" name="id" value="$product_id">
-                <input type="hidden" name="name" value="$product_name">
-                <input type="hidden" name="price" value="$product_price">
-                <input type="hidden" name="image" value="$image_url">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit" class="icon-btn" aria-label="Add to cart">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                    </svg>
-                </button>
-            </form>
-            
+            <button class="icon-btn btn-add-to-cart" 
+        aria-label="Add to cart"
+        data-id="$product_id;" 
+        data-name="$product_name;" 
+        data-price="$product_price" 
+        data-image="$image_url">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
+        </svg>
+    </button>
             <button class="icon-btn" aria-label="Add to favorites">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                 </svg>
             </button>
         </div>
-        
-        <a href="$detail_url">
-            <img src="$image_url" alt="$product_name" class="product-img">
-        </a>
-        
+        <img src="$image_url" alt="$product_name" class="product-img" onclick="window.location.href= '$detail_url' ">
         <div class="product-name">$product_name</div>
-        <div class="product-price">$old_price_html $formatted_price</div>
-        
-        <button class="buy-btn" onclick="window.location.href='$detail_url'">Xem chi tiết</button>
+        <div class="product-price">$formatted_price</div>
+        <button class="buy-btn">Mua ngay</button>
     </div>
-HTML;
+    HTML;
 }
+// (Đảm bảo bạn đã include file chứa hàm render_product_item)
 
-// Render các danh sách sản phẩm
 $html_products_featured = '';
-if(!empty($productsFeatured)) {
-    foreach ($productsFeatured as $item) {
-        $html_products_featured .= render_product_item($item);
-    }
+foreach ($productsFeatured as $item) {
+  $html_products_featured .= render_product_item($item);
 }
 
 $html_products_trending = '';
-if(!empty($productsTrending)) {
-    foreach ($productsTrending as $item) {
-        $html_products_trending .= render_product_item($item);
-    }
+foreach ($productsTrending as $item) {
+  $html_products_trending .= render_product_item($item);
 }
 
 $html_products_collections = '';
-if(!empty($productsCollections)) {
-    foreach ($productsCollections as $item) {
-        $html_products_collections .= render_product_item($item);
-    }
+foreach ($productsCollections as $item) {
+  $html_products_collections .= render_product_item($item);
 }
 ?>
 
-<!-- BẮT ĐẦU PHẦN HTML MAIN (Chuẩn theo index.html) -->
-<!-- Lưu ý: Không có thẻ <header> và <footer> vì index.php đã include rồi -->
+<script>
+  const MovetoPages = () => {
+    window.location.href = BASE_URL + 'cart.php?id=' + idSanPham;
+  };
+</script>
 
-<main class="scroll-container">
-  
-  <!-- Main Banner Full Screen -->
-  <section class="main-banner">
-    <!-- Sửa đường dẫn video theo BASE_URL -->
-    <video autoplay muted loop playsinline src="<?= BASE_URL ?>Views/assets/image/videobanner.mp4"></video>
-    <div class="banner-content">
-      
-      <div class="banner-title">Điều Khiển Thời Gian</div>
-      
-      <!-- Hộp tìm kiếm Glassmorphism (Đã tích hợp chức năng tìm kiếm PHP) -->
-      <form class="search-box-glass" action="<?= BASE_URL ?>index.php/products/all" method="GET">
-        <input type="text" name="search" placeholder="Tìm kiếm" class="search-input">
-        <button type="submit" class="search-button">
-            <!-- Icon kính lúp -->
-            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19.5l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-        </button>
-      </form>
-      
-    </div>
-  </section>
-      
-  <!-- Section 1: Product Grid (Featured) -->
-  <section class="section scroll-reveal" id="featured-products">
-    <div class="section-header">
-      <div class="section-title">Đồng hồ bán chạy</div>
-      <button class="section-action" onclick="window.location.href='<?= BASE_URL ?>index.php/products/all'">>></button>
-    </div>
-    <div class="product-grid">
-      <!-- Đổ dữ liệu PHP vào đây -->
-      <?= $html_products_featured ?>
-    </div>
-  </section>
+<!-- Main Banner Full Screen -->
+<section class="main-banner ">
+  <video autoplay muted loop playsinline src="<?php echo BASE_URL; ?>Views/assets/image/videobanner.mp4"></video>
+  <div class="banner-content">
 
-  <!-- Section 2: Trending Grid -->
-  <section class="section scroll-reveal" id="trending-products">
-    <div class="section-header">
-      <div class="section-title">Đồng hồ cơ</div>
-      <button class="section-action" onclick="window.location.href='<?= BASE_URL ?>index.php/products/all'">>></button>
-    </div>
-    <div class="product-grid">
-      <!-- Đổ dữ liệu PHP vào đây -->
-      <?= $html_products_trending ?>
-    </div>
-  </section>
+    <div class="banner-title">Điều Khiển Thời Gian</div>
+    <!-- <div class="banner-desc">
+        Discover luxury and precision—shop our curated collection of modern watches. <br>
+        <span style="color:var(--accent);"><b>Flash Sale</b></span>: Exclusive deals, limited-time only!
+      </div>-->
+    <!-- Thay thế button bằng hộp tìm kiếm Glassmorphism -->
+    <form class="search-box-glass">
+      <input type="text" placeholder="Tìm kiếm" class="search-input">
+      <button type="submit" class="search-button">
+        <!-- Icon kính lúp (Search) -->
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19.5l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+        </svg>
 
-  <!-- Section Banner (Full Width) -->
-  <div class="mid-banner scroll-reveal dark-filter">
-    <!-- Sửa đường dẫn ảnh banner -->
-    <img src="<?= BASE_URL ?>Views/assets/image/mainbanner1.png" alt="Rolex Banner">
-    <div class="mid-banner-title">Đồng Hồ Rolex</div>
-    <button class="mid-banner-glass-button" onclick="window.location.href='<?= BASE_URL ?>index.php/products/all'">Xem ngay</button>
+      </button>
+    </form>
+
   </div>
+</section>
 
-  <!-- Section 3: Best Collection Grid -->
-  <section class="section scroll-reveal" id="best-collection">
-    <div class="section-header">
-      <div class="section-title">Đồng hồ mới</div>
-      <button class="section-action" onclick="window.location.href='<?= BASE_URL ?>index.php/products/all'">>></button>
-    </div>
-    <div class="product-grid">
-      <!-- Đổ dữ liệu PHP vào đây -->
-      <?= $html_products_collections ?>
-    </div>
-  </section>
+<!-- Section 1: Product Grid -->
+<section class="section scroll-reveal" id="featured-products">
+  <div class="section-header">
+    <div class="section-title">Đồng hồ nổi bật</div>
+    <button class="section-action">>></button>
+  </div>
+  <div class="product-grid">
+    <!-- Product Box 1 -->
+    <?= $html_products_featured ?>
+  </div>
+</section>
 
-  <!-- Section 4: Blog/Article Grid (Phần này vẫn tĩnh vì chưa có Controller Blog) -->
-  <section class="section scroll-reveal" id="watch-blog">
-    <div class="section-header">
-      <div class="section-title">Tin tức</div>
+
+<!-- Section 2: Trending Grid -->
+<section class="section scroll-reveal" id="trending-products">
+  <div class="section-header">
+    <div class="section-title">Theo kịp thời đại</div>
+    <button class="section-action">>></button>
+  </div>
+  <div class="product-grid">
+    <!-- Four Trending Product Boxes -->
+    <?= $html_products_trending ?>
+  </div>
+</section>
+
+<!-- Section Banner (Full Width) -->
+<div class="mid-banner scroll-reveal dark-filter">
+  <img src="<?php echo BASE_URL; ?>Views/assets/image/mainbanner1.png" alt="">
+  <div class="mid-banner-title">Đồng Hồ Rolex</div>
+  <button class="mid-banner-glass-button">Xem ngay</button>
+</div>
+
+<!-- Section 3: Best Collection Grid -->
+<section class="section scroll-reveal" id="best-collection">
+  <div class="section-header">
+    <div class="section-title">Bộ sưu tập mới nhất</div>
+    <button class="section-action">>></button>
+  </div>
+  <div class="product-grid">
+    <!-- Four Best Collection Boxes -->
+    <?= $html_products_collections ?>
+  </div>
+</section>
+
+<!-- Section 4: Blog/Article Grid -->
+<section class="section scroll-reveal" id="watch-blog">
+  <div class="section-header">
+    <div class="section-title">Tin tức</div>
+  </div>
+  <div class="blog-grid">
+    <!-- Box 1: Large Feature -->
+    <div class="blog-feature bloghover">
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+        alt="Watch Trends 2025" class="blog-feature-img">
+      <div class="blog-feature-title">Watch Trends 2025</div>
+      <div class="blog-feature-desc">
+        Uncover the boldest looks and next-gen technologies for wristwatches in 2025: smart chronos, eco-friendly, and
+        classic revivals.
+      </div>
     </div>
-    <div class="blog-grid">
-      <!-- Box 1: Large Feature -->
-      <div class="blog-feature bloghover">
-        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Watch Trends 2025" class="blog-feature-img">
-        <div class="blog-feature-title">Watch Trends 2025</div>
-        <div class="blog-feature-desc">
-          Uncover the boldest looks and next-gen technologies for wristwatches in 2025: smart chronos, eco-friendly, and classic revivals.
+    <!-- Box 2: Vertical List -->
+    <div class="blog-list">
+      <!-- Blog Item 1 -->
+      <div class="blog-list-item bloghover">
+        <img src="https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=400&q=80"
+          class="blog-list-img" alt="Wind Your Watch">
+        <div class="blog-list-info">
+          <div class="blog-list-title">How to Wind Your Watch</div>
+          <div class="blog-list-desc">
+            Learn proper winding techniques for mechanical and automatic watches.
+          </div>
         </div>
       </div>
-      <!-- Box 2: Vertical List -->
-      <div class="blog-list">
-        <!-- Blog Item 1 -->
-        <div class="blog-list-item bloghover">
-          <img src="https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=400&q=80" class="blog-list-img" alt="Wind Your Watch">
-          <div class="blog-list-info">
-            <div class="blog-list-title">How to Wind Your Watch</div>
-            <div class="blog-list-desc">
-              Learn proper winding techniques for mechanical and automatic watches.
-            </div>
+      <!-- Blog Item 2 -->
+      <div class="blog-list-item bloghover">
+        <img src="https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80"
+          class="blog-list-img" alt="Watch Care">
+        <div class="blog-list-info">
+          <div class="blog-list-title">Watch Care 101</div>
+          <div class="blog-list-desc">
+            Essential tips: cleaning, storage, servicing. Make your timepiece last.
           </div>
         </div>
-        <!-- Blog Item 2 -->
-        <div class="blog-list-item bloghover">
-          <img src="https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80" class="blog-list-img" alt="Watch Care">
-          <div class="blog-list-info">
-            <div class="blog-list-title">Watch Care 101</div>
-            <div class="blog-list-desc">
-              Essential tips: cleaning, storage, servicing. Make your timepiece last.
-            </div>
-          </div>
-        </div>
-        <!-- Blog Item 3 -->
-        <div class="blog-list-item bloghover">
-          <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=400&q=80" class="blog-list-img" alt="Choosing the Right Fit">
-          <div class="blog-list-info">
-            <div class="blog-list-title">Choosing the Right Fit</div>
-            <div class="blog-list-desc">
-              Select a watch that suits your wrist, lifestyle, and wardrobe.
-            </div>
-          </div>
-        </div>
-        <button class="glass-button blog-list-btn">Xem Thêm</button>
       </div>
+      <!-- Blog Item 3 -->
+      <div class="blog-list-item bloghover">
+        <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=400&q=80"
+          class="blog-list-img" alt="Choosing the Right Fit">
+        <div class="blog-list-info">
+          <div class="blog-list-title">Choosing the Right Fit</div>
+          <div class="blog-list-desc">
+            Select a watch that suits your wrist, lifestyle, and wardrobe.
+          </div>
+        </div>
+      </div>
+      <button class="glass-button blog-list-btn">Xem Thêm</button>
     </div>
-  </section>
-
-</main>
+  </div>
+</section>

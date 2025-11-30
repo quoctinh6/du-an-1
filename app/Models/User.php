@@ -35,17 +35,17 @@ class Users
         // 1. Validate dữ liệu
         if (empty($name) || empty($email) || empty($phone) || empty($password)) {
             $_SESSION['error'] = 'Vui lòng điền đầy đủ thông tin.';
-            header("Location: /register");
+            header("Location:" . BASE_URL . "index.php/User/register");
             exit();
         }
         if ($password !== $confirm_password) {
             $_SESSION['error'] = 'Mật khẩu xác nhận không khớp.';
-            header("Location: /register");
+            header("Location:" . BASE_URL . "index.php/User/register");
             exit();
         }
         if (strlen($phone) < 9) {
             $_SESSION['error'] = 'Số điện thoại không hợp lệ.';
-            header("Location: /register");
+            header("Location:" . BASE_URL . "index.php/User/register");
             exit();
         }
         // Kiểm tra email đã tồn tại chưa
@@ -53,7 +53,7 @@ class Users
 
         if ($existingUser) {
             $_SESSION['error'] = 'Email đã được sử dụng.';
-            header("Location: " . BASE_URL . "index.php/User/login");
+            header("Location: " . BASE_URL . "index.php/User/register");
             exit();
         }
 
@@ -68,10 +68,10 @@ class Users
         exit();
     }
 
-    function login($user, $is_password_correct)
+    function login($user, $password)
     {
 
-        if ($user && password_verify($is_password_correct, $user['password'])) {
+        if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user;
             unset($_SESSION['error']);
             var_dump(BASE_URL);

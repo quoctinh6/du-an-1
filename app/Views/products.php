@@ -2,6 +2,13 @@
 // === HÀM RENDER HTML ===
 function renderProducts($item)
 {
+    $formatted_price = number_format($item['price'], 0) . ' VND';
+    $product_id = htmlspecialchars($item['id']);
+    $product_price = htmlspecialchars($item['price']);
+    // Bảo mật: Dùng htmlspecialchars để tránh lỗi XSS
+    $image_url = htmlspecialchars($item['image_url']);
+    $product_name = htmlspecialchars($item['name']);
+    $detail_url = 'index.php/products/detail/' . htmlspecialchars($item['slug']);
     $slug = $item['slug'] ?? $item['id'];
     $detailLink = BASE_URL . "index.php/products/detail/" . $slug;
 
@@ -22,10 +29,16 @@ function renderProducts($item)
     return <<<HTML
     <div class="product-box">
         <div class="product-icons">
-            <button class="icon-btn btn-add-to-cart" aria-label="Add to cart">
-                <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                </svg>
+            <button class="icon-btn btn-add-to-cart" 
+        aria-label="Add to cart"
+        data-id="$product_id;" 
+        data-name="$product_name;" 
+        data-price="$product_price" 
+        data-image="$image_url">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
+        </svg>
             </button>
             <button class="icon-btn" aria-label="Add to favorites">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24">
@@ -79,10 +92,10 @@ HTML;
         ?>
         <form class="filter-sidebar" action="" method="GET">
             <h3 class="filter-title">Bộ Lọc Sản Phẩm</h3>
+            <div class="sidebar-search-container"><input type="text" name="search" class="sidebar-search-input"
+                    value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
+                    placeholder="Tên sản phẩm..."></div>
 
-            <input type="text" name="search" class="filter-group-title"
-                value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
-                placeholder="Tên sản phẩm...">
 
 
             <!-- 1. Lọc theo Danh mục -->
