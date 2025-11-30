@@ -11,7 +11,7 @@ $url = rtrim($url, '/');
 // Tách URL thành một mảng dựa trên dấu /
 $parts = explode('/', $url);
 
-// Tự động lấy đường dẫn gốc, kể cả 'du an 1'
+// Tự động lấy đường dẫn gốc, kể cả 'du an 1'   
 define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 
 // === LOGIC ĐIỀU HƯỚNG MỚI ==

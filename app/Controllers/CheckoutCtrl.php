@@ -48,7 +48,13 @@ class CheckoutCtrl
         $shippingMethod = 1; // Mặc định giao hàng tiêu chuẩn
 
         // Lấy ID User (Tạm thời = 1 nếu chưa login)
-        $userID = isset($_SESSION['user']) ? $_SESSION['user']['id'] : 1;
+        // $userID = isset($_SESSION['user']) ? $_SESSION['user']['id'] : 1;
+        if(!isset($_SESSION['user'])) {
+            //Chưa đăng nhập thì đá sang trang login
+            header('location: ' . BASE_URL . 'index.php/User/login');
+            exit;
+        }
+        $userID = $_SESSION['user']['id'];
 
         // Lấy giỏ hàng và tính lại tổng giá phòng trường hợp bị chỉnh client-side
         $cart = $_SESSION['cart'] ?? [];
