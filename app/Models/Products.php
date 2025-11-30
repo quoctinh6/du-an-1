@@ -74,6 +74,20 @@ class Products
     return $this->db->query($sql, $id_product);
   }
 
+  /**
+   * Lấy một variant theo variant id
+   */
+  function getVariantById(int $variant_id)
+  {
+    $sql = 'SELECT variants.*, sizes.name as size_name, colors.name as color_name, products.name as product_name, products.slug
+            FROM variants
+            INNER JOIN sizes ON variants.size_id = sizes.id
+            INNER JOIN colors ON variants.color_id = colors.id
+            INNER JOIN products ON variants.product_id = products.id
+            WHERE variants.id = ? LIMIT 1';
+    return $this->db->queryOne($sql, $variant_id);
+  }
+
   function getProductsByColor_id($id)
   {
     $params = [];

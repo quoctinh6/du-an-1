@@ -63,7 +63,7 @@
                         </div>
                         
                         <div style="font-weight: bold;">
-                            <?= number_format($item['price'] * $item['quantity'], 0, ',', '.') ?>đ
+                            <?= number_format(($item['display_price'] ?? $item['price']) * $item['quantity'], 0, ',', '.') ?>đ
                         </div>
                     </div>
                 <?php endforeach; ?>

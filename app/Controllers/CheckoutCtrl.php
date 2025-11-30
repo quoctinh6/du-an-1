@@ -16,11 +16,27 @@ class CheckoutCtrl
             exit;
         }
 
-        // Tính toán tổng tiền
+        // Tính toán tổng tiền — dùng giá từ DB nếu có variant
+        $productModel = new Products();
         $subtotal = 0;
-        foreach ($cartItems as $item) {
-            $qty = isset($item['quantity']) ? $item['quantity'] : 0;
-            $subtotal += ($item['price'] * $qty);
+        foreach ($cartItems as $key => $item) {
+            $qty = isset($item['quantity']) ? (int)$item['quantity'] : 0;
+            if (!empty($item['variant_id'])) {
+                $v = $productModel->getVariantById((int)$item['variant_id']);
+                if ($v) {
+                    $cartItems[$key]['display_price'] = $v['price'];
+                    $cartItems[$key]['variant_meta'] = [
+                        'size'=>$v['size_name'] ?? null,
+                        'color'=>$v['color_name'] ?? null,
+                        'sku'=>$v['sku'] ?? null
+                    ];
+                    $subtotal += ((float)$v['price']) * $qty;
+                    continue;
+                }
+            }
+            // fallback: use price stored in session
+            $cartItems[$key]['display_price'] = $item['price'] ?? 0;
+            $subtotal += ((float)($item['price'] ?? 0)) * $qty;
         }
 
         // Use the same shipping rule across controller: free when subtotal > 1,000,000
@@ -63,10 +79,31 @@ class CheckoutCtrl
             exit;
         }
 
+        // Recompute subtotal using server-side variant prices if available
+        $productModel = new Products();
         $subtotal = 0;
-        foreach ($cart as $item) {
-            $qty = isset($item['quantity']) ? $item['quantity'] : 0;
-            $subtotal += ($item['price'] * $qty);
+        $missingVariants = [];
+        $insufficientStock = [];
+        foreach ($cart as $key => $item) {
+            $qty = isset($item['quantity']) ? (int)$item['quantity'] : 0;
+
+            if (!empty($item['variant_id'])) {
+                $v = $productModel->getVariantById((int)$item['variant_id']);
+                if (!$v) {
+                    $missingVariants[] = $item['name'] ?? ('#' . ($item['product_id'] ?? $item['id']));
+                    continue;
+                }
+
+                // check stock
+                if (isset($v['quantity']) && $v['quantity'] < $qty) {
+                    $insufficientStock[] = ($v['product_name'] ?? $item['name']) . ' (' . ($v['size_name'] ?? '') . ' / ' . ($v['color_name'] ?? '') . ')';
+                }
+
+                $subtotal += ((float)$v['price']) * $qty;
+            } else {
+                // backward compatible: use price in session
+                $subtotal += ((float)($item['price'] ?? 0)) * $qty;
+            }
         }
 
         // same shipping threshold as in index
@@ -82,19 +119,16 @@ class CheckoutCtrl
             exit;
         }
 
-        // Verify items have variants before creating the order
-        $productModel = new Products();
-        $missingVariants = [];
-        foreach ($cart as $item) {
-            $variants = $productModel->getVariantsById_product((int)$item['id']);
-            if (empty($variants)) {
-                $missingVariants[] = $item['name'] ?? ('#' . $item['id']);
-            }
-        }
-
+        // Check results from the subtotal phase
         if (!empty($missingVariants)) {
             $badList = implode(', ', $missingVariants);
             echo "<script>alert('Không thể đặt hàng. Những sản phẩm sau chưa có biến thể: " . addslashes($badList) . "'); window.history.back();</script>";
+            exit;
+        }
+
+        if (!empty($insufficientStock)) {
+            $list = implode(', ', $insufficientStock);
+            echo "<script>alert('Một số biến thể không còn đủ số lượng: " . addslashes($list) . "'); window.history.back();</script>";
             exit;
         }
 
@@ -112,11 +146,18 @@ class CheckoutCtrl
         // Bước 2: lưu chi tiết
         $failedAdd = [];
         foreach ($cart as $item) {
-            $variants = $productModel->getVariantsById_product((int)$item['id']);
-            $firstVariant = $variants[0];
-            $variantId = $firstVariant['id'];
+            // prefer explicit variant stored in cart
+            if (!empty($item['variant_id'])) {
+                $variantId = $item['variant_id'];
+                $variant = $productModel->getVariantById((int)$variantId);
+                $priceToSave = $variant ? $variant['price'] : $item['price'];
+            } else {
+                // fallback: try to take price from session
+                $variantId = null;
+                $priceToSave = $item['price'];
+            }
 
-            $added = $orderModel->addOrderItem($orderId, $variantId, $item['quantity'], $item['price']);
+            $added = $orderModel->addOrderItem($orderId, $variantId, $item['quantity'], $priceToSave);
             if (!$added) {
                 $failedAdd[] = $item['name'] ?? ('#' . $item['id']);
             }

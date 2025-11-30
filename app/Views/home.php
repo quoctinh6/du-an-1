@@ -214,7 +214,7 @@ if(!empty($productsCollections)) {
     //Tìm tất cả các form có class "form-add-to-cart" 
     const forms = document.querySelectorAll(".form-add-to-cart");
 
-    form.forEach(from => {
+    forms.forEach(form => {
       form.addEventListener('submit', function(e) {
         e.preventDefault(); // Chặn chuyển trang
 
@@ -223,24 +223,36 @@ if(!empty($productsCollections)) {
         //Tự thêm biến "is_ajax" vào đây
         formData.append('is_ajax', '1');
 
-        //Gừi ngầm (Fetch)
+        //Gửi ngầm (Fetch) - mong JSON trả về
         fetch(form.action, {
           method: 'POST',
           body: formData
         })
         .then(response => response.text())
-        .then(data => {
-          //Hiện Alert
-          alert("Đã thêm vào giỏ hành thành công!!!");
-
-          //Cập nhật số trên header(Nếu có)
-          const headerCount = document.getElementsById('header-cart-count');
-          if(headerCount) {
-            headerCount.innerText = '(' + data + ')';
+        .then(text => {
+          let payload;
+          try {
+            payload = JSON.parse(text);
+          } catch (err) {
+            console.error('Invalid JSON from add-to-cart (home):', text);
+            alert('Có lỗi xảy ra!');
+            return;
           }
+
+          if (!payload || !payload.success) {
+            alert(payload?.message || 'Không thể thêm vào giỏ');
+            return;
+          }
+
+          // Hiện Alert
+          alert('Đã thêm vào giỏ hàng thành công!');
+
+          //Cập nhật số trên header nếu có (payload.totalQty)
+          const headerCount = document.getElementById('header-cart-count');
+          if (headerCount) headerCount.innerText = '(' + (payload.totalQty ?? 0) + ')';
         })
-        .catch(err => console.error(err));
-      })
-    })
+        .catch(err => { console.error(err); alert('Có lỗi xảy ra!'); });
+      });
+    });
   });
 </script>

@@ -12,9 +12,13 @@
                         <img src="<?= $item['image'] ?>" class="cart-item-img" alt="">
 
                         <div class="cart-item-details">
-                            <div class="cart-item-name"><?= $item['name'] ?></div>
+                            <div class="cart-item-name"><?= htmlspecialchars($item['name']) ?></div>
 
-                            <!-- thêm vào biến thể ở đây -->
+                            <!-- thêm hiển thị biến thể nếu có -->
+                            <?php if (!empty($item['variant_meta'])): ?>
+                                <div class="cart-item-meta">Kích thước: <?= htmlspecialchars($item['variant_meta']['size'] ?? '') ?> • Màu: <?= htmlspecialchars($item['variant_meta']['color'] ?? '') ?>
+                                    <?php if(!empty($item['variant_meta']['sku'])): ?> • SKU: <?= htmlspecialchars($item['variant_meta']['sku']) ?><?php endif; ?></div>
+                            <?php endif; ?>
                         </div>
 
 
@@ -46,7 +50,8 @@
 
                             <!-- Thành tiền -->
                             <div class="cart-item-price">
-                                <?= number_format($item['price'] * $item['quantity'])?>đ
+                                <?php $linePrice = ($item['display_price'] ?? $item['price']) * ($item['quantity'] ?? 0); ?>
+                                <?= number_format($linePrice) ?>đ
                             </div>
                         </div>
                     </div>
@@ -111,7 +116,7 @@
         <!-- Phí vận chuyển -->
         <div class="summary-row">
             <span class="label">Phí vận chuyển</span>
-            <span class="value">đ30.000</span>
+            <span class="value"><?= ($shipping > 0) ? number_format($shipping) . 'đ' : 'Miễn phí' ?></span>
         </div>
 
         <!-- Tổng đơn hàng (Total) -->

@@ -1,10 +1,28 @@
 <?php
+include_once 'Models/Products.php';
 class CartCtrl {
 
     // 1. Hiển thị giỏ hàng
     public function index() {
         // Lấy giỏ hàng từ Session
         $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+
+        // fetch variant details for display if available
+        $productModel = new Products();
+        foreach ($cart as $key => $item) {
+            if (!empty($item['variant_id'])) {
+                $v = $productModel->getVariantById((int)$item['variant_id']);
+                if ($v) {
+                    $cart[$key]['display_price'] = $v['price'];
+                    $cart[$key]['variant_meta'] = [
+                        'size' => $v['size_name'] ?? null,
+                        'color' => $v['color_name'] ?? null,
+                        'sku' => $v['sku'] ?? null,
+                        'stock' => $v['quantity'] ?? null
+                    ];
+                }
+            }
+        }
         
         // Tính toán tổng tiền
         $subtotal = 0;
@@ -12,7 +30,8 @@ class CartCtrl {
             // SỬA LỖI QUAN TRỌNG: 'quantity' chứ không phải 'quatity'
             // Nếu sai chữ này, tổng tiền luôn bằng 0
             $qty = isset($item['quantity']) ? $item['quantity'] : 0;
-            $subtotal += $item['price'] * $qty;
+            $price = isset($item['display_price']) ? $item['display_price'] : $item['price'];
+            $subtotal += ((float)$price) * $qty;
         }
         
         // Logic phí ship
@@ -29,24 +48,52 @@ class CartCtrl {
     public function add() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
+            $variantId = $_POST['variant_id'] ?? null;
             $name = $_POST['name'];
-            $price = $_POST['price'];
-            $image = $_POST['image'];
-            $quantity = (int)$_POST['quantity']; 
+            $price = $_POST['price'] ?? 0;
+            $image = $_POST['image'] ?? '';
+            $quantity = max(1, (int)$_POST['quantity']);
+
+            // If variant_id provided, validate / fetch server-managed price
+            $productModel = new Products();
+            $variantInfo = null;
+            if ($variantId) {
+                $variantInfo = $productModel->getVariantById((int)$variantId);
+                if (!$variantInfo) {
+                    // Invalid variant submitted
+                    if (isset($_POST['is_ajax']) && $_POST['is_ajax'] == 1) {
+                        header('Content-Type: application/json; charset=utf-8');
+                        echo json_encode(['success' => false, 'message' => 'Variant không tồn tại']);
+                        exit();
+                    }
+                    // For non-AJAX, just redirect back
+                    header("Location: " . BASE_URL . "index.php/cart");
+                    exit;
+                }
+                // use server-side price & data
+                $price = $variantInfo['price'];
+                $image = $image ?: ($variantInfo['image'] ?? $image);
+                // name can include variant details
+                $name = $variantInfo['product_name'] . ' — ' . ($variantInfo['color_name'] ?? '') . ' / ' . ($variantInfo['size_name'] ?? '');
+            }
 
             if (!isset($_SESSION['cart'])) {
                 $_SESSION['cart'] = [];
             }
 
-            if (isset($_SESSION['cart'][$id])) {
-                $_SESSION['cart'][$id]['quantity'] += $quantity;
+            // Use key based on variant if provided so different variants don't overwrite each other
+            $key = $variantId ? 'v_' . $variantId : 'p_' . $id;
+
+            if (isset($_SESSION['cart'][$key])) {
+                $_SESSION['cart'][$key]['quantity'] += $quantity;
             } else {
-                $_SESSION['cart'][$id] = [
-                    'id' => $id,
+                $_SESSION['cart'][$key] = [
+                    'product_id' => $id,
+                    'variant_id' => $variantId,
                     'name' => $name,
                     'price' => $price,
                     'image' => $image,
-                    'quantity' => $quantity
+                    'quantity' => $quantity,
                 ];
             }
 
@@ -56,7 +103,9 @@ class CartCtrl {
                 foreach ($_SESSION['cart'] as $item) {
                     $totalQty += $item['quantity'];
                 }
-                echo $totalQty;
+                // return JSON for AJAX callers
+                header('Content-Type: application/json; charset=utf-8');
+                echo json_encode(['success' => true, 'totalQty' => $totalQty]);
                 exit();
             }
         }

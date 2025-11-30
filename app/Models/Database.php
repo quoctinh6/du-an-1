@@ -93,6 +93,3 @@ class Database
 
 }
 ?>
-<script>
-  const BASE_URL = "<?php echo BASE_URL; ?>";
-</script>
