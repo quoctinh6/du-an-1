@@ -1,184 +1,6 @@
-<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<?php include_once 'header.php'?> 
 
-    <!-- Bootstrap 5.3.2 CSS CDN -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      xintegrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-
-    <!-- Bootstrap Icons 1.11.3 CDN -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
-
-    <!-- SEO Tags -->
-    <title>FashionShop - Quản lý Tài khoản</title>
-    <meta name="description" content="Khu vực quản trị tài khoản hệ thống FashionShop." />
-
-    <!-- Custom CSS -->
-    <style>
-      /* =================================================== */
-      /* START: CSS KẾ THỪA TỪ TRANG KHÁCH HÀNG */
-      /* =================================================== */
-      :root {
-        /* MÀU CHỦ ĐẠO: DEEP NAVY */
-        --color-accent: #000f38;
-        --color-accent-darker: #000826;
-        --color-text-main: #1a1a1a;
-        --color-text-subtle: #555555;
-      }
-      body {
-        font-family: "Segoe UI", sans-serif;
-        color: var(--color-text-main);
-        /* Nền admin luôn là xám nhạt */
-        background-color: #f8f9fa;
-      }
-      /* Kế thừa style nút */
-      .btn-primary {
-        background-color: var(--color-accent);
-        border-color: var(--color-accent);
-        color: #ffffff;
-      }
-      .btn-primary:hover {
-        background-color: var(--color-accent-darker);
-        border-color: var(--color-accent-darker);
-        color: #ffffff;
-      }
-      .btn-outline-secondary {
-        color: var(--color-accent);
-        border-color: var(--color-accent);
-      }
-      .btn-outline-secondary:hover {
-        background-color: var(--color-accent);
-        color: #ffffff;
-      }
-
-      /* =================================================== */
-      /* END: CSS KẾ THỪA */
-      /* =================================================== */
-
-      /* 14. CSS MỚI CHO LAYOUT ADMIN */
-
-      /* Sidebar cố định (Sticky Sidebar) */
-      #admin-sidebar {
-        min-height: 100vh; /* Chiều cao tối thiểu bằng màn hình */
-        background-color: #212529; /* Màu đen */
-        
-        /* KỸ THUẬT STICKY */
-        position: -webkit-sticky; /* Cho Safari */
-        position: sticky;
-        top: 0; /* Dính chặt vào đỉnh màn hình */
-        height: 100vh; /* Chiều cao cố định bằng màn hình để scroll bên trong nếu cần */
-        overflow-y: auto; /* Cho phép scroll dọc nếu menu quá dài */
-        z-index: 1000; /* Nổi lên trên */
-      }
-
-      #admin-sidebar .nav-link {
-        color: #adb5bd; /* Màu chữ xám */
-        padding: 0.75rem 1.5rem;
-        font-weight: 500;
-      }
-      #admin-sidebar .nav-link i {
-        margin-right: 0.75rem;
-        width: 20px;
-        text-align: center;
-      }
-      #admin-sidebar .nav-link:hover {
-        color: #ffffff;
-        background-color: rgba(255, 255, 255, 0.05);
-      }
-      /* Style cho link "active" (đang ở trang đó) */
-      #admin-sidebar .nav-link.active {
-        color: #ffffff;
-        background-color: var(--color-accent); /* Dùng màu vàng */
-      }
-
-      #admin-sidebar .sidebar-heading {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        color: #6c757d;
-        padding: 0.5rem 1.5rem;
-        margin-top: 1rem;
-      }
-
-      .admin-top-nav {
-        background-color: #ffffff;
-        border-bottom: 1px solid #dee2e6;
-      }
-
-      .admin-content {
-        padding: 2rem;
-      }
-      
-      /* Style cho thanh search "màu nâu" */
-      .admin-top-nav .form-control {
-        border-color: var(--color-accent);
-      }
-      .admin-top-nav .form-control:focus {
-        border-color: var(--color-accent-darker);
-        /* CẬP NHẬT SHADOW MÀU MỚI */
-        box-shadow: 0 0 0 0.25rem rgba(0, 15, 56, 0.25);
-      }
-
-      /* Style cho Bảng Tài khoản */
-      .admin-table img.avatar-img {
-        width: 45px;
-        height: 45px;
-        object-fit: cover;
-        border-radius: 50%; /* Bo tròn avatar */
-        border: 2px solid #e9ecef;
-      }
-      .admin-table .badge {
-        font-size: 0.8rem;
-        font-weight: 500;
-        padding: 0.5em 0.8em;
-      }
-      
-      /* Style riêng cho Role badge để dễ phân biệt */
-      .badge-role-admin {
-        background-color: var(--color-accent);
-        color: #fff;
-      }
-      .badge-role-client {
-        background-color: #e9ecef;
-        color: var(--color-text-main);
-        border: 1px solid #ced4da;
-      }
-
-      /* Phân trang (Kế thừa) */
-      .pagination .page-item.active .page-link {
-        background-color: var(--color-accent);
-        border-color: var(--color-accent);
-        color: #fff;
-      }
-      .pagination .page-link {
-        color: var(--color-accent);
-      }
-      .pagination .page-link:hover {
-        color: var(--color-accent-darker);
-      }
-      .pagination > .page-item:not(:first-child) .page-link {
-        margin-left: -1px;
-      }
-      .pagination .page-item:first-child .page-link {
-        border-top-left-radius: 0.375rem;
-        border-bottom-left-radius: 0.375rem;
-      }
-      .pagination .page-item:last-child .page-link {
-        border-top-right-radius: 0.375rem;
-        border-bottom-right-radius: 0.375rem;
-      }
-
-    </style>
-  </head>
-  <body class="bg-light">
+ <body class="bg-light">
     <div class="d-flex">
       <!-- CỘT 1: SIDEBAR (MENU TRÁI) -->
       <nav id="admin-sidebar" class="col-lg-2 col-md-3 d-none d-md-block p-0">
@@ -192,31 +14,22 @@
             <span><strong>ZEROWATCH</strong>Admin</span>
           </a>
 
-          <ul class="nav flex-column">
+         <ul class="nav flex-column">
             <li class="nav-item">
-              <!-- Đây là trang hiện tại, nên có class 'active' -->
-              <a class="nav-link" aria-current="page" href="admin.html">
-                <i class="bi bi-speedometer2"></i>
-                Tổng quan
-              </a>
+              <a class="nav-link" href="<?= BASE_URL ?>index.php/AdminDashBoard/index"><i class="bi bi-speedometer2"></i> Tổng quan</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin_orders.html">
-                <i class="bi bi-receipt"></i>
-                Quản lý Đơn hàng
-              </a>
+              <a class="nav-link" href="<?= BASE_URL ?>index.php/AdminOrder/index"><i class="bi bi-receipt"></i> Quản lý Đơn hàng</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin_products.html">
-                <i class="bi bi-box-seam"></i>
-                Quản lý Sản phẩm
-              </a>
+              <!-- Giữ active để biết đang ở mục Sản phẩm -->
+              <a class="nav-link active" href="<?= BASE_URL ?>index.php/AdminProduct/index"><i class="bi bi-box-seam"></i> Quản lý Sản phẩm</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="admin_account.html">
-                <i class="bi bi-people"></i>
-                Tài khoản
-              </a>
+              <a class="nav-link" href="<?= BASE_URL ?>index.php/AdminCategogy/index"><i class="bi bi-tags"></i> Quản lý Danh mục</a>
+            </li>
+             <li class="nav-item">
+              <a class="nav-link" href="<?= BASE_URL ?>index.php/AdminProfile/index"><i class="bi bi-people"></i> Quản lý Tài khoản</a>
             </li>
           </ul>
 

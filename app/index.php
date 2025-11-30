@@ -25,51 +25,50 @@ if (empty($parts[0])) {
     $ctrl->home();
     include_once "./Views/footer.php";
 
-} elseif ($parts[0] == 'Admin') {
-
+} elseif (strtolower($parts[0]) == 'admin') {
+    
+    // 1. Nạp Header Admin
     include_once "./Views/admin/header.php";
-    include_once "./Controllers/AdminCtrl.php";
-    $ctrl = new AdminCtrl();
-    $act = $parts[1] ?? 'index';
-    $params = array_slice($parts, 2);
-    // Gọi action với các tham số
-    $ctrl->$act(...$params);
 
-} else {
-    // TRƯỜNG HỢP 2: CÓ CONTROLLER
-    include_once "./Views/header.php";
-    $controllerName = ucfirst($parts[0]) . "Ctrl"; // Vd: "ProductCtrl"
+    // 2. Xác định Controller con (Dựa vào phần tử thứ 2 của URL)
+    // Nếu URL là /Admin -> Mặc định gọi Dashboard
+    $subCtrl = $parts[1] ?? 'Dashboard'; 
+
+    // 3. Ghép tên file: Admin + TênChứcNăng + Ctrl
+    // Ví dụ: AdminProductCtrl, AdminDashboardCtrl
+    $controllerName = "Admin" . ucfirst($subCtrl) . "Ctrl";
+
+    // 4. Đường dẫn file (Lưu ý: Bạn để file trong Controllers hay Controllers/Admin?)
+    // Dựa trên ảnh cũ, file của bạn nằm ngay trong Controllers/
     $controllerFile = "./Controllers/" . $controllerName . ".php";
+    
+    // Nếu bạn đã chuyển vào thư mục con 'Admin' thì dùng dòng dưới:
+    // $controllerFile = "./Controllers/Admin/" . $controllerName . ".php";
 
     if (file_exists($controllerFile)) {
-
         include_once $controllerFile;
         $ctrl = new $controllerName();
 
-        // Lấy action (phần tử [1]), mặc định là 'index' nếu không có
-        $act = $parts[1] ?? 'index';
+        // 5. Xác định Action (Hàm) - Lùi xuống vị trí số 2
+        $act = $parts[2] ?? 'index'; 
+        
+        // 6. Lấy tham số
+        $params = array_slice($parts, 3);
 
+        // 7. Gọi hàm
         if (method_exists($ctrl, $act)) {
-            // Lấy các tham số (từ phần tử 2] trở đi)
-            $params = array_slice($parts, 2);
-
-            // Gọi action với các tham số
             $ctrl->$act(...$params);
         } else {
-            // Xử lý lỗi 404 - Không tìm thấy action
-            echo "Error 404: Action '$act' not found in $controllerName";
+            echo "Lỗi: Không tìm thấy hành động '$act'";
         }
     } else {
-        // Xử lý lỗi 404 - Không tìm thấy controller
-        echo "Error 404: Controller '$controllerName' not found";
-        exit;
+        echo "Lỗi 404: Không tìm thấy Controller Admin: $controllerName";
     }
-    include_once "./Views/footer.php";
+
 }
-
-
+    include_once "./Views/footer.php";
 
 ?>
 <Script>
-    const BASE_URL = <?= BASE_URL ?>
+    const BASE_URL = <?= BASE_URL ?>    
 </Script>
