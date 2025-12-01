@@ -220,6 +220,299 @@
             font-weight: 600;
             color: var(--color-accent);
         }
+
+        /* CSS RIÊNG CHO TRANG PROFILE (Logic giống info.html nhưng style Admin) */
+
+        /* Card chứa profile */
+        .profile-card {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        /* Cột trái: Menu Profile */
+        .profile-sidebar .avatar-wrapper {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .profile-sidebar .avatar-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #f8f9fa;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .profile-sidebar .user-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .profile-sidebar .user-role {
+            color: var(--color-text-subtle);
+            font-size: 0.9rem;
+        }
+
+        /* Style cho Nav Pills (Menu dọc) */
+        .profile-nav .nav-link {
+            color: var(--color-text-subtle);
+            padding: 1rem 1.5rem;
+            border-radius: 0;
+            border-left: 3px solid transparent;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-nav .nav-link i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .profile-nav .nav-link:hover {
+            background-color: #f8f9fa;
+            color: var(--color-accent);
+        }
+
+        .profile-nav .nav-link.active {
+            background-color: rgba(0, 15, 56, 0.05);
+            /* Màu accent nhạt */
+            color: var(--color-accent);
+            border-left-color: var(--color-accent);
+        }
+
+        /* Cột phải: Nội dung Form */
+        .profile-content {
+            padding: 2rem;
+        }
+
+        .profile-content h4 {
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 1rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--color-text-subtle);
+        }
+
+        .form-control:disabled {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+
+        /* Timeline cho Nhật ký hoạt động */
+        .activity-timeline {
+            border-left: 2px solid #e9ecef;
+            padding-left: 20px;
+            margin-left: 10px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--color-accent);
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 2px #e9ecef;
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 0.2rem;
+        }
+
+        .timeline-content {
+            font-size: 0.95rem;
+        }
+
+        /* Style riêng cho biến thể */
+        .variant-attribute {
+            font-weight: 600;
+            color: var(--color-accent);
+            background-color: rgba(0, 15, 56, 0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 5px;
+            font-size: 0.85rem;
+        }
+
+        /* product css */
+        .pagination .page-item.active .page-link {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .pagination .page-link {
+            color: var(--color-accent);
+        }
+
+        .pagination .page-link:hover {
+            color: var(--color-accent-darker);
+        }
+
+        /* Style Badge Thương hiệu */
+        .brand-badge {
+            background-color: #e9ecef;
+            color: var(--color-text-subtle);
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            font-weight: 600;
+        }
+
+        /* 17. CSS MỚI CHO QUẢN LÝ ĐƠN HÀNG */
+        .order-status-select {
+            min-width: 150px;
+        }
+
+        /* Phân trang (Kế thừa từ categories.html) */
+        .pagination .page-item.active .page-link {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .pagination .page-link {
+            color: var(--color-accent);
+        }
+
+        .pagination .page-link:hover {
+            color: var(--color-accent-darker);
+        }
+
+        .pagination>.page-item:not(:first-child) .page-link {
+            margin-left: -1px;
+        }
+
+        .pagination .page-item:first-child .page-link {
+            border-top-left-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+        }
+
+        .pagination .page-item:last-child .page-link {
+            border-top-right-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+        }
+
+        /* Style cho Bảng Danh mục */
+        .admin-table img.category-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            padding: 5px;
+            background: #f8f9fa;
+            border-radius: 0.25rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .admin-table .badge {
+            font-size: 0.85rem;
+        }
+
+        /* Phân trang */
+        .pagination .page-item.active .page-link {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .pagination .page-link {
+            color: var(--color-accent);
+        }
+
+        .pagination .page-link:hover {
+            color: var(--color-accent-darker);
+        }
+
+        /* Style cho thanh search "màu nâu" */
+        .admin-top-nav .form-control {
+            border-color: var(--color-accent);
+        }
+
+        .admin-top-nav .form-control:focus {
+            border-color: var(--color-accent-darker);
+            /* CẬP NHẬT SHADOW MÀU MỚI */
+            box-shadow: 0 0 0 0.25rem rgba(0, 15, 56, 0.25);
+        }
+
+        /* Style cho Bảng Tài khoản */
+        .admin-table img.avatar-img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 50%;
+            /* Bo tròn avatar */
+            border: 2px solid #e9ecef;
+        }
+
+        .admin-table .badge {
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.5em 0.8em;
+        }
+
+        /* Style riêng cho Role badge để dễ phân biệt */
+        .badge-role-admin {
+            background-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .badge-role-client {
+            background-color: #e9ecef;
+            color: var(--color-text-main);
+            border: 1px solid #ced4da;
+        }
+
+        /* Phân trang (Kế thừa) */
+        .pagination .page-item.active .page-link {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .pagination .page-link {
+            color: var(--color-accent);
+        }
+
+        .pagination .page-link:hover {
+            color: var(--color-accent-darker);
+        }
+
+        .pagination>.page-item:not(:first-child) .page-link {
+            margin-left: -1px;
+        }
+
+        .pagination .page-item:first-child .page-link {
+            border-top-left-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+        }
+
+        .pagination .page-item:last-child .page-link {
+            border-top-right-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+        }
     </style>
 </head>
 
@@ -230,33 +523,38 @@
         <nav id="admin-sidebar" class="col-lg-2 col-md-3 d-none d-md-block p-0">
             <div class="position-sticky pt-3">
                 <!-- Logo/Brand Admin -->
-                <a href="index.html" class="d-block px-3 mb-3 text-white text-decoration-none fs-5">
-
+                <a href="<?= BASE_URL ?>index.php/admin/index"
+                    class="d-block px-3 mb-3 text-white text-decoration-none fs-5">
                     <span><strong>ZEROWATCH</strong>Admin</span>
                 </a>
 
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <!-- Đây là trang hiện tại, nên có class 'active' -->
-                        <a class="nav-link active" aria-current="page" href="admin.html">
+                        <a class="nav-link active" aria-current="page" href="<?= BASE_URL ?>index.php/admin/index">
                             <i class="bi bi-speedometer2"></i>
                             Tổng quan
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_orders.html">
+                        <a class="nav-link" href="<?= BASE_URL ?>index.php/admin/orders">
                             <i class="bi bi-receipt"></i>
                             Quản lý Đơn hàng
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_products.html">
+                        <a class="nav-link" href="<?= BASE_URL ?>index.php/admin/products">
                             <i class="bi bi-box-seam"></i>
                             Quản lý Sản phẩm
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_account.html">
+                        <a class="nav-link" href="<?= BASE_URL ?>index.php/admin/categories">
+                            <i class="bi bi-tags"></i>
+                            Quản lý Danh mục
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>index.php/admin/account">
                             <i class="bi bi-people"></i>
                             Tài khoản
                         </a>
@@ -268,13 +566,13 @@
                 </h6>
                 <ul class="nav flex-column mb-2">
                     <li class="nav-item">
-                        <a class="nav-link" href="user_profile.html">
+                        <a class="nav-link" href="<?= BASE_URL ?>index.php/admin/user">
                             <i class="bi bi-person-circle"></i>
                             Admin (Bạn)
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" href="<?= BASE_URL ?>index.php/user/logout">
                             <i class="bi bi-box-arrow-left"></i>
                             Đăng xuất
                         </a>
@@ -282,45 +580,3 @@
                 </ul>
             </div>
         </nav>
-
-        <!-- CỘT 2: NỘI DUNG CHÍNH (HEADER + CONTENT) -->
-        <main class="col-lg-10 col-md-9 ms-sm-auto px-0">
-            <!-- HEADER (MENU NGANG) -->
-            <nav class="navbar navbar-expand-lg admin-top-nav shadow-sm sticky-top">
-                <!-- Thêm sticky-top cho header luôn -->
-                <div class="container-fluid">
-                    <!-- Nút bật/tắt sidebar trên Mobile -->
-                    <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#admin-sidebar" aria-controls="admin-sidebar" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <!-- SỬA: Đổi 'ms-md-4' (lệch) thành 'mx-auto' (ngay chính giữa) -->
-                    <form class="d-flex mx-auto" style="width: 400px">
-                        <input class="form-control me-2" type="search" placeholder="Tìm kiếm đơn hàng, sản phẩm..."
-                            aria-label="Search" />
-                    </form>
-
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle fs-4 align-middle"></i>
-                                <span class="d-none d-lg-inline align-middle ms-1">Chào, Admin</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li>
-                                    <a class="dropdown-item" href="index.html">Xem trang khách</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="index.html">Đăng xuất</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
