@@ -74,7 +74,7 @@ class Users
         if ($user && password_verify($is_password_correct, $user['password'])) {
             $_SESSION['user'] = $user;
             unset($_SESSION['error']);
-            var_dump(BASE_URL);
+            // var_dump(BASE_URL);
             // Đã sửa dòng này: Thêm dấu nháy bao quanh đường dẫn và nối chuỗi đúng
             header("Location: " . BASE_URL);
             exit();

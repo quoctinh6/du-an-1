@@ -32,7 +32,7 @@ function render_product_item($item)
     <div class="product-box">
         <div class="product-icons">
             <!-- Nút thêm vào giỏ (Form submit để xử lý PHP) -->
-            <form action="index.php/cart/add" method="POST" style="display:inline;">
+            <form action="index.php/cart/add" method="POST" style="display:inline;" class="form-add-to-cart">
                 <input type="hidden" name="id" value="$product_id">
                 <input type="hidden" name="name" value="$product_name">
                 <input type="hidden" name="price" value="$product_price">
@@ -208,3 +208,51 @@ if(!empty($productsCollections)) {
   </section>
 
 </main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    //Tìm tất cả các form có class "form-add-to-cart" 
+    const forms = document.querySelectorAll(".form-add-to-cart");
+
+    forms.forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Chặn chuyển trang
+
+        const formData = new FormData(form);
+
+        //Tự thêm biến "is_ajax" vào đây
+        formData.append('is_ajax', '1');
+
+        //Gửi ngầm (Fetch) - mong JSON trả về
+        fetch(form.action, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.text())
+        .then(text => {
+          let payload;
+          try {
+            payload = JSON.parse(text);
+          } catch (err) {
+            console.error('Invalid JSON from add-to-cart (home):', text);
+            alert('Có lỗi xảy ra!');
+            return;
+          }
+
+          if (!payload || !payload.success) {
+            alert(payload?.message || 'Không thể thêm vào giỏ');
+            return;
+          }
+
+          // Hiện Alert
+          alert('Đã thêm vào giỏ hàng thành công!');
+
+          //Cập nhật số trên header nếu có (payload.totalQty)
+          const headerCount = document.getElementById('header-cart-count');
+          if (headerCount) headerCount.innerText = '(' + (payload.totalQty ?? 0) + ')';
+        })
+        .catch(err => { console.error(err); alert('Có lỗi xảy ra!'); });
+      });
+    });
+  });
+</script>

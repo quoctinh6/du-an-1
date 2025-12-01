@@ -11,15 +11,25 @@ $url = rtrim($url, '/');
 // Tách URL thành một mảng dựa trên dấu /
 $parts = explode('/', $url);
 
-// Tự động lấy đường dẫn gốc, kể cả 'du an 1'
+// Tự động lấy đường dẫn gốc, kể cả 'du an 1'   
 define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 
 // === LOGIC ĐIỀU HƯỚNG MỚI ==
 
+// Detect AJAX requests so index.php can avoid injecting the global header/footer
+$isAjax = false;
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    $isAjax = true;
+}
+// Also accept a server-side flag (e.g. forms setting is_ajax=1)
+if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
+    $isAjax = true;
+}
+
 if (empty($parts[0])) {
     // TRƯỜNG HỢP 1: TRANG CHỦ
     // Nếu $url rỗng, $parts[0] cũng rỗng
-    include_once "./Views/header.php";
+    if (!$isAjax) include_once "./Views/header.php";
     include_once "./Controllers/PageController.php";
     $ctrl = new PageCtrl();
     $ctrl->home();
@@ -27,7 +37,7 @@ if (empty($parts[0])) {
 
 } elseif ($parts[0] == 'admin') {
 
-    include_once "./Views/admin/header.php";
+    if (!$isAjax) include_once "./Views/admin/header.php";
     include_once "./Controllers/AdminCtrl.php";
     $ctrl = new AdminCtrl();
     $act = $parts[1] ?? 'index';
@@ -37,7 +47,7 @@ if (empty($parts[0])) {
 
 } else {
     // TRƯỜNG HỢP 2: CÓ CONTROLLER
-    include_once "./Views/header.php";
+    if (!$isAjax) include_once "./Views/header.php";
     $controllerName = ucfirst($parts[0]) . "Ctrl"; // Vd: "ProductCtrl"
     $controllerFile = "./Controllers/" . $controllerName . ".php";
 
@@ -64,7 +74,7 @@ if (empty($parts[0])) {
         echo "Error 404: Controller '$controllerName' not found";
         exit;
     }
-    include_once "./Views/footer.php";
+    if (!$isAjax) include_once "./Views/footer.php";
 }
 
 
