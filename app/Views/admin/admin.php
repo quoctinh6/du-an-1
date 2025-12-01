@@ -1,151 +1,191 @@
-<!-- NỘI DUNG CHÍNH CỦA TRANG -->
-<div class="admin-content">
-  <!-- Tiêu đề trang -->
-  <h1 class="h3 mb-4 fw-bold" style="color: var(--color-text-main)">
-    Tổng quan
-  </h1>
+<!-- CỘT 2: NỘI DUNG CHÍNH (HEADER + CONTENT) -->
+<main class="col-lg-10 col-md-9 ms-sm-auto px-0">
+  <!-- HEADER (MENU NGANG) -->
+  <nav class="navbar navbar-expand-lg admin-top-nav shadow-sm sticky-top"> <!-- Thêm sticky-top cho header luôn -->
+    <div class="container-fluid">
+      <!-- Nút bật/tắt sidebar trên Mobile -->
+      <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#admin-sidebar"
+        aria-controls="admin-sidebar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  <!-- 1. CÁC THẺ KPI -->
-  <div class="row g-4 mb-4">
-    <!-- Thẻ 1: Doanh thu -->
-    <div class="col-lg-3 col-md-6">
-      <div class="kpi-card d-flex align-items-center">
-        <div class="flex-grow-1">
-          <div class="card-title">DOANH THU HÔM NAY</div>
-          <div class="card-value">12.500.000đ</div>
+      <!-- SỬA: Đổi 'ms-md-4' (lệch) thành 'mx-auto' (ngay chính giữa) -->
+      <form class="d-flex mx-auto" style="width: 400px">
+        <input class="form-control me-2" type="search" placeholder="Tìm kiếm đơn hàng, sản phẩm..."
+          aria-label="Search" />
+      </form>
+
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="bi bi-person-circle fs-4 align-middle"></i>
+            <span class="d-none d-lg-inline align-middle ms-1">Chào, Admin</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li>
+              <a class="dropdown-item" href="index.html">Xem trang khách</a>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item" href="index.html">Đăng xuất</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- NỘI DUNG CHÍNH CỦA TRANG -->
+  <div class="admin-content">
+    <!-- Tiêu đề trang -->
+    <h1 class="h3 mb-4 fw-bold" style="color: var(--color-text-main)">
+      Tổng quan
+    </h1>
+
+    <!-- 1. CÁC THẺ KPI -->
+    <div class="row g-4 mb-4">
+      <!-- Thẻ 1: Doanh thu -->
+      <div class="col-lg-3 col-md-6">
+        <div class="kpi-card d-flex align-items-center">
+          <div class="flex-grow-1">
+            <div class="card-title">DOANH THU HÔM NAY</div>
+            <div class="card-value">12.500.000đ</div>
+          </div>
+          <!-- <i class="bi bi-cash-stack card-icon"></i> -->
         </div>
-        <!-- <i class="bi bi-cash-stack card-icon"></i> -->
+      </div>
+      <!-- Thẻ 2: Đơn hàng mới -->
+      <div class="col-lg-3 col-md-6">
+        <div class="kpi-card d-flex align-items-center">
+          <div class="flex-grow-1">
+            <div class="card-title">ĐƠN HÀNG MỚI</div>
+            <div class="card-value">32</div>
+          </div>
+          <i class="bi bi-receipt card-icon"></i>
+        </div>
+      </div>
+      <!-- Thẻ 3: Khách hàng mới -->
+      <div class="col-lg-3 col-md-6">
+        <div class="kpi-card d-flex align-items-center">
+          <div class="flex-grow-1">
+            <div class="card-title">KHÁCH HÀNG MỚI</div>
+            <div class="card-value">15</div>
+          </div>
+          <i class="bi bi-person-plus card-icon"></i>
+        </div>
+      </div>
+      <!-- Thẻ 4: Bán chạy nhất -->
+      <div class="col-lg-3 col-md-6">
+        <div class="kpi-card d-flex align-items-center">
+          <div class="flex-grow-1">
+            <div class="card-title">BÁN CHẠY NHẤT</div>
+            <div class="card-value fs-5" style="color: var(--color-text-main);">Áo Khoác Nam Dù</div>
+          </div>
+          <i class="bi bi-star card-icon"></i>
+        </div>
       </div>
     </div>
-    <!-- Thẻ 2: Đơn hàng mới -->
-    <div class="col-lg-3 col-md-6">
-      <div class="kpi-card d-flex align-items-center">
-        <div class="flex-grow-1">
-          <div class="card-title">ĐƠN HÀNG MỚI</div>
-          <div class="card-value">32</div>
+
+    <!-- 2. BIỂU ĐỒ (2 CỘT) -->
+    <div class="row g-4 mb-4">
+      <!-- Cột trái: Biểu đồ đường (Doanh thu) -->
+      <div class="col-lg-8">
+        <div class="dashboard-chart-card">
+          <h5 class="mb-3">Doanh thu 30 ngày qua</h5>
+          <!-- Canvas cho biểu đồ đường -->
+          <canvas id="revenueChart"></canvas>
         </div>
-        <i class="bi bi-receipt card-icon"></i>
+      </div>
+      <!-- Cột phải: Biểu đồ tròn (Tỉ lệ) -->
+      <div class="col-lg-4">
+        <div class="dashboard-chart-card">
+          <h5 class="mb-3">Tỉ lệ danh mục</h5>
+          <!-- Canvas cho biểu đồ tròn -->
+          <canvas id="categoryChart"></canvas>
+        </div>
       </div>
     </div>
-    <!-- Thẻ 3: Khách hàng mới -->
-    <div class="col-lg-3 col-md-6">
-      <div class="kpi-card d-flex align-items-center">
-        <div class="flex-grow-1">
-          <div class="card-title">KHÁCH HÀNG MỚI</div>
-          <div class="card-value">15</div>
+
+    <!-- 3. BẢNG (2 CỘT) -->
+    <div class="row g-4">
+      <!-- Cột trái: Đơn hàng mới nhất -->
+      <div class="col-lg-8">
+        <div class="dashboard-chart-card">
+          <h5 class="mb-3">Đơn hàng mới nhất</h5>
+          <table class="table table-hover align-middle admin-table">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Mã Đơn</th>
+                <th scope="col">Khách hàng</th>
+                <th scope="col">Tổng tiền</th>
+                <th scope="col">Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>#FS1005</strong></td>
+                <td>Nguyễn Văn A</td>
+                <td>1.750.000đ</td>
+                <td><span class="badge bg-success">Đã giao</span></td>
+              </tr>
+              <tr>
+                <td><strong>#FS1004</strong></td>
+                <td>Trần Thị B</td>
+                <td>1.200.000đ</td>
+                <td><span class="badge bg-warning text-dark">Đang xử lý</span></td>
+              </tr>
+              <tr>
+                <td><strong>#FS1003</strong></td>
+                <td>Lê Văn C</td>
+                <td>380.000đ</td>
+                <td><span class="badge bg-danger">Đã hủy</span></td>
+              </tr>
+              <tr>
+                <td><strong>#FS1002</strong></td>
+                <td>Phạm Thị D</td>
+                <td>850.000đ</td>
+                <td><span class="badge bg-primary">Đang giao</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <i class="bi bi-person-plus card-icon"></i>
+      </div>
+      <!-- Cột phải: Sản phẩm bán chạy -->
+      <div class="col-lg-4">
+        <div class="dashboard-chart-card">
+          <h5 class="mb-3">Sản phẩm bán chạy</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span class="product-info">1. Áo Khoác Nam Dù</span>
+              <span class="product-sales">120 sp</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span class="product-info">2. Giày Ultraboost Adidas</span>
+              <span class="product-sales">95 sp</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span class="product-info">3. Quần Jeans Levi's 511</span>
+              <span class="product-sales">88 sp</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span class="product-info">4. Áo Hoodie Nike</span>
+              <span class="product-sales">70 sp</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span class="product-info">5. Áo Sơ Mi Oxford</span>
+              <span class="product-sales">55 sp</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <!-- Thẻ 4: Bán chạy nhất -->
-    <div class="col-lg-3 col-md-6">
-      <div class="kpi-card d-flex align-items-center">
-        <div class="flex-grow-1">
-          <div class="card-title">BÁN CHẠY NHẤT</div>
-          <div class="card-value fs-5" style="color: var(--color-text-main);">Áo Khoác Nam Dù</div>
-        </div>
-        <i class="bi bi-star card-icon"></i>
-      </div>
-    </div>
+
+
   </div>
-
-  <!-- 2. BIỂU ĐỒ (2 CỘT) -->
-  <div class="row g-4 mb-4">
-    <!-- Cột trái: Biểu đồ đường (Doanh thu) -->
-    <div class="col-lg-8">
-      <div class="dashboard-chart-card">
-        <h5 class="mb-3">Doanh thu 30 ngày qua</h5>
-        <!-- Canvas cho biểu đồ đường -->
-        <canvas id="revenueChart"></canvas>
-      </div>
-    </div>
-    <!-- Cột phải: Biểu đồ tròn (Tỉ lệ) -->
-    <div class="col-lg-4">
-      <div class="dashboard-chart-card">
-        <h5 class="mb-3">Tỉ lệ danh mục</h5>
-        <!-- Canvas cho biểu đồ tròn -->
-        <canvas id="categoryChart"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. BẢNG (2 CỘT) -->
-  <div class="row g-4">
-    <!-- Cột trái: Đơn hàng mới nhất -->
-    <div class="col-lg-8">
-      <div class="dashboard-chart-card">
-        <h5 class="mb-3">Đơn hàng mới nhất</h5>
-        <table class="table table-hover align-middle admin-table">
-          <thead class="table-light">
-            <tr>
-              <th scope="col">Mã Đơn</th>
-              <th scope="col">Khách hàng</th>
-              <th scope="col">Tổng tiền</th>
-              <th scope="col">Trạng thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>#FS1005</strong></td>
-              <td>Nguyễn Văn A</td>
-              <td>1.750.000đ</td>
-              <td><span class="badge bg-success">Đã giao</span></td>
-            </tr>
-            <tr>
-              <td><strong>#FS1004</strong></td>
-              <td>Trần Thị B</td>
-              <td>1.200.000đ</td>
-              <td><span class="badge bg-warning text-dark">Đang xử lý</span></td>
-            </tr>
-            <tr>
-              <td><strong>#FS1003</strong></td>
-              <td>Lê Văn C</td>
-              <td>380.000đ</td>
-              <td><span class="badge bg-danger">Đã hủy</span></td>
-            </tr>
-            <tr>
-              <td><strong>#FS1002</strong></td>
-              <td>Phạm Thị D</td>
-              <td>850.000đ</td>
-              <td><span class="badge bg-primary">Đang giao</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <!-- Cột phải: Sản phẩm bán chạy -->
-    <div class="col-lg-4">
-      <div class="dashboard-chart-card">
-        <h5 class="mb-3">Sản phẩm bán chạy</h5>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <span class="product-info">1. Áo Khoác Nam Dù</span>
-            <span class="product-sales">120 sp</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <span class="product-info">2. Giày Ultraboost Adidas</span>
-            <span class="product-sales">95 sp</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <span class="product-info">3. Quần Jeans Levi's 511</span>
-            <span class="product-sales">88 sp</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <span class="product-info">4. Áo Hoodie Nike</span>
-            <span class="product-sales">70 sp</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <span class="product-info">5. Áo Sơ Mi Oxford</span>
-            <span class="product-sales">55 sp</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-
-</div>
-<!-- end .admin-content -->
+  <!-- end .admin-content -->
 </main>
 <!-- end .col-lg-10 -->
 </div>

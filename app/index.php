@@ -35,7 +35,7 @@ if (empty($parts[0])) {
     $ctrl->home();
     include_once "./Views/footer.php";
 
-} elseif ($parts[0] == 'Admin') {
+} elseif ($parts[0] == 'admin') {
 
     if (!$isAjax) include_once "./Views/admin/header.php";
     include_once "./Controllers/AdminCtrl.php";
