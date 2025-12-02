@@ -266,7 +266,8 @@
             <h1 class="h3 mb-0 fw-bold" style="color: var(--color-text-main)">
               Quản lý Danh mục
             </h1>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+            <!-- SỬA: Thêm onclick resetAddModal -->
+            <button class="btn btn-primary" onclick="resetAddModal()">
                <i class="bi bi-plus-lg me-2"></i>Thêm danh mục mới
             </button>
           </div>
@@ -321,7 +322,9 @@
                       <td class="text-center"><span class="badge bg-secondary rounded-pill">120</span></td>
                       <td><span class="badge bg-success">Hiển thị</span></td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa">
+                         <!-- SỬA: Thêm onclick gọi hàm openEditModal -->
+                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa" 
+                                 onclick="openEditModal('Áo Khoác Nam', 'Áo khoác dù, kaki, bomber các loại', 'https://cdn-icons-png.flaticon.com/512/2652/2652218.png', 'active')">
                            <i class="bi bi-pencil"></i>
                          </button>
                          <button class="btn btn-sm btn-outline-danger" title="Xóa">
@@ -343,7 +346,9 @@
                       <td class="text-center"><span class="badge bg-secondary rounded-pill">88</span></td>
                       <td><span class="badge bg-success">Hiển thị</span></td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa">
+                         <!-- SỬA: Thêm onclick -->
+                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa"
+                                 onclick="openEditModal('Quần Jeans', 'Quần dài, quần short, denim', 'https://cdn-icons-png.flaticon.com/512/599/599388.png', 'active')">
                            <i class="bi bi-pencil"></i>
                          </button>
                          <button class="btn btn-sm btn-outline-danger" title="Xóa">
@@ -365,7 +370,9 @@
                       <td class="text-center"><span class="badge bg-secondary rounded-pill">95</span></td>
                       <td><span class="badge bg-success">Hiển thị</span></td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa">
+                         <!-- SỬA: Thêm onclick -->
+                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa"
+                                 onclick="openEditModal('Giày Thể Thao', 'Sneaker, giày chạy bộ, giày tập', 'https://cdn-icons-png.flaticon.com/512/2589/2589903.png', 'active')">
                            <i class="bi bi-pencil"></i>
                          </button>
                          <button class="btn btn-sm btn-outline-danger" title="Xóa">
@@ -387,7 +394,9 @@
                       <td class="text-center"><span class="badge bg-secondary rounded-pill">45</span></td>
                       <td><span class="badge bg-secondary">Đang ẩn</span></td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa">
+                         <!-- SỬA: Thêm onclick (status hidden) -->
+                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa"
+                                 onclick="openEditModal('Phụ Kiện', 'Mũ, nón, thắt lưng, ví da', 'https://cdn-icons-png.flaticon.com/512/88/88746.png', 'hidden')">
                            <i class="bi bi-pencil"></i>
                          </button>
                          <button class="btn btn-sm btn-outline-danger" title="Xóa">
@@ -422,32 +431,37 @@
       </main>
     </div>
     
-    <!-- MODAL THÊM DANH MỤC -->
+    <!-- MODAL DÙNG CHUNG CHO THÊM VÀ SỬA -->
     <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title fw-bold">Thêm danh mục mới</h5>
+            <!-- SỬA: Thêm ID cho title để đổi text bằng JS -->
+            <h5 class="modal-title fw-bold" id="categoryModalTitle">Thêm danh mục mới</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form id="categoryForm">
               <div class="mb-3">
                 <label class="form-label">Tên danh mục</label>
-                <input type="text" class="form-control" placeholder="Ví dụ: Áo Vest">
+                <!-- SỬA: Thêm ID catName -->
+                <input type="text" class="form-control" id="catName" placeholder="Ví dụ: Áo Vest">
               </div>
               <div class="mb-3">
                 <label class="form-label">Mô tả ngắn</label>
-                <textarea class="form-control" rows="3" placeholder="Mô tả danh mục..."></textarea>
+                <!-- SỬA: Thêm ID catDesc -->
+                <textarea class="form-control" id="catDesc" rows="3" placeholder="Mô tả danh mục..."></textarea>
               </div>
               <div class="mb-3">
                 <label class="form-label">Icon / Ảnh đại diện (URL)</label>
-                <input type="text" class="form-control" placeholder="https://...">
+                <!-- SỬA: Thêm ID catIcon -->
+                <input type="text" class="form-control" id="catIcon" placeholder="https://...">
               </div>
               <div class="mb-3">
                 <label class="form-label">Trạng thái</label>
-                <select class="form-select">
-                  <option value="active" selected>Hiển thị</option>
+                <!-- SỬA: Thêm ID catStatus -->
+                <select class="form-select" id="catStatus">
+                  <option value="active">Hiển thị</option>
                   <option value="hidden">Ẩn</option>
                 </select>
               </div>
@@ -455,7 +469,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <button type="button" class="btn btn-primary">Lưu danh mục</button>
+            <!-- SỬA: Thêm ID cho nút Submit -->
+            <button type="button" class="btn btn-primary" id="btnSaveCategory">Lưu danh mục</button>
           </div>
         </div>
       </div>
@@ -467,5 +482,49 @@
       xintegrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
       crossorigin="anonymous"
     ></script>
+
+    <!-- SCRIPT XỬ LÝ MODAL -->
+    <script>
+      // Khai báo biến modal
+      let categoryModal;
+
+      document.addEventListener("DOMContentLoaded", function() {
+        // Khởi tạo Bootstrap modal instance
+        const modalElement = document.getElementById('addCategoryModal');
+        categoryModal = new bootstrap.Modal(modalElement);
+      });
+
+      // Hàm mở modal ở chế độ "Thêm mới" (Reset form)
+      function resetAddModal() {
+        // Reset tiêu đề và nút bấm
+        document.getElementById('categoryModalTitle').innerText = 'Thêm danh mục mới';
+        document.getElementById('btnSaveCategory').innerText = 'Lưu danh mục';
+        
+        // Reset các ô input về rỗng
+        document.getElementById('catName').value = '';
+        document.getElementById('catDesc').value = '';
+        document.getElementById('catIcon').value = '';
+        document.getElementById('catStatus').value = 'active';
+
+        // Hiển thị modal
+        categoryModal.show();
+      }
+
+      // Hàm mở modal ở chế độ "Sửa" (Điền dữ liệu có sẵn)
+      function openEditModal(name, desc, icon, status) {
+        // Đổi tiêu đề và nút bấm
+        document.getElementById('categoryModalTitle').innerText = 'Cập nhật danh mục';
+        document.getElementById('btnSaveCategory').innerText = 'Lưu thay đổi';
+
+        // Điền dữ liệu vào input
+        document.getElementById('catName').value = name;
+        document.getElementById('catDesc').value = desc;
+        document.getElementById('catIcon').value = icon;
+        document.getElementById('catStatus').value = status;
+
+        // Hiển thị modal
+        categoryModal.show();
+      }
+    </script>
   </body>
 </html>

@@ -137,10 +137,28 @@
               <a class="nav-link active" href="admin_products.html"><i class="bi bi-box-seam"></i> Quản lý Sản phẩm</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin_category.html"><i class="bi bi-tags"></i> Quản lý Danh mục</a>
+              <a class="nav-link" href="admin_categories.html"><i class="bi bi-tags"></i> Quản lý Danh mục</a>
             </li>
              <li class="nav-item">
               <a class="nav-link" href="admin_account.html"><i class="bi bi-people"></i> Quản lý Tài khoản</a>
+            </li>
+          </ul>
+
+          <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+             Tài khoản
+          </h6>
+          <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+              <a class="nav-link" href="admin_profile.html">
+                <i class="bi bi-person-circle"></i>
+                Admin (Bạn)
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <i class="bi bi-box-arrow-left"></i>
+                Đăng xuất
+              </a>
             </li>
           </ul>
         </div>
@@ -182,7 +200,8 @@
                 </h1>
                 <p class="text-muted mb-0">Sản phẩm: <strong>Áo Khoác Nam Dù (Mã: AK-001)</strong></p>
             </div>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVariantModal">
+            <!-- SỬA: Thêm onclick gọi hàm reset -->
+            <button class="btn btn-primary" onclick="resetAddVariantModal()">
                <i class="bi bi-plus-lg me-2"></i>Thêm biến thể mới
             </button>
           </div>
@@ -222,7 +241,11 @@
                           </div>
                       </td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1" 
+                                 onclick="openEditVariantModal('AK-001-BL-M', 'Đen', 'M', '450000', '50')">
+                            <i class="bi bi-pencil"></i>
+                         </button>
                          <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                       </td>
                     </tr>
@@ -245,7 +268,11 @@
                           </div>
                       </td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1"
+                                 onclick="openEditVariantModal('AK-001-BL-L', 'Đen', 'L', '450000', '5')">
+                            <i class="bi bi-pencil"></i>
+                         </button>
                          <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                       </td>
                     </tr>
@@ -268,7 +295,11 @@
                           </div>
                       </td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1"
+                                 onclick="openEditVariantModal('AK-001-BU-M', 'Xanh Than', 'M', '460000', '0')">
+                            <i class="bi bi-pencil"></i>
+                         </button>
                          <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                       </td>
                     </tr>
@@ -287,60 +318,119 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title fw-bold">Thêm biến thể mới</h5>
+              <!-- ID title -->
+              <h5 class="modal-title fw-bold" id="variantModalTitle">Thêm biến thể mới</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <form>
                 <div class="mb-3">
                     <label class="form-label">Mã SKU Biến thể</label>
-                    <input type="text" class="form-control" placeholder="VD: AK-001-RED-XL">
+                    <!-- ID: varSku -->
+                    <input type="text" class="form-control" id="varSku" placeholder="VD: AK-001-RED-XL">
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Màu sắc</label>
-                        <select class="form-select">
-                            <option>Đen</option>
-                            <option>Trắng</option>
-                            <option>Xanh</option>
-                            <option>Đỏ</option>
+                        <!-- ID: varColor -->
+                        <select class="form-select" id="varColor">
+                            <option value="Đen">Đen</option>
+                            <option value="Trắng">Trắng</option>
+                            <option value="Xanh">Xanh</option>
+                            <option value="Xanh Than">Xanh Than</option>
+                            <option value="Đỏ">Đỏ</option>
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Kích thước (Size)</label>
-                        <select class="form-select">
-                            <option>S</option>
-                            <option>M</option>
-                            <option>L</option>
-                            <option>XL</option>
-                            <option>XXL</option>
+                        <!-- ID: varSize -->
+                        <select class="form-select" id="varSize">
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
                         </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Giá bán riêng (nếu có)</label>
-                        <input type="number" class="form-control" placeholder="450000">
+                        <!-- ID: varPrice -->
+                        <input type="number" class="form-control" id="varPrice" placeholder="450000">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Số lượng tồn kho</label>
-                        <input type="number" class="form-control" value="0">
+                        <!-- ID: varStock -->
+                        <input type="number" class="form-control" id="varStock" value="0">
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Ảnh đại diện biến thể</label>
-                    <input type="file" class="form-control">
+                    <!-- ID: varImg -->
+                    <input type="file" class="form-control" id="varImg">
                 </div>
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-              <button type="button" class="btn btn-primary">Lưu biến thể</button>
+              <!-- ID: btnSaveVariant -->
+              <button type="button" class="btn btn-primary" id="btnSaveVariant">Lưu biến thể</button>
             </div>
           </div>
         </div>
       </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <!-- SCRIPT XỬ LÝ MODAL -->
+    <script>
+      let variantModal;
+
+      document.addEventListener("DOMContentLoaded", function() {
+        const modalElement = document.getElementById('addVariantModal');
+        variantModal = new bootstrap.Modal(modalElement);
+      });
+
+      // Hàm mở modal Thêm mới (Reset form)
+      function resetAddVariantModal() {
+        document.getElementById('variantModalTitle').innerText = 'Thêm biến thể mới';
+        document.getElementById('btnSaveVariant').innerText = 'Lưu biến thể';
+        
+        document.getElementById('varSku').value = '';
+        document.getElementById('varColor').selectedIndex = 0; // Reset về option đầu tiên
+        document.getElementById('varSize').selectedIndex = 0;
+        document.getElementById('varPrice').value = '';
+        document.getElementById('varStock').value = '0';
+        document.getElementById('varImg').value = ''; // Clear file input
+
+        variantModal.show();
+      }
+
+      // Hàm mở modal Sửa (Điền dữ liệu)
+      function openEditVariantModal(sku, color, size, price, stock) {
+        document.getElementById('variantModalTitle').innerText = 'Cập nhật biến thể';
+        document.getElementById('btnSaveVariant').innerText = 'Lưu thay đổi';
+
+        // Điền dữ liệu vào form
+        document.getElementById('varSku').value = sku;
+        
+        // Chọn đúng option cho Màu sắc
+        const colorSelect = document.getElementById('varColor');
+        colorSelect.value = color;
+
+        // Chọn đúng option cho Size
+        const sizeSelect = document.getElementById('varSize');
+        sizeSelect.value = size;
+
+        document.getElementById('varPrice').value = price;
+        document.getElementById('varStock').value = stock;
+        
+        // Lưu ý: Input type="file" không thể set value programmatically vì lý do bảo mật.
+        // Người dùng sẽ phải chọn lại ảnh nếu muốn thay đổi.
+
+        variantModal.show();
+      }
+    </script>
   </body>
 </html>
