@@ -316,7 +316,8 @@
             <h1 class="h3 mb-0 fw-bold" style="color: var(--color-text-main)">
               Quản lý Tài khoản
             </h1>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            <!-- SỬA: Gọi hàm reset để mở modal thêm mới -->
+            <button class="btn btn-primary" onclick="resetAddUserModal()">
                <i class="bi bi-person-plus-fill me-2"></i>Thêm tài khoản mới
             </button>
           </div>
@@ -387,10 +388,14 @@
                       </td>
                       <td><span class="badge bg-success bg-opacity-10 text-success">Hoạt động</span></td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa thông tin">
+                         <!-- SỬA: Nút Sửa gọi hàm openEditUserModal -->
+                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa thông tin"
+                                 onclick="openEditUserModal('Lê Quản Trị', 'admin@zerowatch.com', '0909111222', 'admin', 'active')">
                            <i class="bi bi-pencil"></i>
                          </button>
-                         <button class="btn btn-sm btn-outline-secondary" title="Đổi quyền">
+                         <!-- SỬA: Nút Đổi quyền gọi hàm openChangeRoleModal -->
+                         <button class="btn btn-sm btn-outline-secondary" title="Đổi quyền"
+                                 onclick="openChangeRoleModal('admin')">
                            <i class="bi bi-arrow-repeat"></i>
                          </button>
                       </td>
@@ -416,7 +421,9 @@
                       </td>
                       <td><span class="badge bg-success bg-opacity-10 text-success">Hoạt động</span></td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa thông tin">
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa thông tin"
+                                 onclick="openEditUserModal('Nguyễn Văn A', 'nguyenvana@gmail.com', '0912345678', 'client', 'active')">
                            <i class="bi bi-pencil"></i>
                          </button>
                          <button class="btn btn-sm btn-outline-danger" title="Khóa tài khoản">
@@ -445,7 +452,9 @@
                       </td>
                       <td><span class="badge bg-danger bg-opacity-10 text-danger">Đã khóa</span></td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa thông tin">
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa thông tin"
+                                 onclick="openEditUserModal('Trần Thị B', 'tranthib@yahoo.com', '0988777666', 'client', 'locked')">
                            <i class="bi bi-pencil"></i>
                          </button>
                          <button class="btn btn-sm btn-outline-success" title="Mở khóa">
@@ -474,10 +483,14 @@
                       </td>
                       <td><span class="badge bg-success bg-opacity-10 text-success">Hoạt động</span></td>
                       <td class="text-end">
-                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa thông tin">
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa thông tin"
+                                 onclick="openEditUserModal('Hoàng Quản Lý', 'hoang@zerowatch.com', '0901000999', 'admin', 'active')">
                            <i class="bi bi-pencil"></i>
                          </button>
-                         <button class="btn btn-sm btn-outline-secondary" title="Đổi quyền">
+                         <!-- SỬA: Nút Đổi quyền -->
+                         <button class="btn btn-sm btn-outline-secondary" title="Đổi quyền"
+                                 onclick="openChangeRoleModal('admin')">
                            <i class="bi bi-arrow-repeat"></i>
                          </button>
                       </td>
@@ -511,16 +524,17 @@
     </div>
     <!-- end .d-flex -->
     
-    <!-- MODAL THÊM TÀI KHOẢN -->
+    <!-- MODAL DÙNG CHUNG THÊM / SỬA TÀI KHOẢN -->
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
+            <!-- ID cho tiêu đề để thay đổi bằng JS -->
             <h5 class="modal-title fw-bold" id="addUserModalLabel">Thêm tài khoản mới</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form id="userForm">
               <div class="mb-3">
                 <label for="userName" class="form-label">Họ và tên</label>
                 <input type="text" class="form-control" id="userName" placeholder="Nhập họ tên đầy đủ">
@@ -553,7 +567,32 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <button type="button" class="btn btn-primary">Lưu tài khoản</button>
+            <!-- ID cho nút lưu -->
+            <button type="button" class="btn btn-primary" id="btnSaveUser">Lưu tài khoản</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MỚI: MODAL ĐỔI QUYỀN (BẢNG NHỎ) -->
+    <div class="modal fade" id="changeRoleModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered"> <!-- modal-sm: Bảng nhỏ -->
+        <div class="modal-content">
+          <div class="modal-header border-bottom-0 pb-0">
+            <h6 class="modal-title fw-bold">Đổi quyền hạn</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body pt-2">
+            <form>
+              <label class="form-label small text-muted">Chọn quyền mới cho tài khoản:</label>
+              <select class="form-select mb-3" id="roleSelect">
+                <option value="client">Khách hàng (Client)</option>
+                <option value="admin">Quản trị viên (Admin)</option>
+              </select>
+              <div class="d-grid">
+                <button type="button" class="btn btn-primary btn-sm">Cập nhật quyền</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -565,5 +604,56 @@
       xintegrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
       crossorigin="anonymous"
     ></script>
+
+    <!-- SCRIPT XỬ LÝ MODAL -->
+    <script>
+      let userModal;
+      let roleModal;
+
+      document.addEventListener("DOMContentLoaded", function() {
+        const userModalEl = document.getElementById('addUserModal');
+        userModal = new bootstrap.Modal(userModalEl);
+
+        const roleModalEl = document.getElementById('changeRoleModal');
+        roleModal = new bootstrap.Modal(roleModalEl);
+      });
+
+      // Hàm mở modal Thêm mới (Reset form)
+      function resetAddUserModal() {
+        document.getElementById('addUserModalLabel').innerText = 'Thêm tài khoản mới';
+        document.getElementById('btnSaveUser').innerText = 'Lưu tài khoản';
+        
+        // Reset inputs
+        document.getElementById('userName').value = '';
+        document.getElementById('userEmail').value = '';
+        document.getElementById('userPhone').value = '';
+        document.getElementById('userRole').value = 'client';
+        document.getElementById('userStatus').value = 'active';
+
+        userModal.show();
+      }
+
+      // Hàm mở modal Sửa (Điền dữ liệu)
+      function openEditUserModal(name, email, phone, role, status) {
+        document.getElementById('addUserModalLabel').innerText = 'Cập nhật tài khoản';
+        document.getElementById('btnSaveUser').innerText = 'Lưu thay đổi';
+
+        // Điền dữ liệu vào form
+        document.getElementById('userName').value = name;
+        document.getElementById('userEmail').value = email;
+        document.getElementById('userPhone').value = phone;
+        document.getElementById('userRole').value = role;
+        document.getElementById('userStatus').value = status;
+
+        userModal.show();
+      }
+
+      // Hàm mở modal Đổi quyền (Bảng nhỏ)
+      function openChangeRoleModal(currentRole) {
+        // Set giá trị hiện tại cho select box
+        document.getElementById('roleSelect').value = currentRole;
+        roleModal.show();
+      }
+    </script>
   </body>
 </html>
