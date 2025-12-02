@@ -42,7 +42,7 @@ class ProductsCtrl
 
     }
 
-    function index()
+    public function index()
     {
 
         $brands = $this->BrandModel->getAll();
@@ -72,6 +72,11 @@ class ProductsCtrl
         // 3. Lúc này biến $products đã có dữ liệu, include View vào nó mới hiện
 
         include_once("Views/products.php");
+    }
+
+
+    public function favor() {
+        include_once("Views/favor.php");
     }
 }
 ?>
