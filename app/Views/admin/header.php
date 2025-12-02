@@ -22,497 +22,443 @@
 
     <!-- Custom CSS -->
     <style>
-        /* =================================================== */
-        /* START: CSS KẾ THỪA TỪ TRANG KHÁCH HÀNG */
-        /* =================================================== */
-        :root {
-            /* Đã thay đổi theo yêu cầu */
-            --color-accent: #000f38;
-            /* Tạo màu tối hơn một chút cho hiệu ứng hover dựa trên #000f38 */
-            --color-accent-darker: #000826;
-            --color-text-main: #1a1a1a;
-            --color-text-subtle: #555555;
-        }
-
-        body {
-            font-family: "Segoe UI", sans-serif;
-            color: var(--color-text-main);
-            /* Nền admin luôn là xám nhạt */
-            background-color: #f8f9fa;
-        }
-
-        /* Kế thừa style nút */
-        .btn-primary {
-            background-color: var(--color-accent);
-            border-color: var(--color-accent);
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--color-accent-darker);
-            border-color: var(--color-accent-darker);
-            color: #ffffff;
-        }
-
-        .btn-outline-secondary {
-            color: var(--color-accent);
-            border-color: var(--color-accent);
-        }
-
-        .btn-outline-secondary:hover {
-            background-color: var(--color-accent);
-            color: #ffffff;
-        }
-
-        /* =================================================== */
-        /* END: CSS KẾ THỪA */
-        /* =================================================== */
-
-        /* 14. CSS MỚI CHO LAYOUT ADMIN */
-
-        /* SỬA: Sidebar cố định (Sticky Sidebar) */
-        #admin-sidebar {
-            min-height: 100vh;
-            /* Chiều cao tối thiểu bằng màn hình */
-            background-color: #212529;
-            /* Màu đen */
-
-            /* KỸ THUẬT STICKY */
-            position: -webkit-sticky;
-            /* Cho Safari */
-            position: sticky;
-            top: 0;
-            /* Dính chặt vào đỉnh màn hình */
-            height: 100vh;
-            /* Chiều cao cố định bằng màn hình để scroll bên trong nếu cần */
-            overflow-y: auto;
-            /* Cho phép scroll dọc nếu menu quá dài */
-            z-index: 1000;
-            /* Nổi lên trên */
-        }
-
-        #admin-sidebar .nav-link {
-            color: #adb5bd;
-            /* Màu chữ xám */
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-        }
-
-        #admin-sidebar .nav-link i {
-            margin-right: 0.75rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        #admin-sidebar .nav-link:hover {
-            color: #ffffff;
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        /* Style cho link "active" (đang ở trang đó) */
-        #admin-sidebar .nav-link.active {
-            color: #ffffff;
-            background-color: var(--color-accent);
-            /* Dùng màu chủ đạo mới */
-        }
-
-        #admin-sidebar .sidebar-heading {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #6c757d;
-            padding: 0.5rem 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .admin-top-nav {
-            background-color: #ffffff;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .admin-content {
-            padding: 2rem;
-        }
-
-        /* Style cho thanh search */
-        .admin-top-nav .form-control {
-            border-color: var(--color-accent);
-        }
-
-        .admin-top-nav .form-control:focus {
-            border-color: var(--color-accent-darker);
-            /* Đã cập nhật shadow sang hệ màu #000f38 (R0 G15 B56) */
-            box-shadow: 0 0 0 0.25rem rgba(0, 15, 56, 0.25);
-        }
-
-        /* Style cho Bảng */
-        .admin-table img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 0.25rem;
-        }
-
-        .admin-table .badge {
-            font-size: 0.85rem;
-        }
-
-        /* 16. CSS MỚI CHO DASHBOARD */
-        .kpi-card {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 0.375rem;
-            padding: 1.5rem;
-        }
-
-        .kpi-card .card-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--color-accent);
-        }
-
-        /* SỬA: Làm đậm và rõ tiêu đề KPI */
-        .kpi-card .card-title {
-            font-size: 0.9rem;
-            font-weight: 700;
-            /* Đậm hơn */
-            color: #6c757d !important;
-            /* Màu xám đậm hơn tí cho rõ */
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .kpi-card .kpi-icon {
-            /* Đổi tên class cho khớp */
-            font-size: 2.5rem;
-            color: var(--color-accent);
-            opacity: 0.5;
-        }
-
-        /* SỬA: Fix lỗi icon hiển thị */
-        .kpi-card .card-icon {
-            font-size: 2.5rem;
-            color: var(--color-accent);
-            opacity: 0.5;
-        }
-
-        .dashboard-chart-card {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 0.375rem;
-            padding: 1.5rem;
-        }
-
-        /* SỬA: Làm đậm tiêu đề các Card lớn (Biểu đồ, Bảng) */
-        .dashboard-chart-card h5,
-        .card-header {
-            font-weight: 700;
-            color: var(--color-text-main);
-            text-align: center;
-            /* THÊM MỚI: Canh giữa theo yêu cầu */
-        }
-
-        .list-group-item .product-info {
-            font-weight: 500;
-            color: var(--color-text-main);
-        }
-
-        .list-group-item .product-sales {
-            font-weight: 600;
-            color: var(--color-accent);
-        }
-
-        /* CSS RIÊNG CHO TRANG PROFILE (Logic giống info.html nhưng style Admin) */
-
-        /* Card chứa profile */
-        .profile-card {
-            background: #fff;
-            border: 1px solid #dee2e6;
-            border-radius: 0.375rem;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-
-        /* Cột trái: Menu Profile */
-        .profile-sidebar .avatar-wrapper {
-            text-align: center;
-            padding: 2rem 1rem;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .profile-sidebar .avatar-img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid #f8f9fa;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1rem;
-        }
-
-        .profile-sidebar .user-name {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .profile-sidebar .user-role {
-            color: var(--color-text-subtle);
-            font-size: 0.9rem;
-        }
-
-        /* Style cho Nav Pills (Menu dọc) */
-        .profile-nav .nav-link {
-            color: var(--color-text-subtle);
-            padding: 1rem 1.5rem;
-            border-radius: 0;
-            border-left: 3px solid transparent;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-        }
-
-        .profile-nav .nav-link i {
-            margin-right: 10px;
-            font-size: 1.1rem;
-        }
-
-        .profile-nav .nav-link:hover {
-            background-color: #f8f9fa;
-            color: var(--color-accent);
-        }
-
-        .profile-nav .nav-link.active {
-            background-color: rgba(0, 15, 56, 0.05);
-            /* Màu accent nhạt */
-            color: var(--color-accent);
-            border-left-color: var(--color-accent);
-        }
-
-        /* Cột phải: Nội dung Form */
-        .profile-content {
-            padding: 2rem;
-        }
-
-        .profile-content h4 {
-            font-weight: 700;
-            color: var(--color-accent);
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 1rem;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: var(--color-text-subtle);
-        }
-
-        .form-control:disabled {
-            background-color: #e9ecef;
-            opacity: 1;
-        }
-
-        /* Timeline cho Nhật ký hoạt động */
-        .activity-timeline {
-            border-left: 2px solid #e9ecef;
-            padding-left: 20px;
-            margin-left: 10px;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -26px;
-            top: 5px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: var(--color-accent);
-            border: 2px solid #fff;
-            box-shadow: 0 0 0 2px #e9ecef;
-        }
-
-        .timeline-date {
-            font-size: 0.8rem;
-            color: #999;
-            margin-bottom: 0.2rem;
-        }
-
-        .timeline-content {
-            font-size: 0.95rem;
-        }
-
-        /* Style riêng cho biến thể */
-        .variant-attribute {
-            font-weight: 600;
-            color: var(--color-accent);
-            background-color: rgba(0, 15, 56, 0.05);
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-right: 5px;
-            font-size: 0.85rem;
-        }
-
-        /* product css */
-        .pagination .page-item.active .page-link {
-            background-color: var(--color-accent);
-            border-color: var(--color-accent);
-            color: #fff;
-        }
-
-        .pagination .page-link {
-            color: var(--color-accent);
-        }
-
-        .pagination .page-link:hover {
-            color: var(--color-accent-darker);
-        }
-
-        /* Style Badge Thương hiệu */
-        .brand-badge {
-            background-color: #e9ecef;
-            color: var(--color-text-subtle);
-            font-size: 0.75rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid #dee2e6;
-            font-weight: 600;
-        }
-
-        /* 17. CSS MỚI CHO QUẢN LÝ ĐƠN HÀNG */
-        .order-status-select {
-            min-width: 150px;
-        }
-
-        /* Phân trang (Kế thừa từ categories.html) */
-        .pagination .page-item.active .page-link {
-            background-color: var(--color-accent);
-            border-color: var(--color-accent);
-            color: #fff;
-        }
-
-        .pagination .page-link {
-            color: var(--color-accent);
-        }
-
-        .pagination .page-link:hover {
-            color: var(--color-accent-darker);
-        }
-
-        .pagination>.page-item:not(:first-child) .page-link {
-            margin-left: -1px;
-        }
-
-        .pagination .page-item:first-child .page-link {
-            border-top-left-radius: 0.375rem;
-            border-bottom-left-radius: 0.375rem;
-        }
-
-        .pagination .page-item:last-child .page-link {
-            border-top-right-radius: 0.375rem;
-            border-bottom-right-radius: 0.375rem;
-        }
-
-        /* Style cho Bảng Danh mục */
-        .admin-table img.category-icon {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            padding: 5px;
-            background: #f8f9fa;
-            border-radius: 0.25rem;
-            border: 1px solid #dee2e6;
-        }
-
-        .admin-table .badge {
-            font-size: 0.85rem;
-        }
-
-        /* Phân trang */
-        .pagination .page-item.active .page-link {
-            background-color: var(--color-accent);
-            border-color: var(--color-accent);
-            color: #fff;
-        }
-
-        .pagination .page-link {
-            color: var(--color-accent);
-        }
-
-        .pagination .page-link:hover {
-            color: var(--color-accent-darker);
-        }
-
-        /* Style cho thanh search "màu nâu" */
-        .admin-top-nav .form-control {
-            border-color: var(--color-accent);
-        }
-
-        .admin-top-nav .form-control:focus {
-            border-color: var(--color-accent-darker);
-            /* CẬP NHẬT SHADOW MÀU MỚI */
-            box-shadow: 0 0 0 0.25rem rgba(0, 15, 56, 0.25);
-        }
-
-        /* Style cho Bảng Tài khoản */
-        .admin-table img.avatar-img {
-            width: 45px;
-            height: 45px;
-            object-fit: cover;
-            border-radius: 50%;
-            /* Bo tròn avatar */
-            border: 2px solid #e9ecef;
-        }
-
-        .admin-table .badge {
-            font-size: 0.8rem;
-            font-weight: 500;
-            padding: 0.5em 0.8em;
-        }
-
-        /* Style riêng cho Role badge để dễ phân biệt */
-        .badge-role-admin {
-            background-color: var(--color-accent);
-            color: #fff;
-        }
-
-        .badge-role-client {
-            background-color: #e9ecef;
-            color: var(--color-text-main);
-            border: 1px solid #ced4da;
-        }
-
-        /* Phân trang (Kế thừa) */
-        .pagination .page-item.active .page-link {
-            background-color: var(--color-accent);
-            border-color: var(--color-accent);
-            color: #fff;
-        }
-
-        .pagination .page-link {
-            color: var(--color-accent);
-        }
-
-        .pagination .page-link:hover {
-            color: var(--color-accent-darker);
-        }
-
-        .pagination>.page-item:not(:first-child) .page-link {
-            margin-left: -1px;
-        }
-
-        .pagination .page-item:first-child .page-link {
-            border-top-left-radius: 0.375rem;
-            border-bottom-left-radius: 0.375rem;
-        }
-
-        .pagination .page-item:last-child .page-link {
-            border-top-right-radius: 0.375rem;
-            border-bottom-right-radius: 0.375rem;
-        }
+    /* =================================================== */
+/* 1. CORE VARIABLES & RESET (DÙNG CHUNG) */
+/* =================================================== */
+:root {
+  /* MÀU CHỦ ĐẠO: DEEP NAVY */
+  --color-accent: #000f38;
+  --color-accent-darker: #000826;
+  --color-text-main: #1a1a1a;
+  --color-text-subtle: #555555;
+  --bg-admin: #f8f9fa;
+  --sidebar-width: 240px; /* (Tham khảo nếu cần chỉnh độ rộng) */
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  color: var(--color-text-main);
+  background-color: var(--bg-admin);
+  overflow-x: hidden; /* Tránh thanh cuộn ngang ngoài ý muốn */
+}
+
+/* =================================================== */
+/* 2. LAYOUT ADMIN (SIDEBAR & HEADER) */
+/* =================================================== */
+
+/* --- Sidebar (Cột trái) --- */
+/* Lưu ý: id #admin-sidebar nằm trong header.php */
+#admin-sidebar {
+  min-height: 100vh;
+  background-color: #212529; /* Màu đen */
+  
+  /* Sticky giúp sidebar luôn cố định khi cuộn nội dung bên phải */
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto; /* Cho phép cuộn dọc trong menu nếu quá dài */
+  z-index: 1000;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+#admin-sidebar .nav-link {
+  color: #adb5bd; /* Màu chữ xám */
+  padding: 0.8rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+#admin-sidebar .nav-link i {
+  margin-right: 0.75rem;
+  width: 20px;
+  text-align: center;
+}
+
+#admin-sidebar .nav-link:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Style cho link đang Active (Trang hiện tại) */
+#admin-sidebar .nav-link.active {
+  color: #ffffff;
+  background-color: var(--color-accent);
+  border-left: 4px solid #fff; /* Thêm điểm nhấn */
+}
+
+#admin-sidebar .sidebar-heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #6c757d;
+  padding: 1rem 1.5rem 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+/* --- Main Content Area (Cột phải) --- */
+/* Class này nằm trong các file admin_*.php */
+.admin-content {
+  padding: 2rem;
+  min-height: calc(100vh - 60px); /* Đảm bảo full màn hình trừ header */
+}
+
+/* --- Header Top Nav --- */
+.admin-top-nav {
+  background-color: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  height: 64px; /* Cố định chiều cao header để tránh nhảy layout */
+}
+
+/* Input tìm kiếm trên header */
+.admin-top-nav .form-control {
+  border-color: var(--color-accent);
+  border-radius: 20px; /* Bo tròn thanh tìm kiếm */
+}
+
+.admin-top-nav .form-control:focus {
+  border-color: var(--color-accent-darker);
+  box-shadow: 0 0 0 0.25rem rgba(0, 15, 56, 0.15);
+}
+
+/* =================================================== */
+/* 3. COMMON COMPONENTS (BẢNG, NÚT, BADGE) */
+/* =================================================== */
+
+/* --- Buttons --- */
+.btn-primary {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--color-accent-darker);
+  border-color: var(--color-accent-darker);
+  color: #ffffff;
+}
+
+.btn-outline-secondary {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+/* --- Data Tables --- */
+/* Mặc định ảnh trong bảng sẽ vuông 60px (cho Sản phẩm, Đơn hàng) */
+.admin-table img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+/* Căn chỉnh badge trong bảng */
+.admin-table .badge {
+  font-size: 0.85rem;
+  padding: 0.5em 0.8em;
+  font-weight: 500;
+}
+
+/* --- Pagination --- */
+.pagination .page-item.active .page-link {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.pagination .page-link {
+  color: var(--color-accent);
+  border: 1px solid #dee2e6;
+}
+
+.pagination .page-link:hover {
+  background-color: #e9ecef;
+  color: var(--color-accent-darker);
+}
+
+/* =================================================== */
+/* 4. PAGE SPECIFIC STYLES (STYLE RIÊNG TỪNG TRANG) */
+/* =================================================== */
+
+/* --- A. Dashboard (admin.php) --- */
+.kpi-card {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.2s;
+}
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.kpi-card .card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1.2;
+}
+
+.kpi-card .card-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-card .card-icon, 
+.kpi-card .kpi-icon {
+  font-size: 2.5rem;
+  color: var(--color-accent);
+  opacity: 0.15; /* Làm mờ icon nền */
+  margin-left: 1rem;
+  flex-shrink: 0;
+}
+
+.dashboard-chart-card {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  height: 100%; /* Đảm bảo bằng nhau khi chia cột */
+}
+
+.dashboard-chart-card h5 {
+  font-weight: 700;
+  color: var(--color-text-main);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.list-group-item {
+  border-left: none;
+  border-right: none;
+  padding: 1rem 0;
+}
+.list-group-item:first-child { border-top: none; }
+.list-group-item:last-child { border-bottom: none; }
+
+.list-group-item .product-info { font-weight: 500; }
+.list-group-item .product-sales { font-weight: 600; color: var(--color-accent); }
+
+
+/* --- B. Quản lý Đơn hàng (admin_orders.php) --- */
+.filter-buttons .btn {
+  border-radius: 50px; /* Pill shape */
+  padding: 0.375rem 1.2rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.filter-buttons .btn-outline-secondary {
+  color: var(--color-text-subtle);
+  border-color: #ced4da;
+  background-color: #fff;
+}
+
+.filter-buttons .btn-outline-secondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background-color: rgba(0, 15, 56, 0.05);
+}
+
+.filter-buttons .btn-primary {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+
+/* --- C. Quản lý Sản phẩm (admin_products.php) --- */
+/* Cột Thương hiệu */
+.brand-badge {
+  background-color: #f1f3f5;
+  color: var(--color-text-subtle);
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+
+/* --- D. Quản lý Danh mục (admin_category.php) --- */
+/* Override ảnh cho danh mục: nhỏ hơn và fit contain (vì là icon) */
+.admin-table img.category-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  padding: 4px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+
+/* --- E. Quản lý Tài khoản (admin_account.php) --- */
+/* Override ảnh cho tài khoản: tròn và nhỏ hơn */
+.admin-table img.avatar-img {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #dee2e6;
+}
+
+/* Badge phân quyền */
+.badge-role-admin {
+  background-color: var(--color-accent);
+  color: #fff;
+  border: 1px solid var(--color-accent);
+}
+
+.badge-role-client {
+  background-color: #f8f9fa;
+  color: var(--color-text-main);
+  border: 1px solid #ced4da;
+}
+
+
+/* --- F. Quản lý Biến thể (admin_variants.php) --- */
+.variant-attribute {
+  font-weight: 600;
+  color: var(--color-accent);
+  background-color: rgba(0, 15, 56, 0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 5px;
+  font-size: 0.85rem;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+
+/* --- G. Hồ sơ Cá nhân (user_profile.php) --- */
+.profile-card {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+  height: 100%;
+}
+
+.profile-sidebar .avatar-wrapper {
+  text-align: center;
+  padding: 2rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.profile-sidebar .avatar-img {
+  width: 120px; /* To hơn avatar trong bảng */
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #f8f9fa;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+}
+
+.profile-sidebar .user-name {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+  color: var(--color-accent);
+}
+
+.profile-sidebar .user-role {
+  color: var(--color-text-subtle);
+  font-size: 0.9rem;
+}
+
+/* Menu dọc trong profile */
+.profile-nav .nav-link {
+  color: var(--color-text-subtle);
+  padding: 1rem 1.5rem;
+  border-radius: 0;
+  border-left: 3px solid transparent;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.profile-nav .nav-link i {
+  margin-right: 12px;
+  font-size: 1.1rem;
+}
+
+.profile-nav .nav-link:hover {
+  background-color: #f8f9fa;
+  color: var(--color-accent);
+}
+
+.profile-nav .nav-link.active {
+  background-color: rgba(0, 15, 56, 0.05);
+  color: var(--color-accent);
+  border-left-color: var(--color-accent);
+  font-weight: 600;
+}
+
+.profile-content {
+  padding: 2rem;
+}
+
+.profile-content h4 {
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f1f1f1;
+  padding-bottom: 0.5rem;
+}
+
+/* Timeline Hoạt động */
+.activity-timeline {
+  border-left: 2px solid #e9ecef;
+  padding-left: 25px;
+  margin-left: 10px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -31px; /* Căn chỉnh chấm tròn trùng với đường kẻ */
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px #e9ecef;
+}
+
+.timeline-date {
+  font-size: 0.8rem;
+  color: #999;
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+}
+
+.timeline-content {
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+}
     </style>
 </head>
 
