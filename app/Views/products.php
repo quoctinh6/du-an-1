@@ -22,7 +22,7 @@ function renderProducts($item)
     return <<<HTML
     <div class="product-box">
         <div class="product-icons">
-            <button class="icon-btn btn-add-to-cart" aria-label="Add to cart">
+            <button class="icon-btn btn-add-to-cart" data-product-id="{$item['id']}" aria-label="Add to cart" type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
                 </svg>
@@ -38,7 +38,7 @@ function renderProducts($item)
         </a>
         <div class="product-name">{$item['name']}</div>
         <div class="product-price">{$oldPriceHtml} {$priceFormat}</div>
-        <button class="buy-btn" onclick="window.location.href='{$detailLink}'">Mua ngay</button>
+        <button class="buy-btn" type="button" onclick="window.location.href='{$detailLink}'">Xem Chi Tiết</button>
     </div>
 HTML;
 }
@@ -90,17 +90,17 @@ HTML;
                 <div class="filter-group-title">Danh Mục</div>
                 <!-- Thêm name="category[]" và value -->
                 <label class="filter-checkbox-container">Đồng hồ cơ (ID:1)
-                    <input type="checkbox" class="category-checkbox" value="1" <?php echo in_array('1', $selected_categories) ? 'checked' : ''; ?>>
-                    <span class="checkmark"></span>
-                </label>
-                <label class="filter-checkbox-container">Đồng hồ thông minh (ID:2)
-                    <input type="checkbox" class="category-checkbox" value="2" <?php echo in_array('2', $selected_categories) ? 'checked' : ''; ?>>
-                    <span class="checkmark"></span>
-                </label>
-                <label class="filter-checkbox-container">Đồng hồ pin (ID:3)
-                    <input type="checkbox" class="category-checkbox" value="3" <?php echo in_array('3', $selected_categories) ? 'checked' : ''; ?>>
-                    <span class="checkmark"></span>
-                </label>
+                        <input type="checkbox" name="category[]" class="category-checkbox" value="1" <?php echo in_array('1', $selected_categories) ? 'checked' : ''; ?>>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="filter-checkbox-container">Đồng hồ thông minh (ID:2)
+                        <input type="checkbox" name="category[]" class="category-checkbox" value="2" <?php echo in_array('2', $selected_categories) ? 'checked' : ''; ?>>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="filter-checkbox-container">Đồng hồ pin (ID:3)
+                        <input type="checkbox" name="category[]" class="category-checkbox" value="3" <?php echo in_array('3', $selected_categories) ? 'checked' : ''; ?>>
+                        <span class="checkmark"></span>
+                    </label>
             </div>
 
             <!-- 2. Lọc theo Giá tiền -->
@@ -170,4 +170,23 @@ HTML;
             ?>
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.querySelector('.filter-sidebar');
+        if (!form) return;
+        var hidden = document.getElementById('category-hidden');
+        var checkboxes = form.querySelectorAll('input.category-checkbox[name="category[]"]');
+
+        function syncHidden() {
+            var vals = Array.prototype.slice.call(checkboxes).filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+            hidden.value = vals.join(',');
+        }
+
+        checkboxes.forEach(function (ch) { ch.addEventListener('change', syncHidden); });
+        // initialize on load
+        syncHidden();
+    });
+    </script>
+
 </section>
