@@ -62,7 +62,7 @@
 </footer>
 
 
-<link rel="stylesheet" href="<?php echo BASE_URL; ?>Views/assets/js/script.js">
+</script>
 <script src="<?php echo BASE_URL; ?>Views/assets/js/script.js"></script>
 </body>
 </html>
