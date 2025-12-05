@@ -389,3 +389,13 @@
         gap: 32px;
       }
     }
+    /* Ẩn thanh cuộn cho TẤT CẢ các phần tử trên trang (bao gồm cả sidebar) */
+* {
+  -ms-overflow-style: none;  /* IE và Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Ẩn thanh cuộn cho Chrome, Safari và Opera */
+*::-webkit-scrollbar {
+  display: none;
+}
