@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -17,7 +18,7 @@
 
 
     <!-- SEO Tags -->
-    <title>FashionShop - Admin Panel</title>
+    <title>ZeroWatch - Admin Panel</title>
     <meta name="description" content="Khu vực quản trị website FashionShop." />
 
     <!-- Custom CSS -->

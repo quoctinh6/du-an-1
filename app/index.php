@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 $url = $_SERVER['PATH_INFO'] ?? '';
 
