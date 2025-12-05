@@ -8,6 +8,7 @@
       --section-width: 85vw;
       --grid-gap: 2rem;
     }
+
     body {
       background: var(--bg);
       color: var(--white);
@@ -16,7 +17,10 @@
       min-height: 100vh;
       overflow-x: hidden;
       scroll-behavior: smooth;
+      
     }
+    
+
     a { color: inherit; text-decoration: none; }
     /* Glassmorphic Header - GIỮ NGUYÊN MÀU SẮC GỐC */
     header {
@@ -1241,4 +1245,14 @@
 .scroll-reveal.is-visible {
     opacity: 1; 
     transform: translateY(0); /* Trở về vị trí gốc */
+}
+/* Ẩn thanh cuộn cho TẤT CẢ các phần tử trên trang (bao gồm cả sidebar) */
+* {
+  -ms-overflow-style: none;  /* IE và Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Ẩn thanh cuộn cho Chrome, Safari và Opera */
+*::-webkit-scrollbar {
+  display: none;
 }
