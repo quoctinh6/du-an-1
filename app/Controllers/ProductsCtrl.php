@@ -16,9 +16,6 @@ class ProductsCtrl
         include_once __DIR__ . "/../Models/Brand.php";
         $this->BrandModel = new Brand();
 
-
-
-
     }
     public function category($categories)
     {
