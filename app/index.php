@@ -30,15 +30,17 @@ if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
 if (empty($parts[0])) {
     // TRƯỜNG HỢP 1: TRANG CHỦ
     // Nếu $url rỗng, $parts[0] cũng rỗng
-    if (!$isAjax) include_once "./Views/header.php";
+    if (!$isAjax)
+        include_once "./Views/header.php";
     include_once "./Controllers/PageController.php";
     $ctrl = new PageCtrl();
     $ctrl->home();
     include_once "./Views/footer.php";
 
-} elseif ($parts[0] == 'admin') {
+} elseif (strtolower($parts[0]) == 'admin') {
 
-    if (!$isAjax) include_once "./Views/admin/header.php";
+    if (!$isAjax)
+        include_once "./Views/admin/header.php";
     include_once "./Controllers/AdminCtrl.php";
     $ctrl = new AdminCtrl();
     $act = $parts[1] ?? 'index';
@@ -48,7 +50,8 @@ if (empty($parts[0])) {
 
 } else {
     // TRƯỜNG HỢP 2: CÓ CONTROLLER
-    if (!$isAjax) include_once "./Views/header.php";
+    if (!$isAjax)
+        include_once "./Views/header.php";
     $controllerName = ucfirst($parts[0]) . "Ctrl"; // Vd: "ProductCtrl"
     $controllerFile = "./Controllers/" . $controllerName . ".php";
 
@@ -75,7 +78,8 @@ if (empty($parts[0])) {
         echo "Error 404: Controller '$controllerName' not found";
         exit;
     }
-    if (!$isAjax) include_once "./Views/footer.php";
+    if (!$isAjax)
+        include_once "./Views/footer.php";
 }
 
 

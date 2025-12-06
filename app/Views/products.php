@@ -79,10 +79,14 @@ HTML;
         ?>
         <form class="filter-sidebar" action="" method="GET">
             <h3 class="filter-title">Bộ Lọc Sản Phẩm</h3>
-
-            <input type="text" name="search" class="filter-group-title"
-                value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
-                placeholder="Tên sản phẩm...">
+            <div class="filter-group">
+                <div class="filter-group-title">Tìm kiếm</div>
+                <div class="sidebar-search-container">
+                    <input type="text"
+                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?> "
+                        class="sidebar-search-input" placeholder="Tên sản phẩm...">
+                </div>
+            </div>
 
 
             <!-- 1. Lọc theo Danh mục -->
@@ -90,17 +94,17 @@ HTML;
                 <div class="filter-group-title">Danh Mục</div>
                 <!-- Thêm name="category[]" và value -->
                 <label class="filter-checkbox-container">Đồng hồ cơ (ID:1)
-                        <input type="checkbox" name="category[]" class="category-checkbox" value="1" <?php echo in_array('1', $selected_categories) ? 'checked' : ''; ?>>
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="filter-checkbox-container">Đồng hồ thông minh (ID:2)
-                        <input type="checkbox" name="category[]" class="category-checkbox" value="2" <?php echo in_array('2', $selected_categories) ? 'checked' : ''; ?>>
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="filter-checkbox-container">Đồng hồ pin (ID:3)
-                        <input type="checkbox" name="category[]" class="category-checkbox" value="3" <?php echo in_array('3', $selected_categories) ? 'checked' : ''; ?>>
-                        <span class="checkmark"></span>
-                    </label>
+                    <input type="checkbox" name="category[]" class="category-checkbox" value="1" <?php echo in_array('1', $selected_categories) ? 'checked' : ''; ?>>
+                    <span class="checkmark"></span>
+                </label>
+                <label class="filter-checkbox-container">Đồng hồ thông minh (ID:2)
+                    <input type="checkbox" name="category[]" class="category-checkbox" value="2" <?php echo in_array('2', $selected_categories) ? 'checked' : ''; ?>>
+                    <span class="checkmark"></span>
+                </label>
+                <label class="filter-checkbox-container">Đồng hồ pin (ID:3)
+                    <input type="checkbox" name="category[]" class="category-checkbox" value="3" <?php echo in_array('3', $selected_categories) ? 'checked' : ''; ?>>
+                    <span class="checkmark"></span>
+                </label>
             </div>
 
             <!-- 2. Lọc theo Giá tiền -->
@@ -172,21 +176,21 @@ HTML;
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var form = document.querySelector('.filter-sidebar');
-        if (!form) return;
-        var hidden = document.getElementById('category-hidden');
-        var checkboxes = form.querySelectorAll('input.category-checkbox[name="category[]"]');
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.querySelector('.filter-sidebar');
+            if (!form) return;
+            var hidden = document.getElementById('category-hidden');
+            var checkboxes = form.querySelectorAll('input.category-checkbox[name="category[]"]');
 
-        function syncHidden() {
-            var vals = Array.prototype.slice.call(checkboxes).filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
-            hidden.value = vals.join(',');
-        }
+            function syncHidden() {
+                var vals = Array.prototype.slice.call(checkboxes).filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+                hidden.value = vals.join(',');
+            }
 
-        checkboxes.forEach(function (ch) { ch.addEventListener('change', syncHidden); });
-        // initialize on load
-        syncHidden();
-    });
+            checkboxes.forEach(function (ch) { ch.addEventListener('change', syncHidden); });
+            // initialize on load
+            syncHidden();
+        });
     </script>
 
 </section>

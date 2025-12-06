@@ -6,7 +6,8 @@
       </button>
       <form class="d-flex mx-auto" style="width: 400px" action="" method="GET">
         <input type="hidden" name="act" value="products">
-        <input class="form-control me-2" type="search" name="search" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>" placeholder="Tìm kiếm sản phẩm..." />
+        <input class="form-control me-2" type="search" name="search"
+          value="<?= htmlspecialchars($_GET['search'] ?? '') ?>" placeholder="Tìm kiếm sản phẩm..." />
       </form>
 
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -71,9 +72,12 @@
               <label class="form-label small text-muted mb-1">Tình trạng kho</label>
               <select class="form-select" name="stock">
                 <option value="">Tất cả</option>
-                <option value="low" <?= (isset($_GET['stock']) && $_GET['stock'] == 'low') ? 'selected' : '' ?>>Sắp hết hàng (< 10)</option>
-                <option value="out" <?= (isset($_GET['stock']) && $_GET['stock'] == 'out') ? 'selected' : '' ?>>Hết hàng (0)</option>
-                <option value="in" <?= (isset($_GET['stock']) && $_GET['stock'] == 'in') ? 'selected' : '' ?>>Còn hàng (>=10)</option>
+                <option value="low" <?= (isset($_GET['stock']) && $_GET['stock'] == 'low') ? 'selected' : '' ?>>Sắp hết
+                  hàng (< 10)</option>
+                <option value="out" <?= (isset($_GET['stock']) && $_GET['stock'] == 'out') ? 'selected' : '' ?>>Hết hàng
+                  (0)</option>
+                <option value="in" <?= (isset($_GET['stock']) && $_GET['stock'] == 'in') ? 'selected' : '' ?>>Còn hàng
+                  (>=10)</option>
               </select>
             </div>
 
@@ -82,8 +86,10 @@
               <div class="d-flex gap-2">
                 <select class="form-select" name="status">
                   <option value="">Tất cả</option>
-                  <option value="active" <?= (isset($_GET['status']) && $_GET['status'] == 'active') ? 'selected' : '' ?>>Đang bán</option>
-                  <option value="hidden" <?= (isset($_GET['status']) && $_GET['status'] == 'hidden') ? 'selected' : '' ?>>Ẩn</option>
+                  <option value="active" <?= (isset($_GET['status']) && $_GET['status'] == 'active') ? 'selected' : '' ?>>
+                    Đang bán</option>
+                  <option value="hidden" <?= (isset($_GET['status']) && $_GET['status'] == 'hidden') ? 'selected' : '' ?>>
+                    Ẩn</option>
                 </select>
                 <button type="submit" class="btn btn-outline-secondary" title="Lọc">
                   <i class="bi bi-funnel"></i>
@@ -122,9 +128,7 @@
                       // Kiểm tra: Nếu có link ảnh thì nối BASE_URL vào, nếu không thì dùng ảnh mặc định
                       $imgUrl = !empty($item['image_url']) ? BASE_URL . $item['image_url'] : 'https://placehold.co/50x50?text=No+Img';
                       ?>
-                      <img src="<?= $imgUrl ?>"
-                        alt="<?= htmlspecialchars($item['name']) ?>"
-                        class="shadow-sm"
+                      <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="shadow-sm"
                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #eee;">
                     </td>
                     <td>
@@ -153,15 +157,12 @@
                     </td>
                     <td class="text-end">
                       <a href="<?= BASE_URL ?>index.php/admin/variants?product_id=<?= $item['id'] ?>"
-                        class="btn btn-sm btn-outline-info me-1"
-                        title="Quản lý biến thể (Size/Màu)">
+                        class="btn btn-sm btn-outline-info me-1" title="Quản lý biến thể (Size/Màu)">
                         <i class="bi bi-layers"></i>
                       </a>
 
-                      <button type="button" class="btn btn-sm btn-outline-primary me-1"
-                        data-bs-toggle="modal"
-                        data-bs-target="#editProductModal_<?= $item['id'] ?>"
-                        title="Sửa thông tin">
+                      <button type="button" class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                        data-bs-target="#editProductModal_<?= $item['id'] ?>" title="Sửa thông tin">
                         <i class="bi bi-pencil"></i>
                       </button>
 
@@ -232,7 +233,7 @@
               <div class="mb-3">
                 <label class="form-label">Ảnh đại diện</label>
 
-                <input type="file" class="form-control" name="image"
+                <input type="file" class="form-control" name="image" accept="image/png, image/jpeg, image/jpg"
                   onchange="previewImage(this, 'preview_img_product')">
 
                 <div class="mt-2 text-center">
@@ -284,7 +285,8 @@
                 <div class="col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Tên sản phẩm</label>
-                    <input type="text" class="form-control" name="name" value="<?= htmlspecialchars($item['name']) ?>" required>
+                    <input type="text" class="form-control" name="name" value="<?= htmlspecialchars($item['name']) ?>"
+                      required>
                   </div>
 
                   <div class="row">
@@ -317,8 +319,7 @@
                     <input type="file" class="form-control" name="image">
                     <?php if (!empty($item['image_url'])): ?>
                       <div class="mt-2">
-                        <img src="<?= BASE_URL . $item['image_url'] ?>"
-                          alt="Ảnh hiện tại"
+                        <img src="<?= BASE_URL . $item['image_url'] ?>" alt="Ảnh hiện tại"
                           style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ddd; border-radius: 5px;">
                         <span class="small text-muted ms-2 align-middle">Ảnh hiện tại</span>
                       </div>
@@ -328,7 +329,8 @@
                     <label class="form-label">Trạng thái</label>
                     <select class="form-select" name="status">
                       <option value="published" <?= ($item['status'] == 'published') ? 'selected' : '' ?>>Đang bán</option>
-                      <option value="draft" <?= ($item['status'] == 'draft' || $item['status'] == 'hidden') ? 'selected' : '' ?>>Ẩn</option>
+                      <option value="draft" <?= ($item['status'] == 'draft' || $item['status'] == 'hidden') ? 'selected' : '' ?>>
+                        Ẩn</option>
                     </select>
                   </div>
                 </div>
@@ -336,7 +338,8 @@
 
               <div class="mb-3">
                 <label class="form-label">Mô tả sản phẩm</label>
-                <textarea class="form-control" name="description" rows="3"><?= htmlspecialchars($item['description'] ?? '') ?></textarea>
+                <textarea class="form-control" name="description"
+                  rows="3"><?= htmlspecialchars($item['description'] ?? '') ?></textarea>
               </div>
             </div>
 
@@ -361,7 +364,7 @@
     if (input.files && input.files[0]) {
       const reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         preview.src = e.target.result;
         preview.style.display = 'block'; // Hiện ảnh lên
       }
