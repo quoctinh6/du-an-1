@@ -80,10 +80,11 @@ HTML;
         <form class="filter-sidebar" action="" method="GET">
             <h3 class="filter-title">Bộ Lọc Sản Phẩm</h3>
 
-            <input type="text" name="search" class="filter-group-title"
+            <div class="sidebar-search-container">
+            <input type="text" name="search" class="sidebar-search-input"
                 value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
                 placeholder="Tên sản phẩm...">
-
+            </div>
 
             <!-- 1. Lọc theo Danh mục -->
             <div class="filter-group">

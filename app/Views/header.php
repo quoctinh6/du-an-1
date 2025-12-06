@@ -30,7 +30,7 @@
             <nav>
                 <!-- Chỉnh sửa lại các menu link cho phù hợp hơn với bố cục 3 cột ở giữa -->
                 <a href="<?= BASE_URL; ?>index.php/products">Sản phẩm</a>
-                <a href="favorites.html">Yêu thích</a>
+                <a href="<?= BASE_URL; ?>index.php/products/favor">Yêu thích</a>
                 <a href="<?= BASE_URL ?>index.php/contact">Liên hệ</a>
             </nav>
 

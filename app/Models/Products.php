@@ -125,5 +125,5 @@ class Products
     return $this->db->query($sql, ...$array_Products);
 
   }
-
+  
 }
