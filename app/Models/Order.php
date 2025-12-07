@@ -1,5 +1,5 @@
 <?php
-include_once "./Models/Database.php";
+include_once __DIR__ . "/Database.php";
 
 class Order
 {
@@ -9,6 +9,8 @@ class Order
     {
         $this->db = new Database();
     }
+
+    // --- CÁC HÀM CŨ CỦA BẠN (GIỮ NGUYÊN) ---
 
     // Lấy tất cả đơn hàng của một user
     function getOrdersByUserId($user_id)
@@ -87,12 +89,17 @@ class Order
         $result = $this->db->queryOne($sql, $user_id);
         return $result['total'] ?? 0;
     }
-   // 1. Hàm lấy đơn hàng (Thêm tham số $keyword)
+
+    // --- 2 HÀM MỚI BỔ SUNG ĐỂ SỬA LỖI ADMIN ---
+
+    /**
+     * Lấy danh sách đơn hàng cho Admin (có lọc và phân trang)
+     * @return array
+     */
     function getAllOrdersAdmin($status = '', $keyword = '', $page = 1, $limit = 10)
     {
         $offset = ($page - 1) * $limit;
 
-        // Câu SQL gốc nối bảng
         $sql = "SELECT o.*, u.name as user_name, u.email 
                 FROM orders o
                 LEFT JOIN users u ON o.user_id = u.id
@@ -100,13 +107,11 @@ class Order
 
         $params = [];
 
-        // 1. Lọc theo trạng thái (Code cũ)
         if (!empty($status)) {
             $sql .= " AND o.status = ?";
             $params[] = $status;
         }
 
-        // 2. Lọc theo từ khóa (CODE MỚI)
         if (!empty($keyword)) {
             // Tìm trong Mã đơn OR Tên khách OR Số điện thoại
             $sql .= " AND (o.id LIKE ? OR u.name LIKE ? OR o.phone_number LIKE ?)";
@@ -119,10 +124,15 @@ class Order
         $sql .= " ORDER BY o.created_at DESC";
         $sql .= " LIMIT " . intval($limit) . " OFFSET " . intval($offset);
 
-        return $this->db->query($sql, ...$params);
+        // Trả về mảng rỗng nếu query lỗi, giúp tránh lỗi void
+        $result = $this->db->query($sql, ...$params);
+        return $result ? $result : [];
     }
 
-    // 2. Hàm đếm tổng số đơn (Cũng phải thêm $keyword để tính trang cho đúng)
+    /**
+     * Đếm tổng số đơn để phân trang
+     * @return int
+     */
     function countOrdersAdmin($status = '', $keyword = '')
     {
         $sql = "SELECT COUNT(*) as total 

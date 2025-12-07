@@ -1,4 +1,8 @@
 <?php
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
     $cart_count = 0;
     if(isset($_SESSION['cart'])) {
         foreach($_SESSION['cart'] as $item){
@@ -23,22 +27,17 @@
 <body>
     <header>
         <div class="header-container">
-            <!-- Cột 1: Logo (Left) -->
             <div class="logo" style="color: white;"><a href="<?= BASE_URL; ?>">Zero Watch</a></div>
 
-            <!-- Cột 2: Menu Navigation (Center) -->
             <nav>
-                <!-- Chỉnh sửa lại các menu link cho phù hợp hơn với bố cục 3 cột ở giữa -->
                 <a href="<?= BASE_URL; ?>index.php/products">Sản phẩm</a>
-                <a href="<?= BASE_URL; ?>index.php/products/favor">Yêu thích</a>
+                <!-- Link đúng trỏ về Favor Controller -->
+                <a href="<?= BASE_URL; ?>index.php/favor">Yêu thích</a>
                 <a href="<?= BASE_URL ?>index.php/contact">Liên hệ</a>
             </nav>
 
-            <!-- Cột 3: Actions (Right) -->
             <div class="header-actions">
-                <!-- Nút Giỏ hàng (Có icon và viền) -->
                 <a href="<?= BASE_URL; ?>index.php/cart" class="action-button cart-btn">
-                    <!-- Icon Giỏ hàng (dùng SVG) -->
                     <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor"
                         viewBox="0 0 24 24">
                         <path
@@ -47,7 +46,6 @@
                     Giỏ hàng <span id="header-cart-count" style="font-weight: 400;">(<?= $cart_count ?>)</span>
                 </a>
 
-                <!-- Nút Đăng nhập (Không viền) -->
                 <?php
                 if (isset($_SESSION['user'])) {
                     ?>
