@@ -87,5 +87,64 @@ class Order
         $result = $this->db->queryOne($sql, $user_id);
         return $result['total'] ?? 0;
     }
+   // 1. Hàm lấy đơn hàng (Thêm tham số $keyword)
+    function getAllOrdersAdmin($status = '', $keyword = '', $page = 1, $limit = 10)
+    {
+        $offset = ($page - 1) * $limit;
+
+        // Câu SQL gốc nối bảng
+        $sql = "SELECT o.*, u.name as user_name, u.email 
+                FROM orders o
+                LEFT JOIN users u ON o.user_id = u.id
+                WHERE 1=1"; 
+
+        $params = [];
+
+        // 1. Lọc theo trạng thái (Code cũ)
+        if (!empty($status)) {
+            $sql .= " AND o.status = ?";
+            $params[] = $status;
+        }
+
+        // 2. Lọc theo từ khóa (CODE MỚI)
+        if (!empty($keyword)) {
+            // Tìm trong Mã đơn OR Tên khách OR Số điện thoại
+            $sql .= " AND (o.id LIKE ? OR u.name LIKE ? OR o.phone_number LIKE ?)";
+            $search_term = "%" . $keyword . "%";
+            $params[] = $search_term;
+            $params[] = $search_term;
+            $params[] = $search_term;
+        }
+
+        $sql .= " ORDER BY o.created_at DESC";
+        $sql .= " LIMIT " . intval($limit) . " OFFSET " . intval($offset);
+
+        return $this->db->query($sql, ...$params);
+    }
+
+    // 2. Hàm đếm tổng số đơn (Cũng phải thêm $keyword để tính trang cho đúng)
+    function countOrdersAdmin($status = '', $keyword = '')
+    {
+        $sql = "SELECT COUNT(*) as total 
+                FROM orders o 
+                LEFT JOIN users u ON o.user_id = u.id 
+                WHERE 1=1";
+        $params = [];
+
+        if (!empty($status)) {
+            $sql .= " AND o.status = ?";
+            $params[] = $status;
+        }
+
+        if (!empty($keyword)) {
+            $sql .= " AND (o.id LIKE ? OR u.name LIKE ? OR o.phone_number LIKE ?)";
+            $search_term = "%" . $keyword . "%";
+            $params[] = $search_term;
+            $params[] = $search_term;
+            $params[] = $search_term;
+        }
+
+        $result = $this->db->queryOne($sql, ...$params);
+        return $result['total'] ?? 0;
+    }
 }
-?>

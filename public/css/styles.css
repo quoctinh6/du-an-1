@@ -8,6 +8,7 @@
       --section-width: 85vw;
       --grid-gap: 2rem;
     }
+
     body {
       background: var(--bg);
       color: var(--white);
@@ -16,7 +17,10 @@
       min-height: 100vh;
       overflow-x: hidden;
       scroll-behavior: smooth;
+      
     }
+    
+
     a { color: inherit; text-decoration: none; }
     /* Glassmorphic Header - GIỮ NGUYÊN MÀU SẮC GỐC */
     header {

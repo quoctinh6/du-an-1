@@ -16,9 +16,6 @@ class ProductsCtrl
         include_once __DIR__ . "/../Models/Brand.php";
         $this->BrandModel = new Brand();
 
-
-
-
     }
     public function category($categories)
     {
@@ -42,7 +39,7 @@ class ProductsCtrl
 
     }
 
-    function index()
+    public function index()
     {
 
         $brands = $this->BrandModel->getAll();
