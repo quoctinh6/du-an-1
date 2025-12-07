@@ -71,9 +71,8 @@ class ProductsCtrl
         include_once("Views/products.php");
     }
 
-
     public function favor() {
-        include_once("Views/favor.php");
+        include_once "Views/favor.php";
     }
 }
 ?>

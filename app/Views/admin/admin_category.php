@@ -15,6 +15,7 @@
     <div class="card-body">
       <div class="row g-3">
         <div class="col-md-6">
+          <!-- dùng switch-case -->
           <select class="form-select" aria-label="Lọc trạng thái">
             <option selected>Tất cả trạng thái</option>
             <option value="1">Đang hiển thị</option>
@@ -22,6 +23,7 @@
           </select>
         </div>
         <div class="col-md-6 text-md-end">
+          <!-- gắn id hoặc name cho nút bấm gửi -->
           <button class="btn btn-outline-secondary w-100 w-md-auto">
             <i class="bi bi-funnel me-1"></i> Lọc danh sách
           </button>
@@ -48,6 +50,10 @@
           <tbody>
 
             <!-- Danh mục 1 -->
+
+             <!-- dùng vòng lặp Foreach để hiển thị từ DTB -->
+              <!-- Cú pháp thì coi lại trên gg -->
+               <!-- hình thì dùng thư mục uploads để chứa -->
             <tr>
               <td>
                 <img src="https://cdn-icons-png.flaticon.com/512/2652/2652218.png" alt="Icon" class="category-icon">
@@ -70,7 +76,7 @@
             </tr>
 
             <!-- Danh mục 2 -->
-            <tr>
+            <!-- <tr>
               <td>
                 <img src="https://cdn-icons-png.flaticon.com/512/599/599388.png" alt="Icon" class="category-icon">
               </td>
@@ -89,10 +95,10 @@
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
-            </tr>
+            </tr> -->
 
             <!-- Danh mục 3 -->
-            <tr>
+            <!-- <tr>
               <td>
                 <img src="https://cdn-icons-png.flaticon.com/512/2589/2589903.png" alt="Icon" class="category-icon">
               </td>
@@ -111,10 +117,10 @@
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
-            </tr>
+            </tr> -->
 
             <!-- Danh mục 4 -->
-            <tr>
+            <!-- <tr>
               <td>
                 <img src="https://cdn-icons-png.flaticon.com/512/88/88746.png" alt="Icon" class="category-icon">
               </td>
@@ -133,7 +139,7 @@
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
-            </tr>
+            </tr> -->
 
           </tbody>
         </table>
@@ -162,6 +168,8 @@
 </div>
 
 <!-- MODAL THÊM DANH MỤC -->
+ <!-- phải có id, name trong các input -->
+  <!-- khi bấm nút sửa thì phải hiển thị lên trên cái form cửa cái dữ liệu cũ hiện tại -->
 <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
