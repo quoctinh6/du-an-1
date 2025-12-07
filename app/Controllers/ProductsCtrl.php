@@ -15,7 +15,11 @@ class ProductsCtrl
         $this->categoryModel = new Category(); // Sửa $catModel thành property
         
         include_once __DIR__ . "/../Models/Brand.php";
-        $this->brandModel = new Brand(); // Sửa $BrandModel thành property
+        $this->BrandModel = new Brand();
+
+
+
+
     }
 
     public function category($categories)
@@ -35,7 +39,7 @@ class ProductsCtrl
         }
     }
 
-    function index()
+    public function index()
     {
         $brands = $this->brandModel->getAll(); // Dùng biến property đã sửa
         $search = $_GET['search'] ?? '';
