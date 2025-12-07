@@ -1,5 +1,6 @@
 <?php
-include_once "./Models/Database.php";
+include_once __DIR__ . "/Database.php"; // Sử dụng đường dẫn tương đối an toàn
+
 class Products
 {
   private $db;
@@ -16,40 +17,37 @@ class Products
 
   function getProducts(int $limit = 16, array $categories_id = [], array $brand = [], string $search = '')
   {
+    // Dùng chữ thường cho tên bảng: products, product_images, variants
     $sql = 'SELECT products.*, MIN(product_images.image_url) image_url, MIN(variants.price) price
-    FROM Products 
+    FROM products 
     INNER JOIN product_images ON products.id = product_images.product_id
     INNER JOIN variants ON products.id = variants.product_id';
     $params = [];
     $where = [];
 
-    //lọc thư mục 
     if (!empty($categories_id)) {
       $placeholders = implode(',', array_fill(0, count($categories_id), '?'));
       $where[] = 'category_id IN (' . $placeholders . ')';
       $params = array_merge($params, $categories_id);
     }
 
-    // lọc hảng
     if (!empty($brand)) {
       $placeholders = implode(',', array_fill(0, count($brand), '?'));
       $where[] = 'brand_id IN (' . $placeholders . ')';
       $params = array_merge($params, $brand);
     }
-    // tìm kiếm
+
     if (!empty($search) || $search == 0) {
       $where[] = 'products.name LIKE ?';
       $params[] = '%' . $search . '%';
     }
 
-    // nối where
     if ($where) {
-      $sql .= ' where ' . implode(' and ', $where) . ' AND status = "published" GROUP BY products.id ';
+      $sql .= ' WHERE ' . implode(' AND ', $where) . ' AND status = "published" GROUP BY products.id ';
     } else {
-      $sql .= ' AND status = "published" GROUP BY products.id ';
+      $sql .= ' WHERE status = "published" GROUP BY products.id ';
     }
 
-    // Giới hạn số lượng
     if ($limit) {
       $sql .= " LIMIT " . intval($limit);
     }
@@ -59,9 +57,8 @@ class Products
 
   function getProductBySlug(string $slug = '')
   {
-    $sql = 'SELECT * FROM Products where slug = ? and status = "published"';
+    $sql = 'SELECT * FROM products WHERE slug = ? AND status = "published"';
     return $this->db->queryOne($sql, $slug);
-
   }
 
   function getVariantsById_product(int $id_product)
@@ -74,9 +71,6 @@ class Products
     return $this->db->query($sql, $id_product);
   }
 
-  /**
-   * Lấy một variant theo variant id
-   */
   function getVariantById(int $variant_id)
   {
     $sql = 'SELECT variants.*, sizes.name as size_name, colors.name as color_name, products.name as product_name, products.slug
@@ -90,40 +84,72 @@ class Products
 
   function getProductsByColor_id($id)
   {
-    $params = [];
+    $placeholders = implode(',', array_fill(0, count($id), '?'));
     $sql = 'SELECT products.*, variants.color_id
     FROM products
-    INNER JOIN variants ON products.id  = variants.product_id';
-
-    $placeholders = implode(',', array_fill(0, count($id), '?'));
-    $sql .= " WHERE variants.color_id in ( $placeholders );";
+    INNER JOIN variants ON products.id  = variants.product_id
+    WHERE variants.color_id in ( ' . $placeholders . ' )';
     return $this->db->query($sql, ...$id);
-  }
-  function getProductsBySize_id($id)
-  {
-    $params = [];
-    $sql = 'SELECT products.*, variants.size_id
-    FROM products
-    INNER JOIN variants ON products.id  = variants.product_id';
-
-    $placeholders = implode(',', array_fill(0, count($id), '?'));
-    $sql .= " WHERE variants.size_id in ( $placeholders );";
-    return $this->db->query($sql, ...$id);
-  }
-
-  // Lấy nhiều khóa học trong array id  
-  function getProductsrray($array_Products)
-  {
-
-    if (empty($array_Products))
-      return [];
-
-    $placeholders = implode(',', array_fill(0, count($array_Products), '?'));
-
-    $sql = "SELECT * FROM Products WHERE id IN ($placeholders) and status = 'published' ";
-
-    return $this->db->query($sql, ...$array_Products);
-
   }
   
+  function getProductsBySize_id($id)
+  {
+    $placeholders = implode(',', array_fill(0, count($id), '?'));
+    $sql = 'SELECT products.*, variants.size_id
+    FROM products
+    INNER JOIN variants ON products.id  = variants.product_id
+    WHERE variants.size_id in ( ' . $placeholders . ' )';
+    return $this->db->query($sql, ...$id);
+  }
+
+  function getProductsrray($array_Products)
+  {
+    if (empty($array_Products)) return [];
+    $placeholders = implode(',', array_fill(0, count($array_Products), '?'));
+    $sql = "SELECT * FROM products WHERE id IN ($placeholders) AND status = 'published' ";
+    return $this->db->query($sql, ...$array_Products);
+  }
+
+  // === HÀM LẤY SẢN PHẨM YÊU THÍCH ===
+  function getFavorites(array $ids, array $categories_id = [], array $brand = [], string $search = '')
+  {
+      if (empty($ids)) return [];
+
+      // Dùng chữ thường cho tên bảng
+      $sql = 'SELECT products.*, MIN(product_images.image_url) image_url, MIN(variants.price) price
+      FROM products 
+      INNER JOIN product_images ON products.id = product_images.product_id
+      INNER JOIN variants ON products.id = variants.product_id';
+      
+      $params = [];
+      $where = [];
+
+      // 1. Lọc theo danh sách ID (WHERE IN)
+      $placeholders_ids = implode(',', array_fill(0, count($ids), '?'));
+      $where[] = 'products.id IN (' . $placeholders_ids . ')';
+      $params = array_merge($params, $ids);
+
+      // 2. Các bộ lọc khác
+      if (!empty($categories_id)) {
+        $placeholders = implode(',', array_fill(0, count($categories_id), '?'));
+        $where[] = 'category_id IN (' . $placeholders . ')';
+        $params = array_merge($params, $categories_id);
+      }
+
+      if (!empty($brand)) {
+        $placeholders = implode(',', array_fill(0, count($brand), '?'));
+        $where[] = 'brand_id IN (' . $placeholders . ')';
+        $params = array_merge($params, $brand);
+      }
+      
+      if (!empty($search)) {
+        $where[] = 'products.name LIKE ?';
+        $params[] = '%' . $search . '%';
+      }
+
+      // Luôn có ít nhất 1 điều kiện (ID IN) nên dùng WHERE an toàn
+      $sql .= ' WHERE ' . implode(' AND ', $where) . ' AND status = "published" GROUP BY products.id';
+      
+      return $this->db->query($sql, ...$params);
+  }
 }
