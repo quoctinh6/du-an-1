@@ -128,16 +128,16 @@
                       // Kiểm tra: Nếu có link ảnh thì nối BASE_URL vào, nếu không thì dùng ảnh mặc định
                       $imgUrl = !empty($item['image_url']) ? BASE_URL . $item['image_url'] : 'https://placehold.co/50x50?text=No+Img';
                       ?>
-                      <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="shadow-sm"
+                      <img src="<?= $item['image_url'] ?? $item['image'] ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="shadow-sm"
                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #eee;">
                     </td>
                     <td>
                       <div class="fw-bold"><?= htmlspecialchars($item['name']) ?></div>
-                      <small class="text-muted">Danh mục: <?= htmlspecialchars($item['cate_name']) ?></small>
+                      <small class="text-muted">Danh mục: <?= htmlspecialchars($item['category_id']) ?></small>
                     </td>
                     <td>
                       <span class="badge bg-light text-dark border">
-                        <?= htmlspecialchars($item['brand_name']) ?>
+                        <?= htmlspecialchars($item['brand_id']) ?>
                       </span>
                     </td>
                     <td class="text-danger fw-bold">
