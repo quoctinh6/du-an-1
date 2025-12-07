@@ -5,7 +5,7 @@ function renderFavorProducts($item)
     $slug = $item['slug'] ?? $item['id'];
     $detailLink = BASE_URL . "index.php/products/detail/" . $slug;
     
-    // Sửa đường dẫn Xóa
+    // Sửa đường dẫn Xóa để trỏ về FavorCtrl
     $removeLink = BASE_URL . "index.php/favor/remove?id=" . $item['id'];
 
     $priceFormat = number_format($item['price'], 0, ',', '.') . ' VND';
@@ -114,7 +114,7 @@ function renderFavorBrands($item)
         </div>
 
         <div class="filter-actions-bottom">
-             <!-- Link reset -->
+             <!-- Sửa đường dẫn Reset về FavorCtrl -->
              <button class="btn-filter-action btn-reset" type="button" onclick="window.location.href='index.php/favor'">Thiết lập lại</button>
             <button class="btn-filter-action btn-apply" type="submit">Áp dụng</button>
         </div>
@@ -135,3 +135,80 @@ function renderFavorBrands($item)
       </div>
     </div>
 </section>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // 1. ADD TO CART
+    const cartForms = document.querySelectorAll(".form-add-to-cart");
+    cartForms.forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault(); 
+        const formData = new FormData(form);
+        formData.append('is_ajax', '1');
+
+        fetch(form.action, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.text())
+        .then(text => {
+          let payload;
+          try { payload = JSON.parse(text); } 
+          catch (err) { console.error('CART JSON ERROR:', text); alert('Có lỗi xảy ra khi thêm giỏ hàng!'); return; }
+
+          if (!payload || !payload.success) {
+            alert(payload?.message || 'Không thể thêm vào giỏ');
+            return;
+          }
+          alert('Đã thêm vào giỏ hàng thành công!');
+          const headerCount = document.getElementById('header-cart-count');
+          if (headerCount) headerCount.innerText = '(' + (payload.totalQty ?? 0) + ')';
+        })
+        .catch(err => { console.error(err); alert('Lỗi kết nối giỏ hàng!'); });
+      });
+    });
+
+    // 2. ADD TO FAVORITES
+    const favorForms = document.querySelectorAll(".form-add-to-favor");
+    favorForms.forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault(); 
+        
+        const formData = new FormData(form);
+        formData.append('is_ajax', '1');
+
+        fetch(form.action, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.text()) 
+        .then(text => {
+          let payload;
+          try {
+            payload = JSON.parse(text);
+          } catch (err) {
+            console.error('FAVOR JSON ERROR:', text);
+            // Check lỗi 404
+            if(text.includes('404') || text.includes('Not Found')) {
+                alert('Lỗi 404: Đường dẫn không tồn tại. Kiểm tra Router.');
+            } else {
+                alert('Có lỗi hệ thống khi thêm yêu thích!');
+            }
+            return;
+          }
+
+          if (payload && payload.success) {
+            alert(payload.message); 
+          } else {
+            alert('Không thể thêm vào yêu thích: ' + (payload?.message || 'Lỗi lạ'));
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Lỗi kết nối mạng!');
+        });
+      });
+    });
+
+  });
+</script>

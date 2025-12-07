@@ -7,19 +7,21 @@ class ProductsCtrl
 
     public function __construct()
     {
-        // Sử dụng __DIR__ để đường dẫn tuyệt đối, tránh lỗi khi include
+        // 1. Khởi động Session
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // 2. Include Models
+        // Dùng __DIR__ . '/../Models/...' để trỏ đúng ra thư mục Models từ thư mục Controllers
         include_once __DIR__ . "/../Models/Products.php";
         $this->productModel = new Products();
-        
+
         include_once __DIR__ . "/../Models/Category.php";
-        $this->categoryModel = new Category(); // Sửa $catModel thành property
-        
+        $this->categoryModel = new Category();
+
         include_once __DIR__ . "/../Models/Brand.php";
-        $this->BrandModel = new Brand();
-
-
-
-
+        $this->brandModel = new Brand();
     }
 
     public function category($categories)
@@ -41,14 +43,11 @@ class ProductsCtrl
 
     public function index()
     {
-        $brands = $this->brandModel->getAll(); // Dùng biến property đã sửa
+        $brands = $this->brandModel->getAll();
+        
         $search = $_GET['search'] ?? '';
-
-        $brand = [];
-        if (isset($_GET['brand']) && $_GET['brand'] != 'all') {
-            $brand = [$_GET['brand']];
-        }
-
+        $brand = (isset($_GET['brand']) && $_GET['brand'] != 'all') ? [$_GET['brand']] : [];
+        
         $category = [];
         if (isset($_GET['category'])) {
             if (is_array($_GET['category'])) {
@@ -62,4 +61,3 @@ class ProductsCtrl
         include_once("Views/products.php");
     }
 }
-?>
