@@ -37,6 +37,7 @@ function render_product_item($item)
                 <input type="hidden" name="name" value="$product_name">
                 <input type="hidden" name="price" value="$product_price">
                 <input type="hidden" name="image" value="$image_url">
+                <!-- <input type="hidden" name="variant_id" id="form_variant_id" value=""> -->
                 <input type="hidden" name="quantity" value="1">
                 <button type="submit" class="icon-btn" aria-label="Add to cart">
                     <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">

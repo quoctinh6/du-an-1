@@ -53,13 +53,13 @@ class Products
 
     // 4. Lọc Trạng thái (Active/Hidden)
     if (!empty($status)) {
-        if ($status == 'active') {
-            $where[] = 'products.status = "published"';
-        } elseif ($status == 'hidden') {
-             // Trong SQL dump của bạn enum là 'draft', 'published', 'archived'
-             // Nên 'hidden' ta sẽ map vào 'draft' hoặc 'archived' tùy bạn chọn. Ở đây tôi để draft
-            $where[] = 'products.status = "draft"';
-        }
+      if ($status == 'active') {
+        $where[] = 'products.status = "published"';
+      } elseif ($status == 'hidden') {
+        // Trong SQL dump của bạn enum là 'draft', 'published', 'archived'
+        // Nên 'hidden' ta sẽ map vào 'draft' hoặc 'archived' tùy bạn chọn. Ở đây tôi để draft
+        $where[] = 'products.status = "draft"';
+      }
     }
 
     // // Nối where (Nối các điều kiện lọc lại với nhau.)
@@ -71,7 +71,7 @@ class Products
 
     // Nối các điều kiện WHERE
     if ($where) {
-        $sql .= ' WHERE ' . implode(' AND ', $where);
+      $sql .= ' WHERE ' . implode(' AND ', $where);
     }
 
     // GROUP BY trước khi HAVING
@@ -101,16 +101,16 @@ class Products
 
     // 7. Lọc Tồn kho (Phải dùng HAVING vì lọc trên cột tổng hợp SUM)
     if (!empty($stock)) {
-        if ($stock == 'out') {
-            // Hết hàng: Tổng = 0 hoặc NULL
-            $sql .= ' HAVING total_stock = 0 OR total_stock IS NULL ';
-        } elseif ($stock == 'low') {
-            // Sắp hết: > 0 và < 10
-            $sql .= ' HAVING total_stock > 0 AND total_stock < 10 ';
-        } elseif ($stock == 'in') {
-            // Còn hàng: >= 10
-            $sql .= ' HAVING total_stock >= 10 ';
-        }
+      if ($stock == 'out') {
+        // Hết hàng: Tổng = 0 hoặc NULL
+        $sql .= ' HAVING total_stock = 0 OR total_stock IS NULL ';
+      } elseif ($stock == 'low') {
+        // Sắp hết: > 0 và < 10
+        $sql .= ' HAVING total_stock > 0 AND total_stock < 10 ';
+      } elseif ($stock == 'in') {
+        // Còn hàng: >= 10
+        $sql .= ' HAVING total_stock >= 10 ';
+      }
     }
 
     $sql .= " ORDER BY products.id DESC"; // Sắp xếp mới nhất lên đầu
@@ -126,7 +126,7 @@ class Products
   // 9. Lấy tất cả biến thể của một sản phẩm theo product_id
   function getVariantsById_product(int $id_product)
   {
-    $sql = 'SELECT variants.*, sizes.name sizes, colors.name colors
+    $sql = 'SELECT variants.*, sizes.name sizes, colors.name colors, colors.code code
     FROM variants 
     INNER JOIN sizes ON variants.size_id = sizes.id
     INNER JOIN colors ON variants.color_id = colors.id
@@ -191,109 +191,119 @@ class Products
   // 14. Lấy thông tin chi tiết 1 sản phẩm theo ID (Để hiển thị tên SP cha ở tiêu đề trang Admin)
   function getProductById($id)
   {
-      $sql = "SELECT * FROM products WHERE id = ?";
-      return $this->db->queryOne($sql, $id);
+    $sql = "SELECT * FROM products WHERE id = ?";
+    return $this->db->queryOne($sql, $id);
   }
 
   // 15. Lấy danh sách tất cả Màu sắc (Để đổ dữ liệu vào Dropdown chọn màu)
-  function getAllColors() {
-      return $this->db->query("SELECT * FROM colors");
+  function getAllColors()
+  {
+    return $this->db->query("SELECT * FROM colors");
   }
 
   // 16. Lấy danh sách tất cả Kích thước (Để đổ dữ liệu vào Dropdown chọn size)
-  function getAllSizes() {
-      return $this->db->query("SELECT * FROM sizes");
+  function getAllSizes()
+  {
+    return $this->db->query("SELECT * FROM sizes");
   }
 
   // 17. Thêm biến thể mới (Create)
-  function addVariant($product_id, $color_id, $size_id, $price, $quantity, $sku, $image) {
-      $sql = "INSERT INTO variants (product_id, color_id, size_id, price, quantity, sku, image) 
+  function addVariant($product_id, $color_id, $size_id, $price, $quantity, $sku, $image)
+  {
+    $sql = "INSERT INTO variants (product_id, color_id, size_id, price, quantity, sku, image) 
               VALUES (?, ?, ?, ?, ?, ?, ?)";
-      // Lưu ý: Hàm execute của DB bên ông phải hỗ trợ trả về true/false hoặc id
-      return $this->db->execute($sql, $product_id, $color_id, $size_id, $price, $quantity, $sku, $image);
+    // Lưu ý: Hàm execute của DB bên ông phải hỗ trợ trả về true/false hoặc id
+    return $this->db->execute($sql, $product_id, $color_id, $size_id, $price, $quantity, $sku, $image);
   }
 
   // 18. Cập nhật biến thể (Update)
-  function updateVariant($id, $color_id, $size_id, $price, $quantity, $sku, $image = null) {
-      if ($image) {
-          // Nếu có chọn ảnh mới thì cập nhật cả ảnh
-          $sql = "UPDATE variants 
+  function updateVariant($id, $color_id, $size_id, $price, $quantity, $sku, $image = null)
+  {
+    if ($image) {
+      // Nếu có chọn ảnh mới thì cập nhật cả ảnh
+      $sql = "UPDATE variants 
                   SET color_id = ?, size_id = ?, price = ?, quantity = ?, sku = ?, image = ? 
                   WHERE id = ?";
-          return $this->db->execute($sql, $color_id, $size_id, $price, $quantity, $sku, $image, $id);
-      } else {
-          // Nếu không chọn ảnh mới thì giữ nguyên ảnh cũ
-          $sql = "UPDATE variants 
+      return $this->db->execute($sql, $color_id, $size_id, $price, $quantity, $sku, $image, $id);
+    } else {
+      // Nếu không chọn ảnh mới thì giữ nguyên ảnh cũ
+      $sql = "UPDATE variants 
                   SET color_id = ?, size_id = ?, price = ?, quantity = ?, sku = ? 
                   WHERE id = ?";
-          return $this->db->execute($sql, $color_id, $size_id, $price, $quantity, $sku, $id);
-      }
+      return $this->db->execute($sql, $color_id, $size_id, $price, $quantity, $sku, $id);
+    }
   }
 
   // 19. Xóa biến thể (Delete)
-  function deleteVariant($id) {
-      $sql = "DELETE FROM variants WHERE id = ?";
-      return $this->db->execute($sql, $id);
+  function deleteVariant($id)
+  {
+    $sql = "DELETE FROM variants WHERE id = ?";
+    return $this->db->execute($sql, $id);
   }
 
   // 20. Kiểm tra SKU tồn tại (Để tránh trùng mã SKU khi thêm mới)
-  function checkSkuExist($sku, $exclude_id = null) {
-      if($exclude_id) {
-          $sql = "SELECT count(*) as count FROM variants WHERE sku = ? AND id != ?";
-          $result = $this->db->queryOne($sql, $sku, $exclude_id);
-      } else {
-          $sql = "SELECT count(*) as count FROM variants WHERE sku = ?";
-          $result = $this->db->queryOne($sql, $sku);
-      }
-      return $result['count'] > 0;
+  function checkSkuExist($sku, $exclude_id = null)
+  {
+    if ($exclude_id) {
+      $sql = "SELECT count(*) as count FROM variants WHERE sku = ? AND id != ?";
+      $result = $this->db->queryOne($sql, $sku, $exclude_id);
+    } else {
+      $sql = "SELECT count(*) as count FROM variants WHERE sku = ?";
+      $result = $this->db->queryOne($sql, $sku);
+    }
+    return $result['count'] > 0;
   }
 
   // 21. Tạo sản phẩm cha (Trả về ID vừa tạo)
-    function createProduct($name, $category_id, $brand_id, $description, $status, $slug) {
-        // Tự tạo slug nếu rỗng
-        if(empty($slug)) {
-            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
-        }
-        
-        $sql = "INSERT INTO products (name, category_id, brand_id, description, status, slug) 
+  function createProduct($name, $category_id, $brand_id, $description, $status, $slug)
+  {
+    // Tự tạo slug nếu rỗng
+    if (empty($slug)) {
+      $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
+    }
+
+    $sql = "INSERT INTO products (name, category_id, brand_id, description, status, slug) 
                 VALUES (?, ?, ?, ?, ?, ?)";
-        // Hàm insert của Database.php phải trả về lastInsertId() nhé
-        return $this->db->insert($sql, $name, $category_id, $brand_id, $description, $status, $slug);
+    // Hàm insert của Database.php phải trả về lastInsertId() nhé
+    return $this->db->insert($sql, $name, $category_id, $brand_id, $description, $status, $slug);
+  }
+
+  // 22. Thêm ảnh vào bảng product_images
+  function addProductImage($product_id, $image_url)
+  {
+    $sql = "INSERT INTO product_images (product_id, image_url) VALUES (?, ?)";
+    return $this->db->execute($sql, $product_id, $image_url);
+  }
+  // --- CÁC HÀM UPDATE SẢN PHẨM CHA ---
+
+  // 24. Cập nhật thông tin sản phẩm (Bảng products)
+  function updateProduct($id, $name, $category_id, $brand_id, $description, $status, $slug)
+  {
+    // Nếu slug rỗng thì tự tạo lại từ tên (giống lúc thêm mới)
+    if (empty($slug)) {
+      $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
     }
 
-    // 22. Thêm ảnh vào bảng product_images
-    function addProductImage($product_id, $image_url) {
-        $sql = "INSERT INTO product_images (product_id, image_url) VALUES (?, ?)";
-        return $this->db->execute($sql, $product_id, $image_url);
-    }
-    // --- CÁC HÀM UPDATE SẢN PHẨM CHA ---
-
-    // 24. Cập nhật thông tin sản phẩm (Bảng products)
-    function updateProduct($id, $name, $category_id, $brand_id, $description, $status, $slug) {
-        // Nếu slug rỗng thì tự tạo lại từ tên (giống lúc thêm mới)
-        if(empty($slug)) {
-            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
-        }
-        
-        $sql = "UPDATE products 
+    $sql = "UPDATE products 
                 SET name = ?, category_id = ?, brand_id = ?, description = ?, status = ?, slug = ?
                 WHERE id = ?";
-        return $this->db->execute($sql, $name, $category_id, $brand_id, $description, $status, $slug, $id);
-    }
+    return $this->db->execute($sql, $name, $category_id, $brand_id, $description, $status, $slug, $id);
+  }
 
-    // 25. Cập nhật ảnh đại diện (Bảng product_images)
-    function updateProductImage($product_id, $image_url) {
-        // Kiểm tra xem sản phẩm này đã có ảnh trong bảng product_images chưa
-        $check = $this->db->queryOne("SELECT id FROM product_images WHERE product_id = ?", $product_id);
+  // 25. Cập nhật ảnh đại diện (Bảng product_images)
+  function updateProductImage($product_id, $image_url)
+  {
+    // Kiểm tra xem sản phẩm này đã có ảnh trong bảng product_images chưa
+    $check = $this->db->queryOne("SELECT id FROM product_images WHERE product_id = ?", $product_id);
 
-        if ($check) {
-            // Nếu có rồi thì UPDATE
-            $sql = "UPDATE product_images SET image_url = ? WHERE product_id = ?";
-            return $this->db->execute($sql, $image_url, $product_id);
-        } else {
-            // Nếu chưa có (trường hợp hiếm) thì INSERT mới
-            $sql = "INSERT INTO product_images (product_id, image_url) VALUES (?, ?)";
-            return $this->db->execute($sql, $product_id, $image_url);
-        }
+    if ($check) {
+      // Nếu có rồi thì UPDATE
+      $sql = "UPDATE product_images SET image_url = ? WHERE product_id = ?";
+      return $this->db->execute($sql, $image_url, $product_id);
+    } else {
+      // Nếu chưa có (trường hợp hiếm) thì INSERT mới
+      $sql = "INSERT INTO product_images (product_id, image_url) VALUES (?, ?)";
+      return $this->db->execute($sql, $product_id, $image_url);
     }
+  }
 }
