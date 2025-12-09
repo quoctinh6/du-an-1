@@ -244,6 +244,7 @@
       height: 100%;
       /* Đảm bảo bằng nhau khi chia cột */
     }
+    
 
     .dashboard-chart-card h5 {
       font-weight: 700;

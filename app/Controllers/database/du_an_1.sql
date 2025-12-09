@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 19, 2025 at 06:14 AM
--- Server version: 8.0.44
--- PHP Version: 8.3.16
+-- Generation Time: Dec 09, 2025 at 03:39 AM
+-- Server version: 5.7.39
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,12 +28,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `addresses` (
-  `id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `full_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `address_line` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_default` tinyint NOT NULL DEFAULT '0',
+  `is_default` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -45,9 +45,9 @@ CREATE TABLE `addresses` (
 --
 
 CREATE TABLE `blogs` (
-  `id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
-  `blog_category_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `blog_category_id` bigint(20) NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `blogs` (
 --
 
 CREATE TABLE `blog_categories` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -79,7 +79,7 @@ CREATE TABLE `blog_categories` (
 --
 
 CREATE TABLE `brands` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -91,7 +91,7 @@ CREATE TABLE `brands` (
 --
 
 INSERT INTO `brands` (`id`, `name`, `slug`, `created_at`, `updated_at`) VALUES
-(1, 'Casio', 'casio', '2025-11-10 08:29:50', '2025-11-10 08:29:50'),
+(1, 'Casio', 'casio', '2025-11-10 08:29:50', '2025-12-04 14:23:32'),
 (2, 'Rolex', 'rolex', '2025-11-10 08:29:50', '2025-11-10 08:29:50'),
 (3, 'Seiko', 'seiko', '2025-11-10 08:29:50', '2025-11-10 08:29:50');
 
@@ -102,8 +102,8 @@ INSERT INTO `brands` (`id`, `name`, `slug`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `carts` (
-  `id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -115,10 +115,10 @@ CREATE TABLE `carts` (
 --
 
 CREATE TABLE `cart_items` (
-  `id` bigint NOT NULL,
-  `cart_id` bigint NOT NULL,
-  `variant_id` bigint NOT NULL,
-  `quantity` int NOT NULL DEFAULT '1',
+  `id` bigint(20) NOT NULL,
+  `cart_id` bigint(20) NOT NULL,
+  `variant_id` bigint(20) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -147,8 +147,8 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `slug`, `created_at`, `updated_at`) VALUES
-(1, 'sản phẩm nổi bật', 'san-pham-noi-bat', '2025-11-10 08:54:30', '2025-11-14 08:13:15'),
-(2, 'sản phẩm xu hướng', 'san-pham-xu-huong', '2025-11-10 08:54:30', '2025-11-14 14:43:50'),
+(1, 'Sản phẩm nổi bật', 'san-pham-noi-bat', '2025-11-10 08:54:30', '2025-12-04 14:27:24'),
+(2, 'Sản phẩm xu hướng', 'san-pham-xu-huong', '2025-11-10 08:54:30', '2025-12-04 13:41:55'),
 (3, 'Bộ sưu tập đẹp nhất\n', 'bo-suu-tap-dep-nhat', '2025-11-10 08:54:30', '2025-11-14 14:50:48');
 
 -- --------------------------------------------------------
@@ -158,7 +158,7 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `created_at`, `updated_at`) VALU
 --
 
 CREATE TABLE `colors` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `code` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -184,11 +184,11 @@ INSERT INTO `colors` (`id`, `name`, `code`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `comments` (
-  `id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `rating` tinyint DEFAULT NULL,
-  `commentable_id` bigint NOT NULL,
+  `rating` tinyint(4) DEFAULT NULL,
+  `commentable_id` bigint(20) NOT NULL,
   `commentable_type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -201,11 +201,11 @@ CREATE TABLE `comments` (
 --
 
 CREATE TABLE `coupons` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` enum('percent','fixed') COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` decimal(15,2) NOT NULL,
-  `usage_limit` int DEFAULT NULL,
+  `usage_limit` int(11) DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -218,15 +218,15 @@ CREATE TABLE `coupons` (
 --
 
 CREATE TABLE `orders` (
-  `id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `total_price` decimal(15,2) NOT NULL,
   `shipping_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` enum('pending','processing','shipped','completed','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
-  `payment_method_id` bigint NOT NULL,
-  `shipping_method_id` bigint NOT NULL,
-  `coupon_id` bigint DEFAULT NULL,
+  `payment_method_id` bigint(20) NOT NULL,
+  `shipping_method_id` bigint(20) NOT NULL,
+  `coupon_id` bigint(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -236,8 +236,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `total_price`, `shipping_address`, `phone_number`, `status`, `payment_method_id`, `shipping_method_id`, `coupon_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 11550000.00, '123 Đường ABC, Quận 1, TP. HCM', '0909123456', 'processing', 1, 2, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18'),
-(2, 1, 351530000.00, '456 Đường XYZ, Quận Hoàn Kiếm, Hà Nội', '0909123456', 'pending', 2, 1, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18');
+(1, 1, '11550000.00', '123 Đường ABC, Quận 1, TP. HCM', '0909123456', 'processing', 1, 2, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18'),
+(2, 1, '351530000.00', '456 Đường XYZ, Quận Hoàn Kiếm, Hà Nội', '0909123456', 'completed', 2, 1, NULL, '2025-11-10 08:58:18', '2025-12-08 14:14:39');
 
 -- --------------------------------------------------------
 
@@ -246,10 +246,10 @@ INSERT INTO `orders` (`id`, `user_id`, `total_price`, `shipping_address`, `phone
 --
 
 CREATE TABLE `order_items` (
-  `id` bigint NOT NULL,
-  `order_id` bigint NOT NULL,
-  `variant_id` bigint NOT NULL,
-  `quantity` int NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `order_id` bigint(20) NOT NULL,
+  `variant_id` bigint(20) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `price` decimal(15,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -262,7 +262,7 @@ CREATE TABLE `order_items` (
 --
 
 CREATE TABLE `payment_methods` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -283,12 +283,12 @@ INSERT INTO `payment_methods` (`id`, `name`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `products` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `brand_id` bigint NOT NULL,
-  `category_id` bigint NOT NULL,
+  `brand_id` bigint(20) NOT NULL,
+  `category_id` bigint(20) NOT NULL,
   `status` enum('published','draft','archived') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -328,7 +328,10 @@ INSERT INTO `products` (`id`, `name`, `description`, `slug`, `brand_id`, `catego
 (27, 'Seiko 5 GMT SSK001', 'Đồng hồ Seiko 5 Sports Style GMT SSK001, máy 4R34.', 'seiko-5-gmt-ssk001', 3, 1, 'published', '2025-11-10 08:54:30', '2025-11-10 08:54:30'),
 (28, 'Casio SHEEN SHE-3047PG', 'Đồng hồ Casio SHEEN SHE-3047PG-9AUDR, đính đá Swarovski.', 'casio-sheen-she-3047pg', 1, 2, 'published', '2025-11-10 08:54:30', '2025-11-10 08:54:30'),
 (29, 'Rolex Yacht-Master 40', 'Đồng hồ Rolex Yacht-Master 40, vàng Everose, dây Oysterflex.', 'rolex-yacht-master-40', 2, 1, 'published', '2025-11-10 08:54:30', '2025-11-10 08:54:30'),
-(30, 'Seiko King Seiko SBPK', 'Tái bản đồng hồ King Seiko SBPK, thiết kế KSK cổ điển.', 'king-seiko-sbpk', 3, 1, 'published', '2025-11-10 08:54:30', '2025-11-10 08:54:30');
+(30, 'Seiko King Seiko SBPK', 'Tái bản đồng hồ King Seiko SBPK, thiết kế KSK cổ điển.', 'king-seiko-sbpk', 3, 1, 'published', '2025-11-10 08:54:30', '2025-11-10 08:54:30'),
+(34, 'Đỗ ', '', '-', 1, 2, 'published', '2025-12-05 06:10:29', '2025-12-05 07:36:04'),
+(37, 'đăng minh', 'kkjljhhjkdgsdfsdggsfgfgfd', '-ng-minh', 2, 2, 'published', '2025-12-05 06:15:43', '2025-12-05 06:15:43'),
+(38, 'gggg', '', 'gggg', 1, 1, 'published', '2025-12-05 07:31:16', '2025-12-05 08:17:17');
 
 -- --------------------------------------------------------
 
@@ -337,8 +340,8 @@ INSERT INTO `products` (`id`, `name`, `description`, `slug`, `brand_id`, `catego
 --
 
 CREATE TABLE `product_images` (
-  `id` bigint NOT NULL,
-  `product_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `product_id` bigint(20) NOT NULL,
   `image_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alt_text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -379,7 +382,10 @@ INSERT INTO `product_images` (`id`, `product_id`, `image_url`, `alt_text`, `crea
 (32, 27, 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80', 'Seiko 5 GMT SSK001', '2025-11-14 08:31:00', '2025-11-14 08:31:00'),
 (33, 28, 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80', 'Casio SHEEN SHE-3047PG', '2025-11-14 08:31:00', '2025-11-14 08:31:00'),
 (34, 29, 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80', 'Rolex Yacht-Master 40', '2025-11-14 08:31:00', '2025-11-14 08:31:00'),
-(35, 30, 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80', 'King Seiko SBPK', '2025-11-14 08:31:00', '2025-11-14 08:31:00');
+(35, 30, 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80', 'King Seiko SBPK', '2025-11-14 08:31:00', '2025-11-14 08:31:00'),
+(36, 34, 'uploads/products/34_1764915029.JPG', NULL, '2025-12-05 06:10:29', '2025-12-05 06:10:29'),
+(37, 37, 'uploads/products/37_1764915343.JPG', NULL, '2025-12-05 06:15:43', '2025-12-05 06:15:43'),
+(38, 38, 'uploads/products/38_1764919876.JPG', NULL, '2025-12-05 07:31:16', '2025-12-05 07:31:16');
 
 -- --------------------------------------------------------
 
@@ -388,7 +394,7 @@ INSERT INTO `product_images` (`id`, `product_id`, `image_url`, `alt_text`, `crea
 --
 
 CREATE TABLE `shipping_methods` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -409,7 +415,7 @@ INSERT INTO `shipping_methods` (`id`, `name`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `sizes` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -431,11 +437,12 @@ INSERT INTO `sizes` (`id`, `name`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `users` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `role` enum('admin','customer') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'customer',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `phone_number` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -445,8 +452,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `phone_number`, `created_at`, `updated_at`) VALUES
-(1, 'Khách Hàng A', 'khachhang_a@gmail.com', '$2y$10$E.gL3h3m/xY.7q.Z.B8q.eK.9j/8U/9U.u3/8i/9q.tX/q.o/6u', 'customer', '0909123456', '2025-11-10 08:58:18', '2025-11-10 08:58:18');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `is_active`, `phone_number`, `created_at`, `updated_at`) VALUES
+(1, 'Khách Hàng B', 'khachhang_a@gmail.com', '$2y$10$E.gL3h3m/xY.7q.Z.B8q.eK.9j/8U/9U.u3/8i/9q.tX/q.o/6u', 'customer', 1, '0909123456', '2025-11-10 08:58:18', '2025-12-05 04:04:39'),
+(2, 'Ä‘Äƒng minh', 'dominhdang3010@gmail.com', '$2y$10$9aBAMXR39dzjOaURN38BW.Q5aQ5kws0MnO0iVWvAwZ8N/8wuIbn1G', 'customer', 1, '0982563787', '2025-11-26 08:33:27', '2025-11-26 08:33:27');
 
 -- --------------------------------------------------------
 
@@ -455,12 +463,12 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `phone_number`, 
 --
 
 CREATE TABLE `variants` (
-  `id` bigint NOT NULL,
-  `product_id` bigint NOT NULL,
-  `color_id` bigint DEFAULT NULL,
-  `size_id` bigint DEFAULT NULL,
+  `id` bigint(20) NOT NULL,
+  `product_id` bigint(20) NOT NULL,
+  `color_id` bigint(20) DEFAULT NULL,
+  `size_id` bigint(20) DEFAULT NULL,
   `price` decimal(15,2) NOT NULL,
-  `quantity` int NOT NULL DEFAULT '0',
+  `quantity` int(11) NOT NULL DEFAULT '0',
   `sku` varchar(100) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -472,38 +480,39 @@ CREATE TABLE `variants` (
 --
 
 INSERT INTO `variants` (`id`, `product_id`, `color_id`, `size_id`, `price`, `quantity`, `sku`, `image`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 500000000.00, 0, 'TEST', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-1-750x500.jpg', '2025-11-14 12:13:58', '2025-11-18 14:10:48'),
-(6, 1, 1, 2, 3500000.00, 50, 'CS-GA2100-BLK-40', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-3-750x500.jpg', '2025-11-10 09:00:19', '2025-11-18 14:11:29'),
-(7, 2, 5, 2, 350000000.00, 5, 'RLX-DJ41-BLU-42', 'product-2-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(8, 3, 1, 2, 7000000.00, 30, 'SK-SRPD-BLK-42', 'product-3-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(9, 3, 5, 2, 7200000.00, 20, 'SK-SRPD-BLU-42', 'product-3-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(10, 4, 4, 3, 280000000.00, 3, 'RLX-LDJ28-RG-38', 'product-4-rosegold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(11, 5, 3, 3, 1500000.00, 100, 'CS-A168WG-GLD-38', 'product-5-gold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(12, 6, 5, 1, 12500000.00, 15, 'SK-SSA343-BLU-40', 'product-6-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(13, 7, 1, 1, 1200000.00, 75, 'CS-DW5600-BLK-40', 'product-7-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(14, 8, 1, 1, 380000000.00, 2, 'RLX-SUBD-BLK-40', 'product-8-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(15, 9, 1, 2, 10500000.00, 10, 'SK-SNE541-BLK-42', 'product-9-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(16, 10, 6, 3, 1800000.00, 40, 'CS-BGD560-WHT-38', 'product-10-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(17, 11, 6, 1, 750000000.00, 1, 'RLX-DAYTONA-WHT-40', 'product-11-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(18, 12, 1, 2, 15000000.00, 0, 'SK-SKX007-BLK-42', 'product-12-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(19, 13, 2, 2, 2500000.00, 25, 'CS-EFR526-SLV-42', 'product-13-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(20, 14, 5, 3, 180000000.00, 3, 'RLX-OP36-BLU-38', 'product-14-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(21, 15, 1, 2, 45000000.00, 5, 'SK-ASTRON-BLK-42', 'product-15-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(22, 16, 6, 1, 800000.00, 200, 'CS-MTPV006-WHT-40', 'product-16-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(23, 17, 5, 1, 550000000.00, 1, 'RLX-GMTII-PEPSI-40', 'product-17-pepsi.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(24, 18, 1, 1, 8800000.00, 18, 'SK-SRPE51-GRY-40', 'product-18-grey.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(25, 19, 1, 3, 500000.00, 500, 'CS-F91W-BLK-38', 'product-19-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(26, 20, 2, 2, 1100000000.00, 1, 'RLX-SKYD-SLV-42', 'product-20-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(27, 21, 6, 1, 150000000.00, 4, 'GS-SBGA211-WHT-40', 'product-21-snowflake.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(28, 22, 1, 2, 9000000.00, 12, 'CS-PRG600-BLK-42', 'product-22-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(29, 23, 1, 3, 210000000.00, 3, 'RLX-EXP36-BLK-38', 'product-23-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(30, 24, 5, 3, 20000000.00, 7, 'SK-SARB017-GRN-38', 'product-24-green.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(31, 25, 2, 2, 13000000.00, 8, 'CS-GMWB5000-SLV-42', 'product-25-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(32, 26, 1, 1, 240000000.00, 2, 'RLX-MILGAUSS-BLK-40', 'product-26-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(33, 27, 1, 2, 13500000.00, 22, 'SK-SSK001-BLK-42', 'product-27-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(34, 28, 4, 3, 4200000.00, 14, 'CS-SHEEN-RG-38', 'product-28-rosegold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(35, 29, 1, 1, 820000000.00, 1, 'RLX-YM40-BLK-40', 'product-29-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
-(36, 30, 2, 3, 40000000.00, 6, 'KS-SBPK-SLV-38', 'product-30-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19');
+(1, 1, 1, 1, '500000000.00', 0, 'TEST', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-1-750x500.jpg', '2025-11-14 12:13:58', '2025-11-18 14:10:48'),
+(6, 1, 1, 2, '3500000.00', 50, 'CS-GA2100-BLK-40', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-3-750x500.jpg', '2025-11-10 09:00:19', '2025-11-18 14:11:29'),
+(7, 2, 5, 2, '350000000.00', 5, 'RLX-DJ41-BLU-42', 'product-2-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(8, 3, 1, 2, '7000000.00', 30, 'SK-SRPD-BLK-42', 'product-3-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(9, 3, 5, 2, '7200000.00', 20, 'SK-SRPD-BLU-42', 'product-3-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(10, 4, 4, 3, '280000000.00', 3, 'RLX-LDJ28-RG-38', 'product-4-rosegold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(11, 5, 3, 3, '1500000.00', 100, 'CS-A168WG-GLD-38', 'product-5-gold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(12, 6, 5, 1, '12500000.00', 15, 'SK-SSA343-BLU-40', 'product-6-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(13, 7, 1, 1, '1200000.00', 75, 'CS-DW5600-BLK-40', 'product-7-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(14, 8, 1, 1, '380000000.00', 2, 'RLX-SUBD-BLK-40', 'product-8-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(15, 9, 1, 2, '10500000.00', 10, 'SK-SNE541-BLK-42', 'product-9-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(16, 10, 6, 3, '1800000.00', 40, 'CS-BGD560-WHT-38', 'product-10-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(17, 11, 6, 1, '750000000.00', 1, 'RLX-DAYTONA-WHT-40', 'product-11-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(18, 12, 1, 2, '15000000.00', 0, 'SK-SKX007-BLK-42', 'product-12-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(19, 13, 2, 2, '2500000.00', 25, 'CS-EFR526-SLV-42', 'product-13-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(20, 14, 5, 3, '180000000.00', 3, 'RLX-OP36-BLU-38', 'product-14-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(21, 15, 1, 2, '45000000.00', 5, 'SK-ASTRON-BLK-42', 'product-15-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(22, 16, 6, 1, '800000.00', 200, 'CS-MTPV006-WHT-40', 'product-16-white.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(23, 17, 5, 1, '550000000.00', 1, 'RLX-GMTII-PEPSI-40', 'product-17-pepsi.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(24, 18, 1, 1, '8800000.00', 18, 'SK-SRPE51-GRY-40', 'product-18-grey.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(25, 19, 1, 3, '500000.00', 500, 'CS-F91W-BLK-38', 'product-19-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(26, 20, 2, 2, '1100000000.00', 1, 'RLX-SKYD-SLV-42', 'product-20-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(27, 21, 6, 1, '150000000.00', 4, 'GS-SBGA211-WHT-40', 'product-21-snowflake.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(28, 22, 1, 2, '9000000.00', 12, 'CS-PRG600-BLK-42', 'product-22-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(29, 23, 1, 3, '210000000.00', 3, 'RLX-EXP36-BLK-38', 'product-23-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(30, 24, 5, 3, '20000000.00', 7, 'SK-SARB017-GRN-38', 'product-24-green.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(31, 25, 2, 2, '13000000.00', 8, 'CS-GMWB5000-SLV-42', 'product-25-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(32, 26, 1, 1, '240000000.00', 2, 'RLX-MILGAUSS-BLK-40', 'product-26-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(33, 27, 1, 2, '13500000.00', 22, 'SK-SSK001-BLK-42', 'product-27-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(34, 28, 4, 3, '4200000.00', 14, 'CS-SHEEN-RG-38', 'product-28-rosegold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(35, 29, 1, 1, '820000000.00', 1, 'RLX-YM40-BLK-40', 'product-29-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(36, 30, 2, 3, '40000000.00', 6, 'KS-SBPK-SLV-38', 'product-30-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
+(37, 38, 1, 1, '0.00', 0, 'hihi', 'uploads/variants/var_kkkk_1764924304.JPG', '2025-12-05 08:45:04', '2025-12-05 08:45:11');
 
 --
 -- Indexes for dumped tables
@@ -659,115 +668,115 @@ ALTER TABLE `variants`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `blogs`
 --
 ALTER TABLE `blogs`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `blog_categories`
 --
 ALTER TABLE `blog_categories`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `brands`
 --
 ALTER TABLE `brands`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `colors`
 --
 ALTER TABLE `colors`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
 --
 ALTER TABLE `payment_methods`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `shipping_methods`
 --
 ALTER TABLE `shipping_methods`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sizes`
 --
 ALTER TABLE `sizes`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `variants`
 --
 ALTER TABLE `variants`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- Constraints for dumped tables

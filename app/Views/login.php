@@ -1,35 +1,37 @@
 <main class="auth-main">
     <div class="auth-card">
         <div class="auth-title">Đăng Nhập</div>
-        <div class="auth-subtitle"><?= $_SESSION['error'] ?? '' ?></div>
+        
+        <?php if (!empty($error)): ?>
+            <div class="auth-subtitle" style="color: red; padding: 10px;">
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
 
-        <form method="POST" style="width: 100%;">
+        <?php if (!empty($success)): ?>
+            <div class="auth-subtitle" style="color: green; padding: 10px;">
+                <?= htmlspecialchars($success) ?>
+            </div>
+        <?php endif; ?>
+        
+        <form action="<?= BASE_URL ?>index.php/User/login" method="POST" style="width: 100%;"> 
 
-            <!-- Tên đăng nhập (hoặc Email) -->
             <div class="input-group">
                 <label for="login-username-email">Tên đăng nhập hoặc Email</label>
                 <input type="text" id="login-username-email" name="username" placeholder="nhập email của bạn" required>
             </div>
-
-            <!-- Mật khẩu -->
+            
             <div class="input-group">
                 <label for="login-password">Mật khẩu</label>
                 <input type="password" id="login-password" name="password" placeholder="••••••••" required>
             </div>
 
-            <!-- Nút Đăng nhập -->
             <button type="submit" class="auth-button" name="submit">ĐĂNG NHẬP</button>
 
         </form>
 
-        <!-- Link chuyển sang trang Đăng ký -->
         <div class="auth-footer-link">
             Bạn chưa có tài khoản? <a href="<?= BASE_URL ?>index.php/User/register">Đăng ký ngay</a>
         </div>
     </div>
 </main>
-
-<?php
-
-
-?>
