@@ -52,7 +52,7 @@
         <div class="kpi-card d-flex align-items-center">
           <div class="flex-grow-1">
             <div class="card-title">DOANH THU HÔM NAY</div>
-            <div class="card-value">12.500.000đ</div>
+            <div class="card-value"><?= number_format($totalRevenue) ?>đ</div>
           </div>
           <!-- <i class="bi bi-cash-stack card-icon"></i> -->
         </div>
@@ -62,7 +62,7 @@
         <div class="kpi-card d-flex align-items-center">
           <div class="flex-grow-1">
             <div class="card-title">ĐƠN HÀNG MỚI</div>
-            <div class="card-value">32</div>
+            <div class="card-value"><?= $pendingOrders ?></div>
           </div>
           <i class="bi bi-receipt card-icon"></i>
         </div>
@@ -72,7 +72,7 @@
         <div class="kpi-card d-flex align-items-center">
           <div class="flex-grow-1">
             <div class="card-title">KHÁCH HÀNG MỚI</div>
-            <div class="card-value">15</div>
+            <div class="card-value"><?= $newUsers ?></div>
           </div>
           <i class="bi bi-person-plus card-icon"></i>
         </div>
@@ -82,7 +82,7 @@
         <div class="kpi-card d-flex align-items-center">
           <div class="flex-grow-1">
             <div class="card-title">BÁN CHẠY NHẤT</div>
-            <div class="card-value fs-5" style="color: var(--color-text-main);">Áo Khoác Nam Dù</div>
+            <div class="card-value fs-5"><?= $topSellerName ?></div>
           </div>
           <i class="bi bi-star card-icon"></i>
         </div>
@@ -125,30 +125,30 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><strong>#FS1005</strong></td>
-                <td>Nguyễn Văn A</td>
-                <td>1.750.000đ</td>
-                <td><span class="badge bg-success">Đã giao</span></td>
-              </tr>
-              <tr>
-                <td><strong>#FS1004</strong></td>
-                <td>Trần Thị B</td>
-                <td>1.200.000đ</td>
-                <td><span class="badge bg-warning text-dark">Đang xử lý</span></td>
-              </tr>
-              <tr>
-                <td><strong>#FS1003</strong></td>
-                <td>Lê Văn C</td>
-                <td>380.000đ</td>
-                <td><span class="badge bg-danger">Đã hủy</span></td>
-              </tr>
-              <tr>
-                <td><strong>#FS1002</strong></td>
-                <td>Phạm Thị D</td>
-                <td>850.000đ</td>
-                <td><span class="badge bg-primary">Đang giao</span></td>
-              </tr>
+              <?php if (!empty($latestOrders)): ?>
+                <?php foreach ($latestOrders as $order): ?>
+                  <tr>
+                    <td><strong>#FS<?= $order['id'] ?></strong></td>
+                    <td><?= $order['user_name'] ?></td>
+                    <td><?= number_format($order['total_price']) ?>đ</td>
+                    <td>
+                      <?php
+                      $badge = match ($order['status']) {
+                        'completed' => 'bg-success',
+                        'pending' => 'bg-warning text-dark',
+                        'cancelled' => 'bg-danger',
+                        default => 'bg-primary', // shipped/processing
+                      };
+                      ?>
+                      <span class="badge <?= $badge ?>"><?= $order['status'] ?></span>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="4" class="text-center">Chưa có đơn hàng nào gần đây.</td>
+                </tr>
+              <?php endif; ?>
             </tbody>
           </table>
         </div>
@@ -158,26 +158,16 @@
         <div class="dashboard-chart-card">
           <h5 class="mb-3">Sản phẩm bán chạy</h5>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              <span class="product-info">1. Áo Khoác Nam Dù</span>
-              <span class="product-sales">120 sp</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              <span class="product-info">2. Giày Ultraboost Adidas</span>
-              <span class="product-sales">95 sp</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              <span class="product-info">3. Quần Jeans Levi's 511</span>
-              <span class="product-sales">88 sp</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              <span class="product-info">4. Áo Hoodie Nike</span>
-              <span class="product-sales">70 sp</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              <span class="product-info">5. Áo Sơ Mi Oxford</span>
-              <span class="product-sales">55 sp</span>
-            </li>
+            <?php if (!empty($bestSellers)): ?>
+              <?php foreach ($bestSellers as $index => $item): ?>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <span class="product-info"><?= $index + 1 ?>. <?= $item['product_name'] ?></span>
+                  <span class="product-sales"><?= $item['total_sold'] ?> sp</span>
+                </li>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <li class="list-group-item px-0 text-center text-muted">Chưa có dữ liệu bán hàng.</li>
+            <?php endif; ?>
           </ul>
         </div>
       </div>
@@ -199,10 +189,12 @@
 <script>
   // Dữ liệu mẫu
   const revenueData = {
-    labels: ["Ngày 1", "Ngày 5", "Ngày 10", "Ngày 15", "Ngày 20", "Ngày 25", "Ngày 30"],
+    // LẤY TỪ CONTROLLER
+    labels: <?= $revenueLabelsJson ?>,
     datasets: [{
       label: 'Doanh thu (VNĐ)',
-      data: [1500000, 2000000, 1800000, 3000000, 2500000, 4000000, 4500000],
+      // LẤY TỪ CONTROLLER
+      data: <?= $revenueDataJson ?>,
       fill: true,
       // Đã cập nhật sang màu #000f38 với độ trong suốt 0.1
       backgroundColor: 'rgba(0, 15, 56, 0.1)',
@@ -213,27 +205,25 @@
   };
 
   const categoryData = {
-    labels: [
-      'Áo Khoác',
-      'Quần Jeans',
-      'Giày',
-      'Áo Hoodie'
-    ],
+    // Lấy tên danh mục từ PHP
+    labels: <?= $categoryLabelsJson ?>,
     datasets: [{
       label: 'Tỉ lệ danh mục',
-      data: [40, 25, 20, 15],
+      // Lấy số lượng sản phẩm từ PHP
+      data: <?= $categoryDataJson ?>,
       backgroundColor: [
-        '#000f38', // Accent mới
-        '#000826', // Accent Darker mới
-        '#6c757d', // Xám
-        '#adb5bd'  // Xám nhạt
+        '#0d2d85ff',
+        '#000826',
+        '#6c757d',
+        '#adb5bd'
+        // Lưu ý: Nếu có nhiều hơn 4 danh mục, phải thêm màu vào đây
       ],
       hoverOffset: 4
     }]
   };
 
   // Khởi tạo biểu đồ khi DOM đã sẵn sàng
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function() {
     // Biểu đồ đường
     const ctxRevenue = document.getElementById('revenueChart');
     if (ctxRevenue) {
