@@ -28,9 +28,9 @@ class PageCtrl
         include_once 'Views/home.php';
     }
 
-    public function favorites() {
+    public function favor() {
         $productsFavorits = $this->productModel->getProducts(8, [0]);
         
-        include_once "Views/products-favorite.php";
+        include_once "Views/favor.php";
     }
 }

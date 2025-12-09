@@ -516,38 +516,42 @@
     <nav id="admin-sidebar" class="col-lg-2 col-md-3 d-none d-md-block p-0">
       <div class="position-sticky pt-3">
         <!-- Logo/Brand Admin -->
-        <a href="<?= BASE_URL ?>index.php/admin/index"
-          class="d-block px-3 mb-3 text-white text-decoration-none fs-5">
+        <a href="<?= BASE_URL ?>index.php/admin/index" class="d-block px-3 mb-3 text-white text-decoration-none fs-5">
           <span><strong>ZEROWATCH</strong>Admin</span>
         </a>
 
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="<?= BASE_URL ?>index.php/admin/index">
+            <a class="nav-link <?= ($parts[1] == 'index') ? 'active' : '' ?>" aria-current="page"
+              href="<?= BASE_URL ?>index.php/admin/index">
               <i class="bi bi-speedometer2"></i>
               Tổng quan
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= BASE_URL ?>index.php/admin/orders">
+            <a class="nav-link <?= ($parts[1] == 'orders') ? 'active' : '' ?>"
+              href="<?= BASE_URL ?>index.php/admin/orders">
               <i class="bi bi-receipt"></i>
               Quản lý Đơn hàng
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= BASE_URL ?>index.php/admin/products">
+            <a class="nav-link <?= ($parts[1] == 'products') ? 'active' : '' ?>"
+              href="<?= BASE_URL ?>index.php/admin/products">
               <i class="bi bi-box-seam"></i>
               Quản lý Sản phẩm
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= BASE_URL ?>index.php/admin/categories">
+            <a class="nav-link <?= ($parts[1] == 'categories') ? 'active' : '' ?>"
+              href="<?= BASE_URL ?>index.php/admin/categories">
               <i class="bi bi-tags"></i>
               Quản lý Danh mục
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= BASE_URL ?>index.php/admin/account">
+            <a class="nav-link <?= ($parts[1] == 'account') ? 'active' : '' ?>"
+              href="<?= BASE_URL ?>index.php/admin/account">
               <i class="bi bi-people"></i>
               Tài khoản
             </a>
