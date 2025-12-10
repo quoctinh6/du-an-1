@@ -240,7 +240,7 @@ $p_sku = htmlspecialchars($product_base['slug'] ?? '');
 
   function renderGallery(images) {
     dom.thumbArea.innerHTML = '';
-    const processedImgs = images.map(img => img.startsWith('http') ? img : '<?= BASE_URL ?>Views/assets/img/' + img);
+    const processedImgs = images.map(img => img.startsWith('http') ? img : '<?= BASE_URL ?>uploads/products/' + img);
     if (processedImgs.length === 0) processedImgs.push('https://placehold.co/600x600?text=No+Image');
 
     productData[state.colorIndex].processedImages = processedImgs;

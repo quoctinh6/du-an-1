@@ -10,7 +10,7 @@ function renderProducts($item)
 
     $imgSrc = $item['image_url'] ?? 'default.png';
     if (!filter_var($imgSrc, FILTER_VALIDATE_URL)) {
-        $imgSrc = BASE_URL . "Views/assets/img/" . $imgSrc;
+        $imgSrc = BASE_URL . "uploads/products/" . $imgSrc;
     }
     $favor_add_url = BASE_URL . 'index.php/favor/add';
 

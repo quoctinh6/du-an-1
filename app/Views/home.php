@@ -9,7 +9,7 @@ function render_product_item($item)
   $image_url = htmlspecialchars($item['image_url']);
 
   if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
-    $image_url = BASE_URL . 'Views/assets/img/' . $image_url;
+    $image_url = BASE_URL . 'uploads/products/' . $image_url;
   }
 
   $product_name = htmlspecialchars($item['name']);
