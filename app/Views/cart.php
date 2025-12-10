@@ -105,12 +105,31 @@
 
         <!-- Voucher -->
         <div class="voucher-section">
-            <select class="voucher-select">
-                <option value="">-- Chọn voucher --</option>
-                <option value="GIAMGIA10">GIAMGIA10 (Giảm 10%)</option>
-                <option value="FREESHIP">FREESHIP (Miễn phí vận chuyển)</option>
-            </select>
-            <button class="apply-btn">Áp dụng</button>
+            <form action="<?= BASE_URL ?>index.php/cart/applyCoupon" method="POST" style="display:flex; gap:8px;">
+                <input type="text" name="coupon_code" id="coupon_code_cart" class="form-input" placeholder="Nhập mã hoặc chọn bên dưới" style="flex:1;">
+                <button type="submit" class="apply-btn">Áp dụng</button>
+            </form>
+
+            <?php if (!empty($availableCoupons)): ?>
+                <div style="margin-top:8px;">
+                    <label class="form-label">Mã giảm giá có sẵn:</label>
+                    <select onchange="document.getElementById('coupon_code_cart').value=this.value;" style="width:100%; margin-top:6px;">
+                        <option value="">-- Chọn mã --</option>
+                        <?php foreach ($availableCoupons as $c): ?>
+                            <?php
+                                $label = htmlspecialchars($c['code']) . ' - ' . ($c['type'] === 'percent' ? (float)$c['value'] . '%': number_format($c['value'],0,',','.').'đ');
+                            ?>
+                            <option value="<?= htmlspecialchars($c['code']) ?>"><?= $label ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['coupon_error'])): ?>
+                <div style="color: red; margin-top:6px;"><?php echo htmlspecialchars($_SESSION['coupon_error']); unset($_SESSION['coupon_error']); ?></div>
+            <?php elseif (isset($_SESSION['coupon_success'])): ?>
+                <div style="color: green; margin-top:6px;"><?php echo htmlspecialchars($_SESSION['coupon_success']); unset($_SESSION['coupon_success']); ?></div>
+            <?php endif; ?>
         </div>
         
         <!-- Phí vận chuyển -->
@@ -118,6 +137,13 @@
             <span class="label">Phí vận chuyển</span>
             <span class="value"><?= ($shipping > 0) ? number_format($shipping) . 'đ' : 'Miễn phí' ?></span>
         </div>
+
+        <?php if (!empty($discountApplied) && $discountApplied > 0): ?>
+            <div class="summary-row">
+                <span class="label">Giảm giá (<?= htmlspecialchars($_SESSION['applied_coupon']['code'] ?? '') ?>)</span>
+                <span class="value" style="color: #d9534f;">-<?= number_format($discountApplied) ?>đ</span>
+            </div>
+        <?php endif; ?>
 
         <!-- Tổng đơn hàng (Total) -->
         <div class="summary-total summary-row">
@@ -128,7 +154,7 @@
         <!-- Nút hành động -->
         <div class="cart-actions-group">
             <button class="btn-checkout"><a href="<?= BASE_URL ?>index.php/checkout">Tiếp tục thanh toán</a></button>
-            <a href="<?= BASE_URL ?>index.php/checkout" class="btn-continue" style="text-align: center;">Tiếp tục mua sắm</a>
+            <a href="<?= BASE_URL ?>" class="btn-continue" style="text-align: center;">Tiếp tục mua sắm</a>
         </div>
         
         <div class="cart-note">

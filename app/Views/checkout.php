@@ -76,13 +76,20 @@
             <span class="value"><?= number_format($subtotal, 0, ',', '.') ?>đ</span>
         </div>
 
+        <?php if (!empty($discountApplied) && $discountApplied > 0): ?>
+          <div class="summary-detail-row">
+            <span class="label">Giảm giá (<?= htmlspecialchars($_SESSION['applied_coupon']['code'] ?? '') ?>)</span>
+            <span class="value" style="color: #d9534f;">-<?= number_format($discountApplied, 0, ',', '.') ?>đ</span>
+          </div>
+        <?php endif; ?>
+
         <!-- PHƯƠNG THỨC THANH TOÁN -->
         <div class="summary-option-group">
             <label for="payment-method" class="form-label">Phương thức thanh toán</label>
             <!-- Input nằm ngoài form chính nhưng dùng thuộc tính form="checkout-form" để liên kết -->
             <select id="payment-method" name="payment_method" class="option-select" form="checkout-form">
                 <option value="cod">Thanh toán khi nhận hàng (COD)</option>
-                <option value="banking">Chuyển khoản ngân hàng</option>
+                <option value="vnpay">Chuyển khoản qua vnpay</option>
             </select>
         </div>
         

@@ -40,8 +40,93 @@ class CartCtrl {
 
         $total = $subtotal + $shipping;
 
+        // Nếu có coupon đã áp dụng trong session, giảm giá cho tổng
+        $discountApplied = 0;
+        if (isset($_SESSION['applied_coupon']) && is_array($_SESSION['applied_coupon'])) {
+            $discountApplied = floatval($_SESSION['applied_coupon']['discount'] ?? 0);
+            $total = round($total - $discountApplied, 2);
+        }
+
+        // Load available coupons to render in the cart view
+        include_once __DIR__ . '/../Models/Coupon.php';
+        $couponModel = new Coupon();
+        $availableCoupons = $couponModel->getAllAvailable();
+
         // Gọi View và truyền biến sang
         include_once "Views/cart.php";
+    }
+
+    // Xử lý áp dụng mã giảm giá từ trang giỏ hàng
+    public function applyCoupon()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: " . BASE_URL . "index.php/cart");
+            exit;
+        }
+
+        $coupon_code = trim($_POST['coupon_code'] ?? '');
+
+        if ($coupon_code === '') {
+            $_SESSION['coupon_error'] = 'Vui lòng nhập mã giảm giá.';
+            header("Location: " . BASE_URL . "index.php/cart");
+            exit;
+        }
+
+        include_once __DIR__ . '/../Models/Coupon.php';
+        $couponModel = new Coupon();
+        $coupon = $couponModel->getByCode($coupon_code);
+        if (!$coupon) {
+            $_SESSION['coupon_error'] = 'Mã giảm giá không tồn tại.';
+            header("Location: " . BASE_URL . "index.php/cart");
+            exit;
+        }
+
+        if (!empty($coupon['expires_at']) && strtotime($coupon['expires_at']) < time()) {
+            $_SESSION['coupon_error'] = 'Mã giảm giá đã hết hạn.';
+            header("Location: " . BASE_URL . "index.php/cart");
+            exit;
+        }
+
+        if (!is_null($coupon['usage_limit']) && intval($coupon['usage_limit']) <= 0) {
+            $_SESSION['coupon_error'] = 'Mã giảm giá đã đạt giới hạn sử dụng.';
+            header("Location: " . BASE_URL . "index.php/cart");
+            exit;
+        }
+
+        // Tính subtotal lại dựa trên session cart
+        $cart = $_SESSION['cart'] ?? [];
+        $productModel = new \Products();
+        $subtotal = 0;
+        foreach ($cart as $item) {
+            if (!empty($item['variant_id'])) {
+                $v = $productModel->getVariantById((int)$item['variant_id']);
+                $price = $v ? $v['price'] : ($item['price'] ?? 0);
+            } else {
+                $price = $item['price'] ?? 0;
+            }
+            $qty = $item['quantity'] ?? 0;
+            $subtotal += ((float)$price) * $qty;
+        }
+        $shipping = ($subtotal > 1000000) ? 0 : 30000;
+        if ($subtotal == 0) $shipping = 0;
+        $total = $subtotal + $shipping;
+
+        if ($coupon['type'] === 'percent') {
+            $discount = ($total * (float)$coupon['value']) / 100.0;
+        } else {
+            $discount = (float)$coupon['value'];
+        }
+        if ($discount > $total) $discount = $total;
+
+        $_SESSION['applied_coupon'] = [
+            'id' => $coupon['id'],
+            'code' => $coupon['code'],
+            'discount' => round($discount, 2)
+        ];
+        $_SESSION['coupon_success'] = 'Áp dụng mã giảm giá thành công.';
+
+        header("Location: " . BASE_URL . "index.php/cart");
+        exit;
     }
 
     // 2. Thêm vào giỏ
