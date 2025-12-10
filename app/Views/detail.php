@@ -1,7 +1,6 @@
 <?php
 // 1. Chuẩn bị dữ liệu từ PHP (Chuyển đổi để JS đọc được)
 $variants_json = json_encode($product_variants ?? []);
-var_dump($product_variants);
 $p_id = $product_base['id'] ?? 0;
 $p_name = htmlspecialchars($product_base['name'] ?? '');
 $p_sku = htmlspecialchars($product_base['slug'] ?? '');
