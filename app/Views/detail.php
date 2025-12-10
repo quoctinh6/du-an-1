@@ -1,6 +1,7 @@
 <?php
 // 1. Chuẩn bị dữ liệu từ PHP (Chuyển đổi để JS đọc được)
 $variants_json = json_encode($product_variants ?? []);
+var_dump($product_variants);
 $p_id = $product_base['id'] ?? 0;
 $p_name = htmlspecialchars($product_base['name'] ?? '');
 $p_sku = htmlspecialchars($product_base['slug'] ?? '');
@@ -240,7 +241,7 @@ $p_sku = htmlspecialchars($product_base['slug'] ?? '');
 
   function renderGallery(images) {
     dom.thumbArea.innerHTML = '';
-    const processedImgs = images.map(img => img.startsWith('http') ? img : '<?= BASE_URL ?>uploads/products/' + img);
+    const processedImgs = images.map(img => img.startsWith('http') ? img : '<?= BASE_URL ?>uploads/variants/' + img);
     if (processedImgs.length === 0) processedImgs.push('https://placehold.co/600x600?text=No+Image');
 
     productData[state.colorIndex].processedImages = processedImgs;
