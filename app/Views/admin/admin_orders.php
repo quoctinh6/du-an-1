@@ -113,9 +113,13 @@
                                             <span class="badge <?= $badgeClass ?>"><?= $statusText ?></span>
                                         </td>
                                         <td class="text-end">
-                                            <a href="index.php?act=order_detail&id=<?= $order['id'] ?>" class="btn btn-sm btn-outline-primary">
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-primary"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#orderDetailModal_<?= $order['id'] ?>"
+                                                    title="Xem chi tiết đơn hàng">
                                                 <i class="bi bi-eye"></i> Xem
-                                            </a>
+                                            </button>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -160,3 +164,108 @@
 
     </div>
 </main>
+
+<?php if (!empty($orders)): ?>
+  <?php foreach ($orders as $order): ?>
+    <?php
+        // Lấy lại các biến trạng thái để sử dụng trong Modal
+        $badgeClass = 'bg-secondary';
+        $statusText = $order['status'];
+        switch ($order['status']) {
+            case 'pending': $badgeClass = 'bg-warning text-dark'; $statusText = 'Chờ xử lý'; break;
+            case 'processing': $badgeClass = 'bg-info text-dark'; $statusText = 'Đang chuẩn bị'; break;
+            case 'shipped': $badgeClass = 'bg-primary'; $statusText = 'Đang giao'; break;
+            case 'completed': $badgeClass = 'bg-success'; $statusText = 'Đã giao'; break;
+            case 'cancelled': $badgeClass = 'bg-danger'; $statusText = 'Đã hủy'; break;
+        }
+    ?>
+
+    <div class="modal fade" id="orderDetailModal_<?= $order['id'] ?>" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl"> <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold">Chi tiết Đơn hàng #FS<?= $order['id'] ?></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          
+          <div class="modal-body">
+            
+            <div class="row">
+                <div class="col-md-7 border-end">
+                    <h6><i class="bi bi-info-circle me-2"></i>Thông tin chung</h6>
+                    <table class="table table-borderless table-sm small">
+                        <tr>
+                            <td><strong>Mã đơn:</strong></td>
+                            <td class="fw-bold">#FS<?= $order['id'] ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ngày đặt:</strong></td>
+                            <td><?= date('d/m/Y H:i', strtotime($order['created_at'])) ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Trạng thái:</strong></td>
+                            <td><span class="badge <?= $badgeClass ?>"><?= $statusText ?></span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tổng thanh toán:</strong></td>
+                            <td class="fw-bold text-danger"><?= number_format($order['total_price'], 0, ',', '.') ?>đ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phương thức TT:</strong></td>
+                            <td><?= htmlspecialchars($order['payment_method'] ?? 'N/A') ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Giao hàng:</strong></td>
+                            <td><?= htmlspecialchars($order['shipping_method'] ?? 'N/A') ?></td>
+                        </tr>
+                    </table>
+
+                    <h6 class="mt-4"><i class="bi bi-person-fill me-2"></i>Thông tin người nhận</h6>
+                    <p class="mb-1"><strong>Tên:</strong> <?= htmlspecialchars($order['user_name'] ?? 'Khách vãng lai') ?></p>
+                    <p class="mb-1"><strong>SĐT:</strong> <?= htmlspecialchars($order['phone_number']) ?></p>
+                    <p class="mb-1"><strong>Địa chỉ:</strong> <?= htmlspecialchars($order['shipping_address']) ?></p>
+                    
+                    <h6 class="mt-4"><i class="bi bi-list-check me-2"></i>Danh sách Sản phẩm</h6>
+                    <p class="small text-muted fst-italic">Để xem chi tiết sản phẩm, bạn cần đảm bảo Model Orders đã lấy dữ liệu order_items. (Dữ liệu này hiện tại chưa có sẵn trong biến $orders).</p>
+
+                </div>
+                
+                <div class="col-md-5">
+                    <h6 class="mb-3"><i class="bi bi-pencil-square me-2"></i>Cập nhật Trạng thái</h6>
+                    <form action="<?= BASE_URL ?>index.php/admin/updateOrderStatus" method="POST">
+                        <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
+                        
+                        <div class="mb-3">
+                            <label for="orderStatus_<?= $order['id'] ?>" class="form-label">Chọn Trạng thái mới</label>
+                            <select class="form-select" name="new_status" id="orderStatus_<?= $order['id'] ?>" required>
+                                <option value="pending" <?= ($order['status'] == 'pending') ? 'selected' : '' ?>>Chờ xử lý</option>
+                                <option value="processing" <?= ($order['status'] == 'processing') ? 'selected' : '' ?>>Đang chuẩn bị</option>
+                                <option value="shipped" <?= ($order['status'] == 'shipped') ? 'selected' : '' ?>>Đang giao</option>
+                                <option value="completed" <?= ($order['status'] == 'completed') ? 'selected' : '' ?>>Đã giao (Hoàn thành)</option>
+                                <option value="cancelled" <?= ($order['status'] == 'cancelled') ? 'selected' : '' ?>>Đã hủy</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="note_<?= $order['id'] ?>" class="form-label">Ghi chú (Tùy chọn)</label>
+                            <textarea class="form-control" name="note" id="note_<?= $order['id'] ?>" rows="2" placeholder="Thêm ghi chú nội bộ..."></textarea>
+                        </div>
+                        
+                        <button type="submit" name="btn_update_status" class="btn btn-primary w-100">
+                            Cập nhật Trạng thái
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php endforeach; ?>
+<?php endif; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -3,24 +3,22 @@ $html_products_featured = '';
 
 function render_product_item($item)
 {
-  $formatted_price = number_format($item['price'], 0, ',', '.') . ' VND';
-  $product_id = htmlspecialchars($item['id']);
-  $product_price = htmlspecialchars($item['price']);
-  $image_url = htmlspecialchars($item['image_url']);
+  $formatted_price = number_format($item['price'] ?? 0, 0, ',', '.') . ' VND'; 
+  $product_id = htmlspecialchars($item['id'] ?? '');
+  $product_price = htmlspecialchars($item['price'] ?? ''); 
+  $image_url = htmlspecialchars($item['image_url'] ?? '');
 
   if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
     $image_url = BASE_URL . 'uploads/products/' . $image_url;
   }
 
-  $product_name = htmlspecialchars($item['name']);
+  $product_name = htmlspecialchars($item['name'] ?? '');
   $detail_url = BASE_URL . 'index.php/products/detail/' . htmlspecialchars($item['slug'] ?? $item['id']);
-
-  // --- ĐƯỜNG DẪN TRỎ VỀ FAVOR CONTROLLER ---
   $favor_add_url = BASE_URL . 'index.php/favor/add';
-
   $old_price_html = '';
+
   if (!empty($item['old_price']) && $item['old_price'] > $item['price']) {
-    $formatted_old = number_format($item['old_price'], 0, ',', '.');
+    $formatted_old = number_format($item['old_price'] ?? 0, 0, ',', '.');
     $old_price_html = "<span class=\"product-old-price\">{$formatted_old}</span>";
   }
 
