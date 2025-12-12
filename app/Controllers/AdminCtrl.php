@@ -13,11 +13,11 @@ class AdminCtrl
         include_once __DIR__ . "/../Models/Products.php";
         $this->productModel = new Products();
 
-        include_once __DIR__ . "/../Models/Brand.php";
-        $this->BrandModel = new Brand();
+        include_onModel = new Brand();
 
         include_once __DIR__ . "/../Models/Category.php";
-        $this->CategoryModel = new Category();
+        $this->CategoryModel = new Cce __DIR__ . "/../Models/Brand.php";
+        $this->Brandategory();
 
         include_once __DIR__ . "/../Models/Order.php";
         $this->OrderModel = new Order();
@@ -456,4 +456,14 @@ class AdminCtrl
     {
         include_once 'Views/admin/user_profile.php';
     }
-}
+    public function brands() {
+        include_once 'Views/admin/admin_brands.php';
+    }
+    public function comments() {
+        include_once 'Views/admin/admin_comments.php';
+    }
+    public function coupons() {
+        include_once 'Views/admin/admin_coupons.php';
+    }
+}    
+?>
