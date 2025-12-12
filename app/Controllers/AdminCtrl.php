@@ -254,5 +254,6 @@ class AdminCtrl
     public function coupons() {
         include_once 'Views/admin/admin_coupons.php';
     }
-}   
+}
+    
 ?>
