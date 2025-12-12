@@ -39,3 +39,26 @@ To: angtenchill@gmail.com
 New Password: vdsfy3
 =================================================
 
+=== LOG MAIL [2025-12-12 10:38:55] ===
+To Admins: Không tìm thấy Admin hoặc lỗi truy vấn SQL
+Subject: KHÁCH HÀNG LIÊN HỆ: HELIOS
+Content:
+Bạn có một liên hệ mới từ khách hàng.
+
+THÔNG TIN CHI TIẾT:
+--------------------------------
+Họ và tên: Helios
+Email: freak8927@gmail.com
+Chủ đề: warranty
+--------------------------------
+NỘI DUNG TIN NHẮN:
+Shop làm ăn rất ngon.
+--------------------------------
+
+=================================================
+
+=== RESET PASSWORD LOG [2025-12-12 10:44:03] ===
+To: Duy129@gmail.com
+New Password: ag26fu
+=================================================
+

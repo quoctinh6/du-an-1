@@ -74,7 +74,7 @@
             <?php else :?>
                 <div style="text-align: center; padding: 40px;">
                     <p style="font-size: 1.2rem; color: #666;">Giỏ hàng trống trơn!!</p>
-                    <a href="<?= BASE_URL ?>index.php/products/all" class="btn-continue" style="margin-top: 15px; display: inline-block;">Quay lại mua sắm</a>
+                    <a href="<?= BASE_URL ?>index.php/products" class="btn-continue" style="margin-top: 15px; display: inline-block;">Quay lại mua sắm</a>
                 </div>
             <?php endif;?>
         </div>
