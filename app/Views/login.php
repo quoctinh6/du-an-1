@@ -33,5 +33,8 @@
         <div class="auth-footer-link">
             Bạn chưa có tài khoản? <a href="<?= BASE_URL ?>index.php/User/register">Đăng ký ngay</a>
         </div>
+        <div class="auth-footer-link">
+            <a href="<?= BASE_URL ?>index.php/User/reset">Quên mật khẩu?</a>
+        </div>
     </div>
 </main>

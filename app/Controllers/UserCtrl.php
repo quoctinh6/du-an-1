@@ -166,4 +166,8 @@ class UserCtrl
         header("Location: " . BASE_URL);
         exit();
     }
+    public function reset()
+    {
+        include_once 'Views/reset_password.php';
+    }
 }
