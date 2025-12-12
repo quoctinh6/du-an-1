@@ -25,7 +25,7 @@
                         </div>
                         <div>
                             <span class="label">Địa chỉ:</span>
-                            <div class="value">123 Đường ABC, Quận 1, TP. HCM</div>
+                            <div class="value">QTSC 9 Building, Đ. Tô Ký, Tân Chánh Hiệp, Q.12, Tp.Hồ Chí Minh</div>
                         </div>
                     </div>
 
@@ -35,7 +35,7 @@
                         </div>
                         <div>
                             <span class="label">Hotline:</span>
-                            <div class="value highlight-text">0938 447 728</div>
+                            <div class="value highlight-text">0397 337 423</div>
                         </div>
                     </div>
 
@@ -45,16 +45,22 @@
                         </div>
                         <div>
                             <span class="label">Email:</span>
-                            <div class="value">support@zerowatch.vn</div>
+                            <div class="value">angtenchill@gmail.com</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Fake Map Container (Thay bằng iframe Google Map thật nếu cần) -->
-                <div class="map-container">
-                    <div class="map-placeholder">
-                        <span>Bản đồ hiển thị tại đây</span>
-                    </div>
+                <!-- Google Map Container -->
+                <div class="map-container" style="margin-top: 20px; height: 350px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4205948965825!2d106.623485775704!3d10.855580057726354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752a2072046803%3A0xc3f8e58988226065!2sQTSC%209%20Building!5e0!3m2!1svi!2s!4v1708681234567!5m2!1svi!2s" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
             </div>
 
@@ -65,17 +71,17 @@
                     
                     <div class="form-group">
                         <label for="name">Họ và tên</label>
-                        <input type="text" id="name" class="custom-input" placeholder="Nhập tên của bạn">
+                        <input type="text" id="name" name="name" class="custom-input" placeholder="Nhập tên của bạn">
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" class="custom-input" placeholder="example@email.com">
+                        <input type="email" id="email" name="email" class="custom-input" placeholder="example@email.com">
                     </div>
 
                     <div class="form-group">
                         <label for="subject">Tiêu đề</label>
-                        <select id="subject" class="custom-input custom-select">
+                        <select id="subject" name="subject" class="custom-input custom-select">
                             <option value="">Chọn vấn đề cần hỗ trợ</option>
                             <option value="buy">Tư vấn mua hàng</option>
                             <option value="warranty">Bảo hành & Sửa chữa</option>
@@ -86,7 +92,7 @@
 
                     <div class="form-group">
                         <label for="message">Nội dung</label>
-                        <textarea id="message" rows="5" class="custom-input" placeholder="Nhập nội dung tin nhắn..."></textarea>
+                        <textarea id="message" name="message" rows="5" class="custom-input" placeholder="Nhập nội dung tin nhắn..."></textarea>
                     </div>
 
                     <button type="submit" class="submit-btn section-action">Gửi ngay >></button>

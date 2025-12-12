@@ -222,5 +222,12 @@ class Users
         $sql = "UPDATE users SET role = ?, updated_at = NOW() WHERE id = ?";
         return $this->db->update($sql, $new_role, $id);
     }
+
+    // [CODE MỚI]: Lấy danh sách email Admin
+    function getAdminEmails() {
+        // Chỉ lấy theo role admin, KHÔNG check is_active để tránh lỗi SQL
+        $sql = "SELECT email FROM users WHERE role = 'admin'";
+        return $this->db->query($sql);
+    }
     
 }
