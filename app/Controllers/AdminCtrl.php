@@ -255,4 +255,5 @@ class AdminCtrl
         include_once 'Views/admin/admin_coupons.php';
     }
 }
+}   
 ?>
