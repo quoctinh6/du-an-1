@@ -5,23 +5,97 @@ class AdminCtrl
     private $productModel;
     private $BrandModel;
     private $OrderModel;
+    private $StatsModel;
+    private $UserModel;
 
     public function __construct()
     {
         include_once __DIR__ . "/../Models/Products.php";
         $this->productModel = new Products();
 
-        include_once __DIR__ . "/../Models/Brand.php";
-        $this->BrandModel = new Brand();
+        include_onModel = new Brand();
 
         include_once __DIR__ . "/../Models/Category.php";
-        $this->CategoryModel = new Category();
+        $this->CategoryModel = new Cce __DIR__ . "/../Models/Brand.php";
+        $this->Brandategory();
 
         include_once __DIR__ . "/../Models/Order.php";
         $this->OrderModel = new Order();
+
+        include_once __DIR__ . "/../Models/StatsModel.php";
+        $this->StatsModel = new StatsModel();
+
+        include_once __DIR__ . "/../Models/User.php";
+        $this->UserModel = new Users();
     }
 
-    public function index() {
+    public function index()
+    {
+        // BƯỚC 1: LẤY DỮ LIỆU KPIs
+        $totalRevenue = $this->StatsModel->getTotalRevenueToday();
+        $pendingOrders = $this->StatsModel->countPendingOrders();
+        $newUsers = $this->StatsModel->countNewUsersLast7Days(); // Hàm đã được thêm ở lần trước
+
+        // BƯỚC 2: LẤY DỮ LIỆU CHO BẢNG & LIST
+        $latestOrders = $this->StatsModel->getLatestOrders(4);
+        $bestSellers = $this->StatsModel->getTopSellingProducts(5);
+
+        // Tìm sản phẩm bán chạy nhất (Dòng đầu tiên trong bestSellers)
+        $topSellerName = !empty($bestSellers) ? $bestSellers[0]['product_name'] : 'Chưa có';
+
+        // DỮ LIỆU CHO BIỂU ĐỒ TRÒN (Tỉ lệ Danh mục)
+        $rawCategoryData = $this->StatsModel->countProductsByCategory();
+
+        $categoryLabels = [];
+        $categoryCounts = [];
+
+        // Tách dữ liệu thô thành 2 mảng riêng biệt (Labels và Data)
+        // Đây là logic Presentation, nó chuyển đổi dữ liệu thô thành định dạng cần thiết cho View/JS
+        foreach ($rawCategoryData as $row) {
+            $categoryLabels[] = $row['name']; // Tên danh mục (ví dụ: 'Áo Khoác')
+            $categoryCounts[] = (int)$row['product_count']; // Số lượng sản phẩm
+        }
+
+        // Chuyển 2 mảng PHP thành JSON để JavaScript có thể đọc được
+        $categoryLabelsJson = json_encode($categoryLabels);
+        $categoryDataJson = json_encode($categoryCounts);
+
+        $rawRevenueData = $this->StatsModel->getRevenueLast30Days(); // Lấy dữ liệu
+
+        $revenueLabels = [];
+        $revenueCounts = [];
+
+        // 1. Chuẩn bị dữ liệu:
+        // Cần lấy tất cả các ngày từ 30 ngày trước đến hôm nay
+        $revenueMap = [];
+        foreach ($rawRevenueData as $row) {
+            // Chuẩn bị mảng Map: ['2025-12-01' => 12345000, '2025-12-02' => 0, ...]
+            $revenueMap[$row['order_date']] = (float)$row['total_daily_revenue'];
+        }
+
+        // 2. Điền đầy đủ 30 ngày (Dù không có doanh thu)
+        $date = new DateTime('-30 days'); // Bắt đầu từ 30 ngày trước
+        $interval = new DateInterval('P1D'); // Mỗi lần lặp là 1 ngày
+        $period = new DatePeriod($date, $interval, new DateTime()); // Lặp cho đến hôm nay
+
+        foreach ($period as $day) {
+            $currentDate = $day->format('Y-m-d'); // Định dạng ngày (vd: 2025-11-08)
+            $label = $day->format('d/m'); // Định dạng cho Label (vd: 08/11)
+
+            $revenueLabels[] = $label;
+            // Nếu ngày này có trong Map (có doanh thu), lấy giá trị, ngược lại là 0
+            $revenueCounts[] = $revenueMap[$currentDate] ?? 0;
+        }
+
+        // 3. Chuyển thành JSON
+        $revenueLabelsJson = json_encode($revenueLabels ?? []);
+        $revenueDataJson = json_encode($revenueCounts ?? []);
+
+        // Chuyển 2 mảng PHP thành JSON để JavaScript có thể đọc được
+        $categoryLabelsJson = json_encode($categoryLabels ?? []);
+        $categoryDataJson = json_encode($categoryCounts ?? []);
+
+        // Truyền thêm biến mới vào view
         include_once 'Views/admin/admin.php';
     }
 
@@ -238,11 +312,148 @@ class AdminCtrl
         include_once 'Views/admin/admin_orders.php';
     }
 
-    public function account() {
+    public function account()
+    {
+        // Áp dụng Flash Message cho trang Admin
+        $error = $_SESSION['error_admin'] ?? null;
+        $success = $_SESSION['success_admin'] ?? null;
+        unset($_SESSION['error_admin']);
+        unset($_SESSION['success_admin']);
+
+        // 1. LẤY THAM SỐ LỌC & TÌM KIẾM TỪ URL ($_GET)
+        $role = $_GET['role'] ?? 'all';         // Vai trò: 'all', 'admin', 'client'
+        $status = $_GET['status'] ?? 'all';     // Trạng thái: 'all', 'active', 'locked'
+        $search = $_GET['search'] ?? '';        // Từ khóa tìm kiếm
+
+        // 2. THAM SỐ PHÂN TRANG
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $limit = 10;
+
+        // 3. GỌI MODEL LẤY DỮ LIỆU
+        // Dữ liệu hiển thị
+        $users = $this->UserModel->getFilteredUsersAdmin($role, $status, $search, $page, $limit);
+        // Tổng số user (để tính phân trang)
+        $totalUsers = $this->UserModel->countFilteredUsersAdmin($role, $status, $search);
+
+        // Tính tổng số trang
+        $totalPages = ceil($totalUsers / $limit);
+
+        // 4. TRUYỀN DỮ LIỆU VÀO VIEW
+        $data = [
+            'users' => $users,
+            'totalUsers' => $totalUsers,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'currentLimit' => $limit,
+            'currentRole' => $role,
+            'currentStatus' => $status,
+            'currentSearch' => $search,
+            'error' => $error,
+            'success' => $success
+        ];
+
+        // 'extract' các biến cho View sử dụng (Ví dụ: $users, $totalPages, $error...)
+        extract($data);
+
         include_once 'Views/admin/admin_account.php';
     }
-    
-    public function user() {
+
+    /**
+     * Xử lý thêm tài khoản người dùng mới (từ Admin)
+     */
+    public function addUser()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_add_user'])) {
+            $name = trim($_POST['name']);
+            $email = trim($_POST['email']);
+            $phone = trim($_POST['phone']);
+            $role = $_POST['role'];
+            $password = $_POST['password']; // Admin tự đặt hoặc dùng mật khẩu mặc định
+            $is_active = $_POST['status'] == 'active' ? 1 : 0;
+
+            // 1. Validation Cơ bản
+            if (empty($name) || empty($email) || empty($phone) || empty($password)) {
+                $_SESSION['error_admin'] = 'Vui lòng điền đầy đủ thông tin bắt buộc.';
+            }
+            // 2. Kiểm tra Email đã tồn tại
+            elseif ($this->UserModel->getByEmail($email)) {
+                $_SESSION['error_admin'] = 'Email này đã được sử dụng. Vui lòng chọn Email khác.';
+            }
+            // 3. Tạo User
+            else {
+                $result = $this->UserModel->createAdminUser($name, $email, $phone, $password, $role, $is_active);
+                if ($result) {
+                    $_SESSION['success_admin'] = "Thêm tài khoản **$name** ($email) thành công!";
+                } else {
+                    $_SESSION['error_admin'] = 'Có lỗi xảy ra trong quá trình thêm tài khoản.';
+                }
+            }
+        }
+        // Redirect về trang quản lý tài khoản để thấy kết quả
+        header("Location: " . BASE_URL . "index.php/admin/account");
+        exit();
+    }
+
+    /**
+     * Xử lý Khóa/Mở khóa tài khoản (Cập nhật is_active)
+     */
+    public function updateStatus()
+    {
+        if (isset($_GET['id']) && isset($_GET['status'])) {
+            $user_id = (int)$_GET['id'];
+            $new_status = (int)$_GET['status']; // 1: Active, 0: Locked
+
+            // ⚠️ Kiểm tra: Không cho khóa chính tài khoản Admin đang dùng
+            if ($user_id == ($_SESSION['user']['id'] ?? 0)) {
+                $_SESSION['error_admin'] = 'Không thể khóa tài khoản của chính bạn!';
+                header("Location: " . BASE_URL . "index.php/admin/account");
+                exit();
+            }
+
+            $user = $this->UserModel->getById($user_id);
+            if ($user) {
+                $this->UserModel->updateActiveStatus($user_id, $new_status);
+                $status_text = ($new_status == 1) ? 'mở khóa' : 'khóa';
+                $_SESSION['success_admin'] = "Đã **$status_text** tài khoản **{$user['name']}** thành công.";
+            } else {
+                $_SESSION['error_admin'] = 'Không tìm thấy tài khoản cần cập nhật.';
+            }
+        }
+        header("Location: " . BASE_URL . "index.php/admin/account");
+        exit();
+    }
+
+    /**
+     * Xử lý Phân quyền tài khoản (Cập nhật role)
+     */
+    public function updateRole()
+    {
+        if (isset($_GET['id']) && isset($_GET['role'])) {
+            $user_id = (int)$_GET['id'];
+            $new_role = $_GET['role']; // 'admin' hoặc 'client'
+
+            // ⚠️ Kiểm tra: Không cho tự đổi quyền của chính tài khoản Admin đang dùng
+            if ($user_id == ($_SESSION['user']['id'] ?? 0) && $new_role == 'client') {
+                $_SESSION['error_admin'] = 'Không thể tự hạ cấp quyền của chính bạn khi đang đăng nhập.';
+                header("Location: " . BASE_URL . "index.php/admin/account");
+                exit();
+            }
+
+            $user = $this->UserModel->getById($user_id);
+            if ($user) {
+                $this->UserModel->updateUserRole($user_id, $new_role);
+                $role_text = ($new_role == 'admin') ? 'Quản trị viên' : 'Khách hàng';
+                $_SESSION['success_admin'] = "Đã phân quyền tài khoản **{$user['name']}** thành **$role_text** thành công.";
+            } else {
+                $_SESSION['error_admin'] = 'Không tìm thấy tài khoản cần cập nhật.';
+            }
+        }
+        header("Location: " . BASE_URL . "index.php/admin/account");
+        exit();
+    }
+
+    public function user()
+    {
         include_once 'Views/admin/user_profile.php';
     }
     public function brands() {
@@ -254,6 +465,5 @@ class AdminCtrl
     public function coupons() {
         include_once 'Views/admin/admin_coupons.php';
     }
-}
-    
+}    
 ?>

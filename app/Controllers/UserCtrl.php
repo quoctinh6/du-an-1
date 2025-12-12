@@ -24,12 +24,31 @@ class UserCtrl
             $user = $this->UsersModel->getByEmail($email);
 
             // Kiểm tra user có tồn tại và mật khẩu khớp không
+            // Nếu thất bại, Model đã set $_SESSION['error'] và return;
             $this->UsersModel->login($user, $password);
         }
 
+        // 1. Lấy thông báo lỗi/thành công từ Session
+        $error = $_SESSION['error'] ?? null;
+        $success = $_SESSION['success'] ?? null;
+
+        // 2. Xóa thông báo khỏi Session ngay lập tức
+        unset($_SESSION['error']);
+        unset($_SESSION['success']);
+
+        // 3. Truyền dữ liệu lỗi/thành công vào View
+        // Sử dụng biến $data để truyền biến vào View
+        $data = [
+            'error' => $error,
+            'success' => $success
+        ];
+
+        // Giả sử Controller của bạn có hàm loadView hoặc bạn xử lý truyền biến thủ công
+        // Cách xử lý thủ công: extract($data) để biến $error và $success có sẵn trong View
+        extract($data);
+
         include_once 'Views/login.php';
     }
-
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -148,4 +167,3 @@ class UserCtrl
         exit();
     }
 }
-?>

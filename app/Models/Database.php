@@ -15,9 +15,10 @@ class Database
       
       // 2. Thêm mảng options để ép buộc UTF-8 ngay từ lúc kết nối
       $options = [
-          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Báo lỗi dạng Exception
-          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Mặc định lấy dữ liệu dạng mảng kết hợp
-          PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4" // CÂU LỆNH QUAN TRỌNG NHẤT
+          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+          PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
+          PDO::ATTR_EMULATE_PREPARES => false, // dùng native prepares -> không quote số
       ];
 
       // 3. Kết nối với options vừa tạo

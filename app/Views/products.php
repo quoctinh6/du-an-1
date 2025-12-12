@@ -4,13 +4,15 @@ function renderProducts($item)
 {
     $slug = $item['slug'] ?? $item['id'];
     $detailLink = BASE_URL . "index.php/products/detail/" . $slug;
+    $product_id = htmlspecialchars($item['id']);
 
     $priceFormat = number_format($item['price'], 0, ',', '.') . ' VND';
 
     $imgSrc = $item['image_url'] ?? 'default.png';
     if (!filter_var($imgSrc, FILTER_VALIDATE_URL)) {
-        $imgSrc = BASE_URL . "Views/assets/img/" . $imgSrc;
+        $imgSrc = BASE_URL . "uploads/products/" . $imgSrc;
     }
+    $favor_add_url = BASE_URL . 'index.php/favor/add';
 
     // Xử lý giá cũ (chỉ hiện khi có giá trị và lớn hơn giá bán)
     $oldPriceHtml = '';
@@ -22,16 +24,11 @@ function renderProducts($item)
     return <<<HTML
     <div class="product-box">
         <div class="product-icons">
-            <button class="icon-btn btn-add-to-cart" data-product-id="{$item['id']}" aria-label="Add to cart" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z" />
-                </svg>
-            </button>
-            <button class="icon-btn" aria-label="Add to favorites">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-            </button>
+            <form action="{$favor_add_url}" method="POST" style="display:inline;" class="form-add-to-favor">
+                <input type="hidden" name="id" value="$product_id">
+                <button type="submit" class="icon-btn" aria-label="Add to favorites">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
+                </button>
         </div>
         <a href="{$detailLink}">
             <img src="{$imgSrc}" alt="{$item['name']}" class="product-img">
@@ -82,8 +79,8 @@ HTML;
             <div class="filter-group">
                 <div class="filter-group-title">Tìm kiếm</div>
                 <div class="sidebar-search-container">
-                    <input type="text"
-                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?> "
+                    <input type="text" name="search"
+                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
                         class="sidebar-search-input" placeholder="Tên sản phẩm...">
                 </div>
             </div>
@@ -93,15 +90,15 @@ HTML;
             <div class="filter-group">
                 <div class="filter-group-title">Danh Mục</div>
                 <!-- Thêm name="category[]" và value -->
-                <label class="filter-checkbox-container">Đồng hồ cơ (ID:1)
+                <label class="filter-checkbox-container">Đồng bán chạy
                     <input type="checkbox" name="category[]" class="category-checkbox" value="1" <?php echo in_array('1', $selected_categories) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
-                <label class="filter-checkbox-container">Đồng hồ thông minh (ID:2)
+                <label class="filter-checkbox-container">Đồng hồ cơ
                     <input type="checkbox" name="category[]" class="category-checkbox" value="2" <?php echo in_array('2', $selected_categories) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
-                <label class="filter-checkbox-container">Đồng hồ pin (ID:3)
+                <label class="filter-checkbox-container">Đồng hồ mới
                     <input type="checkbox" name="category[]" class="category-checkbox" value="3" <?php echo in_array('3', $selected_categories) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
@@ -194,3 +191,81 @@ HTML;
     </script>
 
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // 1. ADD TO CART
+        const cartForms = document.querySelectorAll(".form-add-to-cart");
+        cartForms.forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                formData.append('is_ajax', '1');
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(text => {
+                        let payload;
+                        try { payload = JSON.parse(text); }
+                        catch (err) { console.error('CART JSON ERROR:', text); alert('Có lỗi xảy ra khi thêm giỏ hàng!'); return; }
+
+                        if (!payload || !payload.success) {
+                            alert(payload?.message || 'Không thể thêm vào giỏ');
+                            return;
+                        }
+                        alert('Đã thêm vào giỏ hàng thành công!');
+                        const headerCount = document.getElementById('header-cart-count');
+                        if (headerCount) headerCount.innerText = '(' + (payload.totalQty ?? 0) + ')';
+                    })
+                    .catch(err => { console.error(err); alert('Lỗi kết nối giỏ hàng!'); });
+            });
+        });
+
+        // 2. ADD TO FAVORITES
+        const favorForms = document.querySelectorAll(".form-add-to-favor");
+        favorForms.forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                formData.append('is_ajax', '1');
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(text => {
+                        let payload;
+                        try {
+                            payload = JSON.parse(text);
+                        } catch (err) {
+                            console.error('FAVOR JSON ERROR:', text);
+                            // Check lỗi 404
+                            if (text.includes('404') || text.includes('Not Found')) {
+                                alert('Lỗi 404: Đường dẫn không tồn tại. Kiểm tra Router.');
+                            } else {
+                                alert('Có lỗi hệ thống khi thêm yêu thích!');
+                            }
+                            return;
+                        }
+
+                        if (payload && payload.success) {
+                            alert(payload.message);
+                        } else {
+                            alert('Không thể thêm vào yêu thích: ' + (payload?.message || 'Lỗi lạ'));
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Lỗi kết nối mạng!');
+                    });
+            });
+        });
+
+    });
+</script>
