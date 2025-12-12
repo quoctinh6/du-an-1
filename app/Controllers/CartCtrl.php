@@ -1,5 +1,7 @@
 <?php
 include_once 'Models/Products.php';
+include_once 'Models/Coupon.php';
+
 class CartCtrl {
 
     // 1. Hiển thị giỏ hàng
@@ -38,10 +40,67 @@ class CartCtrl {
         $shipping = ($subtotal > 1000000) ? 0 : 30000;
         if($subtotal == 0) $shipping = 0; 
 
-        $total = $subtotal + $shipping;
+        // ==== Logic ma giam gia ====
+        $discount = 0;
+        if (isset($_SESSION['applied_coupon'])) {
+            $coupon = $_SESSION['applied_coupon'];
+
+            // Tinh tong tien giam
+            if ($coupon['type'] == 'percent') {
+                $discount = ($subtotal * $coupon['value']) / 100 ;
+            }else {
+                $discount = $coupon['value'];
+            }
+
+            //Khong cho giam qua so tien hang - Tranh viec bi am tien
+            if($discount > $subtotal) $discount = $subtotal;
+        }
+
+        //Tong tien cuoi cung
+        $total = ($subtotal + $shipping) - $discount;
+        if ($total < 0) $total = 0;
 
         // Gọi View và truyền biến sang
         include_once "Views/cart.php";
+    }
+
+    // === Xu ly ap dung ma giam gia ===
+    public function applyCoupon() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $code = $_POST['coupon_code'] ?? '';
+
+            $couponModel = new Coupon();
+            $coupon = $couponModel->getByCode($code);
+
+            if($coupon) {
+                //Kiem tra han su dung
+                $now = date ('Y-m-d H:i:s');
+                if($coupon['expires_at'] < $now) {
+                    echo "<script>alert('Ma giam gia da het han!!'); window.location.href='../cart';</script>";
+                    exit;
+                }
+                //Kiem tra luot dung
+                if($coupon['usage_limit'] <= 0) {
+                    echo "<script>alert('Ma giam gia da het han!!'); window.location.href='../cart';</script>";
+                    exit;
+                }
+
+                // Neu hop le thi luu vao SESSION
+                $_SESSION['applied_coupon'] = $coupon;
+                echo "<script>alert('Áp dụng mã thành công!'); window.location.href='../cart';</script>";
+            }else {
+                echo "<script>alert('Mã giảm giá không tồn tại!'); window.location.href='../cart';</script>";
+            }
+        }
+    }
+
+    // === Huy ma giam gia
+    public function removeCoupon() {
+        if (isset($_SESSION['applied_coupon'])) {
+            unset($_SESSION['applied_coupon']);
+        }
+        header("Location: " . BASE_URL . "index.php/cart");
+        exit;
     }
 
     // 2. Thêm vào giỏ
