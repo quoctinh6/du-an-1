@@ -245,5 +245,14 @@ class AdminCtrl
     public function user() {
         include_once 'Views/admin/user_profile.php';
     }
+    public function brands() {
+        include_once 'Views/admin/admin_brands.php';
+    }
+    public function comments() {
+        include_once 'Views/admin/admin_comments.php';
+    }
+    public function coupons() {
+        include_once 'Views/admin/admin_coupons.php';
+    }
 }
 ?>

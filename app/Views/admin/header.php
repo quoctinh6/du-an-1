@@ -549,6 +549,27 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link <?= ($parts[1] == 'brands') ? 'active' : '' ?>"
+              href="<?= BASE_URL ?>index.php/admin/brands">
+              <i class="bi bi-receipt"></i>
+              Thương hiệu
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <?= ($parts[1] == 'comments') ? 'active' : '' ?>"
+              href="<?= BASE_URL ?>index.php/admin/comments">
+              <i class="bi bi-receipt"></i>
+              Bình luận
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <?= ($parts[1] == 'coupons') ? 'active' : '' ?>"
+              href="<?= BASE_URL ?>index.php/admin/coupons">
+              <i class="bi bi-receipt"></i>
+              Mã giảm giá
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link <?= ($parts[1] == 'account') ? 'active' : '' ?>"
               href="<?= BASE_URL ?>index.php/admin/account">
               <i class="bi bi-people"></i>
