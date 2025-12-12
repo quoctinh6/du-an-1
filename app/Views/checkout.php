@@ -9,12 +9,12 @@
         <div class="checkout-title">Thông tin giao hàng</div>
         
         <!-- FORM CHÍNH: Gửi dữ liệu về CheckoutCtrl -> process -->
+        <!-- ID="checkout-form" dùng để liên kết với nút Đặt hàng ở cột bên phải -->
         <form id="checkout-form" action="<?= BASE_URL ?>index.php/checkout/process" method="POST">
           
           <!-- Họ và tên -->
           <div class="form-group">
             <label for="full-name" class="form-label">Họ và tên</label>
-            <!-- Tự động điền nếu đã đăng nhập -->
             <input type="text" id="full-name" name="fullname" class="form-input" 
                    value="<?= isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']['name']) : '' ?>" 
                    placeholder="Nhập họ tên" required>
@@ -48,10 +48,10 @@
         <div class="summary-title">Tóm tắt đơn hàng</div>
 
         <!-- DANH SÁCH SẢN PHẨM TRONG GIỎ -->
-        <div class="order-list" style="margin-bottom: 20px; max-height: 300px; overflow-y: auto;">
+        <div class="order-list" style="margin-bottom: 20px; max-height: 300px; overflow-y: auto; border-bottom: 1px dashed #eee;">
             <?php if (!empty($cartItems)): ?>
                 <?php foreach ($cartItems as $item): ?>
-                    <div class="summary-detail-row" style="justify-content: flex-start; gap: 10px; border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 10px;">
+                    <div class="summary-detail-row" style="justify-content: flex-start; gap: 10px; padding-bottom: 10px; margin-bottom: 10px;">
                         <!-- Ảnh nhỏ -->
                         <img src="<?= $item['image'] ?>" 
                              style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
@@ -59,7 +59,14 @@
                         
                         <div style="flex: 1;">
                             <div style="font-weight: 600; font-size: 0.9rem;"><?= htmlspecialchars($item['name']) ?></div>
-                            <div style="font-size: 0.8rem; color: #666;">x<?= $item['quantity'] ?></div>
+                            <div style="font-size: 0.8rem; color: #666;">
+                                SL: <?= $item['quantity'] ?>
+                                <?php if(!empty($item['variant_meta'])): ?>
+                                    <br><span style="font-size: 0.75rem; color: #999;">
+                                        <?= htmlspecialchars($item['variant_meta']['size'] ?? '') ?> - <?= htmlspecialchars($item['variant_meta']['color'] ?? '') ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
                         </div>
                         
                         <div style="font-weight: bold;">
@@ -70,37 +77,69 @@
             <?php endif; ?>
         </div>
         
-        <!-- Tạm tính -->
+        <!-- TÍNH TOÁN TIỀN -->
         <div class="summary-detail-row">
-            <span class="label">Tổng tiền hàng</span>
+            <span class="label">Tạm tính</span>
             <span class="value"><?= number_format($subtotal, 0, ',', '.') ?>đ</span>
         </div>
-
-        <!-- PHƯƠNG THỨC THANH TOÁN -->
-        <div class="summary-option-group">
-            <label for="payment-method" class="form-label">Phương thức thanh toán</label>
-            <!-- Input nằm ngoài form chính nhưng dùng thuộc tính form="checkout-form" để liên kết -->
-            <select id="payment-method" name="payment_method" class="option-select" form="checkout-form">
-                <option value="cod">Thanh toán khi nhận hàng (COD)</option>
-                <option value="banking">Chuyển khoản ngân hàng</option>
-            </select>
-        </div>
         
-        <!-- Phí vận chuyển -->
-        <div class="summary-detail-row" style="padding-top: 1rem;">
+        <div class="summary-detail-row">
             <span class="label">Phí vận chuyển</span>
             <span class="value"><?= ($shipping > 0) ? number_format($shipping, 0, ',', '.') . 'đ' : 'Miễn phí' ?></span>
         </div>
+        <?php if (isset($discountApplied) && $discountApplied > 0): ?>
+            <!-- Dòng hiển thị Mã Code -->
+            <div class="summary-detail-row">
+                <span class="label">Mã giảm giá đã sử dụng</span>
+                <span class="value" style="color: #28a745; font-weight: 600;">
+                    <?= htmlspecialchars($_SESSION['applied_coupon']['code'] ?? '') ?>
+                </span>
+            </div>
+            
+            <!-- Dòng hiển thị Số tiền giảm -->
+            <div class="summary-detail-row" style="color: #d9534f;">
+                <span class="label">Đã giảm</span>
+                <span class="value">-<?= number_format($discountApplied, 0, ',', '.') ?>đ</span>
+            </div>
+        <?php endif; ?>
+
+        <!-- HIỂN THỊ MÃ GIẢM GIÁ VÀ SỐ TIỀN GIẢM (Đã cập nhật theo yêu cầu) -->
+        <?php if (isset($discount) && $discount > 0): ?>
+            <!-- Dòng hiển thị Mã Code -->
+            <div class="summary-detail-row">
+                <span class="label">Mã giảm giá đã sử dụng</span>
+                <span class="value" style="color: #28a745; font-weight: 600;">
+                    <?= htmlspecialchars($_SESSION['applied_coupon']['code'] ?? '') ?>
+                </span>
+            </div>
+            
+            <!-- Dòng hiển thị Số tiền giảm -->
+            <div class="summary-detail-row" style="color: #d9534f;">
+                <span class="label">Đã giảm</span>
+                <span class="value">-<?= number_format($discount, 0, ',', '.') ?>đ</span>
+            </div>
+        <?php endif; ?>
 
         <!-- TỔNG CỘNG -->
-        <div class="summary-final-total">
+        <div class="summary-final-total" style="margin-top: 15px; border-top: 1px solid #444; padding-top: 15px;">
             <span class="label">Tổng thanh toán</span>
             <span class="value" style="color: #d4af37;"><?= number_format($totalPrice, 0, ',', '.') ?>đ</span>
         </div>
 
+        <!-- PHƯƠNG THỨC THANH TOÁN -->
+        <div class="summary-option-group" style="margin-top: 20px;">
+            <label for="payment-method" class="form-label">Phương thức thanh toán</label>
+            <!-- Input nằm ngoài form chính nhưng dùng thuộc tính form="checkout-form" để liên kết -->
+            <select id="payment-method" name="payment_method" class="option-select" form="checkout-form">
+                <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                <option value="vnpay">Thanh toán Online (VNPAY)</option>
+                <option value="banking">Chuyển khoản ngân hàng</option>
+            </select>
+        </div>
+
         <!-- Nút Đặt hàng -->
-        <button type="submit" form="checkout-form" class="btn-place-order">XÁC NHẬN ĐẶT HÀNG</button>
+        <button type="submit" form="checkout-form" class="btn-place-order" style="margin-top: 20px;">XÁC NHẬN ĐẶT HÀNG</button>
 
       </div>
     </div>
-  </main>
+</main>

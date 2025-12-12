@@ -1,6 +1,7 @@
 <?php
 include_once 'Models/Order.php';
 include_once 'Models/Products.php';
+include_once 'Models/Coupon.php';
 
 class CheckoutCtrl
 {
@@ -44,7 +45,21 @@ class CheckoutCtrl
         $shipping = ($subtotal > $shipFreeThreshold) ? 0 : 30000;
         if ($subtotal == 0) $shipping = 0;
 
-        $totalPrice = $subtotal + $shipping;
+        $discount = 0;
+        if (isset($_SESSION['applied_coupon'])) {
+            $coupon = $_SESSION['applied_coupon'];
+            if ($coupon['type'] == 'percent') {
+                $discount = ($subtotal * $coupon['value']) / 100;
+            } else {
+                $discount = $coupon['value'];
+            }
+            // Không giảm quá tổng tiền
+            if ($discount > $subtotal) $discount = $subtotal;
+        }
+
+        // Tinh tong tien
+        $totalPrice = ($subtotal + $shipping) - $discount;
+        if ($totalPrice < 0) $totalPrice = 0;
 
         include_once 'Views/checkout.php';
     }
@@ -82,8 +97,10 @@ class CheckoutCtrl
         // Recompute subtotal using server-side variant prices if available
         $productModel = new Products();
         $subtotal = 0;
+
         $missingVariants = [];
         $insufficientStock = [];
+        
         foreach ($cart as $key => $item) {
             $qty = isset($item['quantity']) ? (int)$item['quantity'] : 0;
 
@@ -111,7 +128,23 @@ class CheckoutCtrl
         $shipping = ($subtotal > $shipFreeThreshold) ? 0 : 30000;
         if ($subtotal == 0) $shipping = 0;
 
-        $totalPrice = $subtotal + $shipping;
+        // === TÍNH LẠI GIẢM GIÁ (MỚI THÊM) ===
+        $discount = 0;
+        $couponId = null;
+        if (isset($_SESSION['applied_coupon'])) {
+            $coupon = $_SESSION['applied_coupon'];
+            $couponId = $coupon['id']; // Lấy ID để lưu vào đơn
+            
+            if ($coupon['type'] == 'percent') {
+                $discount = ($subtotal * $coupon['value']) / 100;
+            } else {
+                $discount = $coupon['value'];
+            }
+            if ($discount > $subtotal) $discount = $subtotal;
+        }
+
+        $totalPrice = ($subtotal + $shipping) - $discount;
+        if ($totalPrice < 0) $totalPrice = 0;
 
         // Server-side validation
         if (empty($fullname) || empty($phone) || empty($address)) {
