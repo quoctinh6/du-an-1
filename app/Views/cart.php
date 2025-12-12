@@ -57,8 +57,8 @@
                             
                             <!-- Xóa sản phẩm -->
                             <a href="<?= BASE_URL ?>index.php/cart/remove/<?= $key ?>" 
-                               class="cart-item-remove"
-                               onclick="return confirm('Bạn chắc chắn muốn xóa sản phẩm này?')">Xóa</a>
+                                class="cart-item-remove"
+                                onclick="return confirm('Bạn chắc chắn muốn xóa sản phẩm này?')">Xóa</a>
 
                             <!-- Thành tiền -->
                             <div class="cart-item-price">
