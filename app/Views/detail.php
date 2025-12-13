@@ -4,6 +4,59 @@ $variants_json = json_encode($product_variants ?? []);
 $p_id = $product_base['id'] ?? 0;
 $p_name = htmlspecialchars($product_base['name'] ?? '');
 $p_sku = htmlspecialchars($product_base['slug'] ?? '');
+
+$html_products_featured = '';
+
+function render_product_item($item)
+{
+  $formatted_price = number_format($item['price'] ?? 0, 0, ',', '.') . ' VND';
+  $product_id = htmlspecialchars($item['id'] ?? '');
+  $product_price = htmlspecialchars($item['price'] ?? '');
+  $image_url = htmlspecialchars($item['image_url'] ?? '');
+
+  if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
+    $image_url = BASE_URL . 'uploads/products/' . $image_url;
+  }
+
+  $product_name = htmlspecialchars($item['name'] ?? '');
+  $detail_url = BASE_URL . 'index.php/products/detail/' . htmlspecialchars($item['slug'] ?? $item['id']);
+  $favor_add_url = BASE_URL . 'index.php/favor/add';
+  $old_price_html = '';
+
+  if (!empty($item['old_price']) && $item['old_price'] > $item['price']) {
+    $formatted_old = number_format($item['old_price'] ?? 0, 0, ',', '.');
+    $old_price_html = "<span class=\"product-old-price\">{$formatted_old}</span>";
+  }
+
+  return <<<HTML
+    <div class="product-box">
+        <div class="product-icons">          
+            <!-- Form Thêm Yêu Thích -->
+            <form action="{$favor_add_url}" method="POST" style="display:inline;" class="form-add-to-favor">
+                <input type="hidden" name="id" value="$product_id">
+                <button type="submit" class="icon-btn" aria-label="Add to favorites">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="22" width="22" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
+                </button>
+            </form>
+        </div>
+        
+        <a href="$detail_url">
+            <img src="$image_url" alt="$product_name" class="product-img">
+        </a>
+        
+        <div class="product-name">$product_name</div>
+        <div class="product-price">$old_price_html $formatted_price</div>
+        
+        <button class="buy-btn" onclick="window.location.href='$detail_url'">Xem chi tiết</button>
+    </div>
+HTML;
+}
+
+$html_products = '';
+if (!empty($product_category)) {
+  foreach ($product_category as $item)
+    $html_products .= render_product_item($item);
+}
 ?>
 
 <!-- Link CSS riêng -->
@@ -176,7 +229,19 @@ $p_sku = htmlspecialchars($product_base['slug'] ?? '');
   </section>
 
 </section>
+<section class="section scroll-reveal" id="trending-products">
+  <div class="section-header">
+    <div class="section-title">Sản phẩm liên quan</div>
+    <button class="section-action"
+      onclick="window.location.href='<?= BASE_URL ?>index.php/products/?category=<?= $product_base['category_id'] ?>'">>></button>
+  </div>
+  <div class="product-grid">
+    <!-- Four Trending Product Boxes -->
+    <?= $html_products ?>
+    <div class="product-box">
 
+    </div>
+</section>
 
 <!-- SCRIPT XỬ LÝ LOGIC (Màu, Size, Giá) -->
 <script>

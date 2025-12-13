@@ -36,6 +36,8 @@ class ProductsCtrl
         if ($product_base) {
             $product_variants = $this->productModel->getVariantsById_product($product_base['id']);
 
+            $product_category = $this->productModel->getProducts(4, [$product_base['category_id']]);
+
             // Lấy comments (3 đánh giá mới nhất)
             $product_comments = $this->productModel->getCommentsByProductId($product_base['id'], 3);
 
