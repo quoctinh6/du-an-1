@@ -203,7 +203,7 @@ class AdminCtrl
 
             if ($new_product_id) {
                 if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                    $target_dir = "uploads/products/";
+                    $target_dir = "uploads/products";
                     if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
                     $ext = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
                     $file_name = $new_product_id . "_" . time() . "." . $ext;
@@ -230,7 +230,7 @@ class AdminCtrl
             $this->productModel->updateProduct($id, $name, $cate_id, $brand_id, $desc, $status, $slug);
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $target_dir = "uploads/products/";
+                $target_dir = "uploads/products";
                 if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
                 $ext = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
                 $file_name = $id . "_" . time() . "." . $ext;
@@ -254,7 +254,7 @@ class AdminCtrl
             $image_path = '';
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $target_dir = "uploads/variants/";
+                $target_dir = "uploads/products";
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
@@ -295,7 +295,7 @@ class AdminCtrl
             $image_path = null;
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $target_dir = "uploads/variants/";
+                $target_dir = "uploads/products";
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
