@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Thanh Toán | Zero Watch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- LIÊN KẾT ĐẾN STYLES CHUNG CỦA TRANG CHỦ -->
+  <link rel="stylesheet" href="./css/styles.css" />
+  <!-- LIÊN KẾT ĐẾN STYLES RIÊNG CỦA THANH TOÁN -->
+  <link rel="stylesheet" href="./css/checkout.css" />
+
+</head>
+<body>
+  
+  <!-- Header with Glassmorphism (Sử dụng lại từ index.html) -->
+  <header>
+    <div class="header-container">
+      <!-- Cột 1: Logo (Left) -->
+      <div class="logo" style="color: white;"><a href="index.html">Zero Watch</a></div> 
+      
+      <!-- Cột 2: Menu Navigation (Center) -->
+      <nav>
+        <a href="product.html">Sản phẩm</a>
+        <a href="favor.html">Yêu thích</a>
+        <a href="login.html">Liên hệ</a>
+      </nav>
+      
+      <!-- Cột 3: Actions (Right) -->
+      <div class="header-actions">
+        <!-- Nút Giỏ hàng (đang trong quy trình, không highlight) -->
+        <a href="cart.html" class="action-button cart-btn">
+          <!-- Icon Giỏ hàng (dùng SVG) -->
+          <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.604-2.083l2.396-9.917h-16v-2h-3v2h1.604l3.452 13.917a2 2 0 0 0 1.944 1.25h10.192a2 2 0 0 0 1.944-1.25l.588-2.333zm-13.604-11.083v-2h16v2h-16z"/></svg>
+          Giỏ hàng
+        </a>
+        
+        <!-- Nút Đăng nhập (Không viền) -->
+        <a href="login.html" class="action-button login-btn">Đăng nhập</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Checkout Content -->
+  <main class="checkout-main">
+    <div class="checkout-container">
+      
+      <!-- CỘT 1: THÔNG TIN GIAO HÀNG (2/3 CHIỀU RỘNG) -->
+      <div class="checkout-info-wrapper">
+        <div class="checkout-title">Thông tin giao hàng</div>
+        <form id="checkout-form">
+          
+          <!-- Họ và tên -->
+          <div class="form-group">
+            <label for="full-name" class="form-label">Họ và tên</label>
+            <input type="text" id="full-name" class="form-input" placeholder="Nhập họ tên" required>
+          </div>
+
+          <!-- Số điện thoại -->
+          <div class="form-group">
+            <label for="phone" class="form-label">Số điện thoại</label>
+            <input type="tel" id="phone" class="form-input" placeholder="Nhập số điện thoại" required>
+          </div>
+
+          <!-- Địa chỉ -->
+          <div class="form-group">
+            <label for="address" class="form-label">Địa chỉ</label>
+            <input type="text" id="address" class="form-input" placeholder="Nhập địa chỉ" required>
+          </div>
+
+          <!-- Chọn địa chỉ có sẵn (Select/Dropdown) -->
+          <div class="form-group">
+            <label for="available-address" class="form-label">Chọn địa chỉ có sẵn</label>
+            <select id="available-address" class="form-select">
+                <option value="">-- Chọn địa chỉ --</option>
+                <option value="home">Nhà riêng: 123 Đường ABC, Quận 1, TP. HCM</option>
+                <option value="office">Văn phòng: 456 Đường XYZ, Quận 3, TP. HCM</option>
+            </select>
+          </div>
+
+          <!-- Ghi chú cho đơn hàng -->
+          <div class="form-group">
+            <label for="notes" class="form-label">Ghi chú cho đơn hàng</label>
+            <textarea id="notes" class="form-textarea" placeholder="VD: Giao hàng ngoài giờ hành chính..."></textarea>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- CỘT 2: TÓM TẮT ĐƠN HÀNG (1/3 CHIỀU RỘNG) -->
+      <div class="order-summary-wrapper">
+        <div class="summary-title">Tóm tắt đặt hàng</div>
+
+        <!-- Mã đơn hàng -->
+        <div class="summary-detail-row">
+            <span class="label">Mã đơn hàng</span>
+            <span class="value">DH956103</span>
+        </div>
+
+        <!-- Ngày đặt -->
+        <div class="summary-detail-row">
+            <span class="label">Ngày đặt</span>
+            <span class="value">20:44:54 22/11/2025</span>
+        </div>
+        
+        <!-- Tổng tiền hàng -->
+        <div class="summary-detail-row">
+            <span class="label">Tổng tiền hàng</span>
+            <span class="value">đ14.300.000</span>
+        </div>
+
+        <!-- PHƯƠNG THỨC THANH TOÁN -->
+        <div class="summary-option-group">
+            <label for="payment-method" class="form-label">Phương thức thanh toán</label>
+            <select id="payment-method" class="option-select">
+                <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                <option value="bank">Chuyển khoản ngân hàng</option>
+                <option value="card">Thanh toán bằng thẻ</option>
+            </select>
+        </div>
+        
+        <!-- CHỌN PHÍ VẬN CHUYỂN -->
+        <div class="summary-option-group">
+            <label for="shipping-fee" class="form-label">Chọn phí vận chuyển</label>
+            <select id="shipping-fee" class="option-select">
+                <option value="express">Giao nhanh (1-2 ngày) - đ30.000</option>
+                <option value="standard">Giao tiêu chuẩn (3-5 ngày) - đ0</option>
+            </select>
+        </div>
+        
+        <!-- Phí vận chuyển -->
+        <div class="summary-detail-row" style="padding-top: 1rem;">
+            <span class="label">Phí vận chuyển</span>
+            <span class="value">đ30.000</span>
+        </div>
+
+        <!-- CHỌN VOUCHER -->
+        <div class="summary-option-group">
+            <label for="voucher" class="form-label">Chọn voucher</label>
+            <select id="voucher" class="option-select">
+                <option value="">BLACKFRIDAY - Giảm 20% (tối đa đ50.000)</option>
+                <option value="promo10">PROMO10 - Giảm 10%</option>
+            </select>
+        </div>
+
+        <!-- Giảm giá -->
+        <div class="summary-detail-row" style="padding-bottom: 0;">
+            <span class="label">Giảm giá</span>
+            <span class="value" style="color: #f00;">-đ0</span>
+        </div>
+
+        <!-- TỔNG ĐƠN HÀNG CUỐI CÙNG -->
+        <div class="summary-final-total">
+            <span class="label">Tổng đơn hàng</span>
+            <span class="value">đ14.330.000</span>
+        </div>
+
+        <!-- Nút Đặt hàng -->
+        <button type="submit" form="checkout-form" class="btn-place-order">Tiếp tục đặt hàng</button>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer (Sử dụng lại từ index.html) -->
+  <footer>
+    <div class="footer-row">
+        <div class="footer-col footer-col-intro">
+            <div class="logo logo-footer">Zero Watch</div>
+            <div class="intro-text">
+                Chúng tôi cung cấp những chiếc đồng hồ hiện đại, sang trọng và chính xác nhất. <br>
+                Đảm bảo chất lượng, uy tín hàng đầu.
+            </div>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-head">Liên kết nhanh</div>
+            <div class="footer-col-list">
+                <a class="footer-col-link" href="#">Sản phẩm mới</a>
+                <a class="footer-col-link" href="#">Sản phẩm bán chạy</a>
+                <a class="footer-col-link" href="#">Tin tức & Blog</a>
+                <a class="footer-col-link" href="#">Về chúng tôi</a>
+                <a class="footer-col-link" href="#">Liên hệ</a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-head">Thông tin cửa hàng</div>
+            <div class="footer-col-list">
+                <p class="footer-col-link" style="opacity: 1;">**Giờ làm việc (Online)**</p>
+                <p class="footer-col-link">Thứ 2 - Thứ 6: 8:00 - 20:00</p>
+                <p class="footer-col-link">Thứ 7 & CN: 9:00 - 18:00</p>
+                <p class="footer-col-link" style="opacity: 1; margin-top: 1rem;">**Địa chỉ**</p>
+                <p class="footer-col-link">123 Đường ABC, Quận 1, TP. HCM</p>
+            </div>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-head">Theo dõi chúng tôi</div>
+            <div class="social-icons">
+                <a href="#" class="social-icon-btn" aria-label="Facebook">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-2c-.607 0-.909.13-.909.432v1.568h2.909l-.439 3h-2.47v7h-3v-7h-2v-3h2v-2.083c0-2.194 1.25-3.417 3.65-3.417h2.35v3z"/></svg>
+                </a>
+                <a href="#" class="social-icon-btn" aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.013 4.85.071 3.544.156 4.907 1.499 5.063 5.044.058 1.265.071 1.645.071 4.849 0 3.204-.013 3.583-.071 4.848-.156 3.543-1.499 4.907-5.044 5.063-1.265.058-1.644.071-4.849.071-3.204 0-3.583-.013-4.848-.071-3.544-.156-4.907-1.499-5.063-5.044-.058-1.265-.071-1.644-.071-4.848 0-3.205.013-3.584.071-4.849.156-3.544 1.498-4.907 5.044-5.063 1.265-.058 1.644-.071 4.849-.071zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.471-10.662c0-.528.428-.956.956-.956.528 0 .956.428.956.956s-.428.956-.956.956c-.528 0-.956-.428-.956-.956z"/></svg>
+                </a>
+                <a href="#" class="social-icon-btn" aria-label="Twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.796-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.466 2.809-4.814 5.761-4.01-.2-7.587-2.112-9.97-5.011-.42 1.442-.204 3.011.82 4.093-2.152-.083-3.766-.69-4.288-1.182v.059c0 3.19 2.228 5.67 5.176 6.262-.756.206-1.547.234-2.348.089.824 2.54 3.262 4.398 6.155 4.459-2.203 1.72-4.978 2.748-8 2.748-.52 0-1.03-.03-1.53-.09.308 1.83 1.84 3.23 3.659 3.493-2.455 1.954-5.545 3.102-8.91 3.102-.58 0-1.146-.038-1.698-.111 3.018 1.933 6.556 3.064 10.375 3.064 12.457 0 19.344-10.825 19.344-20.082 0-.306-.01-.61-.027-.912.836-.607 1.564-1.353 2.13-2.218z"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        &copy; 2025 ZERO WATCH | Shop được tạo bởi <span style="color:var(--highlight);">Sinh viên FPT</span>
+        và <span style="color:var(--accent);">Rolex.com</span>. <br>
+        Phản ánh chức năng và dịch vụ qua zalo: 0938447728
+    </div>
+</footer>
+
+</body>
+</html>

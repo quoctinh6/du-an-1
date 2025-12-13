@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap 5.3.2 CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      xintegrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons 1.11.3 CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <!-- SEO Tags -->
+    <title>FashionShop - Quản lý Sản phẩm</title>
+
+    <!-- Custom CSS -->
+    <style>
+      :root {
+        --color-accent: #000f38;
+        --color-accent-darker: #000826;
+        --color-text-main: #1a1a1a;
+        --color-text-subtle: #555555;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        color: var(--color-text-main);
+        background-color: #f8f9fa;
+      }
+      .btn-primary {
+        background-color: var(--color-accent);
+        border-color: var(--color-accent);
+        color: #ffffff;
+      }
+      .btn-primary:hover {
+        background-color: var(--color-accent-darker);
+        border-color: var(--color-accent-darker);
+        color: #ffffff;
+      }
+      .btn-outline-secondary {
+        color: var(--color-accent);
+        border-color: var(--color-accent);
+      }
+      .btn-outline-secondary:hover {
+        background-color: var(--color-accent);
+        color: #ffffff;
+      }
+      
+      /* Sidebar */
+      #admin-sidebar {
+        min-height: 100vh;
+        background-color: #212529;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 1000;
+      }
+      #admin-sidebar .nav-link {
+        color: #adb5bd;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+      }
+      #admin-sidebar .nav-link i {
+        margin-right: 0.75rem;
+        width: 20px;
+        text-align: center;
+      }
+      #admin-sidebar .nav-link:hover {
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+      #admin-sidebar .nav-link.active {
+        color: #ffffff;
+        background-color: var(--color-accent);
+      }
+      #admin-sidebar .sidebar-heading {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: #6c757d;
+        padding: 0.5rem 1.5rem;
+        margin-top: 1rem;
+      }
+      .admin-top-nav {
+        background-color: #ffffff;
+        border-bottom: 1px solid #dee2e6;
+      }
+      .admin-content {
+        padding: 2rem;
+      }
+      
+      .admin-top-nav .form-control {
+        border-color: var(--color-accent);
+      }
+      .admin-top-nav .form-control:focus {
+        border-color: var(--color-accent-darker);
+        box-shadow: 0 0 0 0.25rem rgba(0, 15, 56, 0.25);
+      }
+      .admin-table img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 0.25rem;
+      }
+      .admin-table .badge {
+        font-size: 0.85rem;
+      }
+      .pagination .page-item.active .page-link {
+        background-color: var(--color-accent);
+        border-color: var(--color-accent);
+        color: #fff;
+      }
+      .pagination .page-link {
+        color: var(--color-accent);
+      }
+      .pagination .page-link:hover {
+        color: var(--color-accent-darker);
+      }
+      
+      /* Style Badge Thương hiệu */
+      .brand-badge {
+        background-color: #e9ecef;
+        color: var(--color-text-subtle);
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: 1px solid #dee2e6;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="d-flex">
+      <!-- SIDEBAR -->
+      <nav id="admin-sidebar" class="col-lg-2 col-md-3 d-none d-md-block p-0">
+        <div class="position-sticky pt-3">
+          <a href="index.html" class="d-block px-3 mb-3 text-white text-decoration-none fs-5">
+            <span><strong>ZEROWATCH</strong>Admin</span>
+          </a>
+
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="admin.html"><i class="bi bi-speedometer2"></i> Tổng quan</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="admin_orders.html"><i class="bi bi-receipt"></i> Quản lý Đơn hàng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="admin_products.html"><i class="bi bi-box-seam"></i> Quản lý Sản phẩm</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="admin_category.html"><i class="bi bi-tags"></i> Quản lý Danh mục</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="admin_account.html"><i class="bi bi-people"></i> Quản lý Tài khoản</a>
+            </li>
+          </ul>
+
+          <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+            Tài khoản
+          </h6>
+          <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+              <a class="nav-link" href="admin_profile.html">
+                <i class="bi bi-person-circle"></i>
+                Admin (Bạn)
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <i class="bi bi-box-arrow-left"></i>
+                Đăng xuất
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- CONTENT -->
+      <main class="col-lg-10 col-md-9 ms-sm-auto px-0">
+        <nav class="navbar navbar-expand-lg admin-top-nav shadow-sm sticky-top">
+          <div class="container-fluid">
+            <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#admin-sidebar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <form class="d-flex mx-auto" style="width: 400px">
+              <input class="form-control me-2" type="search" placeholder="Tìm kiếm sản phẩm..." />
+            </form>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i class="bi bi-person-circle fs-4 align-middle"></i>
+                  <span class="d-none d-lg-inline align-middle ms-1">Chào, Admin</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="index.html">Xem trang khách</a></li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li><a class="dropdown-item" href="index.html">Đăng xuất</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <div class="admin-content">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0 fw-bold" style="color: var(--color-text-main)">
+              Quản lý Sản phẩm
+            </h1>
+            <!-- SỬA: Nút Thêm mới gọi hàm resetAddProductModal() -->
+            <button class="btn btn-primary" onclick="resetAddProductModal()">
+               <i class="bi bi-plus-lg me-2"></i>Thêm sản phẩm mới
+            </button>
+          </div>
+          
+          <!-- BỘ LỌC -->
+           <div class="card shadow-sm mb-4">
+             <div class="card-body">
+               <div class="row g-3">
+                 <!-- Lọc Danh mục -->
+                 <div class="col-md-3">
+                   <label class="form-label small text-muted mb-1">Danh mục</label>
+                   <select class="form-select">
+                      <option selected>Tất cả danh mục</option>
+                      <option value="1">Áo Khoác</option>
+                      <option value="2">Quần Jeans</option>
+                      <option value="3">Giày</option>
+                    </select>
+                 </div>
+                 
+                 <!-- Lọc Thương hiệu -->
+                 <div class="col-md-3">
+                    <label class="form-label small text-muted mb-1">Thương hiệu</label>
+                    <select class="form-select">
+                      <option selected>Tất cả thương hiệu</option>
+                      <option value="Nike">Nike</option>
+                      <option value="Adidas">Adidas</option>
+                      <option value="Levi's">Levi's</option>
+                      <option value="ZeroWatch">ZeroWatch Original</option>
+                    </select>
+                 </div>
+
+                 <!-- Lọc Tồn kho -->
+                 <div class="col-md-3">
+                    <label class="form-label small text-muted mb-1">Tình trạng kho</label>
+                    <select class="form-select">
+                      <option selected>Tất cả</option>
+                      <option value="low">Sắp hết hàng (< 10)</option>
+                      <option value="out">Hết hàng (0)</option>
+                      <option value="stock">Còn hàng</option>
+                    </select>
+                 </div>
+                 
+                 <!-- Lọc Trạng thái -->
+                 <div class="col-md-3">
+                    <label class="form-label small text-muted mb-1">Trạng thái bán</label>
+                    <div class="d-flex gap-2">
+                        <select class="form-select">
+                          <option selected>Tất cả</option>
+                          <option value="active">Đang bán</option>
+                          <option value="hidden">Ẩn</option>
+                        </select>
+                        <button class="btn btn-outline-secondary" title="Lọc">
+                            <i class="bi bi-funnel"></i>
+                        </button>
+                    </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+
+          <!-- Bảng Sản Phẩm -->
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle admin-table">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col" style="width: 80px;">Ảnh</th>
+                      <th scope="col">Tên sản phẩm</th>
+                      <th scope="col">Thương hiệu</th> 
+                      <th scope="col">Giá bán</th>
+                      <th scope="col">Tổng Kho</th>
+                      <th scope="col">Trạng thái</th>
+                      <th scope="col" class="text-end">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    <!-- Sản phẩm 1 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1005/100/100" alt="Áo Khoác Nam Dù">
+                      </td>
+                      <td>
+                        <div class="fw-bold">Áo Khoác Nam Dù</div>
+                        <small class="text-muted">Danh mục: Áo Khoác</small>
+                      </td>
+                      <td><span class="brand-badge">ZeroWatch</span></td>
+                      <td>450.000đ</td>
+                      <td>150</td>
+                      <td><span class="badge bg-success">Đang bán</span></td>
+                      <td class="text-end">
+                         <!-- Nút Biến thể -->
+                         <a href="admin_variants.html" class="btn btn-sm btn-outline-info me-1" title="Quản lý biến thể (Size/Màu)">
+                            <i class="bi bi-layers"></i>
+                         </a>
+                         <!-- SỬA: Nút Sửa gọi hàm openEditProductModal() -->
+                         <button class="btn btn-sm btn-outline-primary me-1" title="Sửa thông tin chung"
+                                 onclick="openEditProductModal('Áo Khoác Nam Dù', '1', 'ZeroWatch', '450000', '150', 'active', 'https://picsum.photos/id/1005/100/100')">
+                           <i class="bi bi-pencil"></i>
+                         </button>
+                         <button class="btn btn-sm btn-outline-danger" title="Xóa">
+                           <i class="bi bi-trash"></i>
+                         </button>
+                      </td>
+                    </tr>
+                    
+                    <!-- Sản phẩm 2 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1011/100/100" alt="Quần Jeans Levi's">
+                      </td>
+                      <td>
+                        <div class="fw-bold">Quần Jeans Levi's 511</div>
+                        <small class="text-muted">Danh mục: Quần Jeans</small>
+                      </td>
+                      <td><span class="brand-badge">Levi's</span></td>
+                      <td>650.000đ</td>
+                      <td>85</td>
+                      <td><span class="badge bg-success">Đang bán</span></td>
+                      <td class="text-end">
+                         <a href="admin_variants.html" class="btn btn-sm btn-outline-info me-1" title="Quản lý biến thể">
+                            <i class="bi bi-layers"></i>
+                         </a>
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1" 
+                                 onclick="openEditProductModal('Quần Jeans Levi\'s 511', '2', 'Levi\'s', '650000', '85', 'active', 'https://picsum.photos/id/1011/100/100')">
+                           <i class="bi bi-pencil"></i>
+                         </button>
+                         <button class="btn btn-sm btn-outline-danger">
+                           <i class="bi bi-trash"></i>
+                         </button>
+                      </td>
+                    </tr>
+                    
+                    <!-- Sản phẩm 3 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1018/100/100" alt="Áo Hoodie Nike">
+                      </td>
+                      <td>
+                        <div class="fw-bold">Áo Hoodie Nike Sportswear</div>
+                        <small class="text-muted">Danh mục: Áo Hoodie</small>
+                      </td>
+                      <td><span class="brand-badge">Nike</span></td>
+                      <td>850.000đ</td>
+                      <td>0</td>
+                      <td><span class="badge bg-danger">Hết hàng</span></td>
+                      <td class="text-end">
+                         <a href="admin_variants.html" class="btn btn-sm btn-outline-info me-1">
+                            <i class="bi bi-layers"></i>
+                         </a>
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1"
+                                 onclick="openEditProductModal('Áo Hoodie Nike Sportswear', '3', 'Nike', '850000', '0', 'active', 'https://picsum.photos/id/1018/100/100')">
+                           <i class="bi bi-pencil"></i>
+                         </button>
+                         <button class="btn btn-sm btn-outline-danger">
+                           <i class="bi bi-trash"></i>
+                         </button>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phân trang -->
+          <nav aria-label="Products pagination" class="d-flex justify-content-center mt-4">
+            <ul class="pagination">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trước</a>
+              </li>
+              <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">1</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">Sau</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODAL DÙNG CHUNG CHO THÊM VÀ SỬA SẢN PHẨM -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg"> <!-- Modal lớn hơn chút (modal-lg) -->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold" id="productModalTitle">Thêm sản phẩm mới</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="productForm">
+              <div class="row">
+                  <!-- Cột Trái -->
+                  <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="prodName" placeholder="Nhập tên sản phẩm">
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Danh mục</label>
+                            <select class="form-select" id="prodCategory">
+                              <option value="1">Áo Khoác</option>
+                              <option value="2">Quần Jeans</option>
+                              <option value="3">Giày</option>
+                              <option value="4">Phụ kiện</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Thương hiệu</label>
+                            <select class="form-select" id="prodBrand">
+                              <option value="ZeroWatch">ZeroWatch</option>
+                              <option value="Nike">Nike</option>
+                              <option value="Adidas">Adidas</option>
+                              <option value="Levi's">Levi's</option>
+                            </select>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Giá bán (VNĐ)</label>
+                            <input type="number" class="form-control" id="prodPrice" placeholder="0">
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Tổng tồn kho</label>
+                            <input type="number" class="form-control" id="prodStock" placeholder="0">
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <!-- Cột Phải -->
+                  <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Ảnh đại diện (URL)</label>
+                        <input type="text" class="form-control mb-2" id="prodImg" placeholder="https://..." onchange="previewImage()">
+                        <!-- Khung xem trước ảnh -->
+                        <div class="border rounded d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
+                            <img id="imgPreview" src="" alt="Preview" style="max-height: 100%; max-width: 100%; display: none;">
+                            <span id="imgPlaceholder" class="text-muted small">Xem trước ảnh</span>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Trạng thái</label>
+                        <select class="form-select" id="prodStatus">
+                          <option value="active">Đang bán</option>
+                          <option value="hidden">Ẩn</option>
+                        </select>
+                      </div>
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <label class="form-label">Mô tả sản phẩm</label>
+                  <textarea class="form-control" id="prodDesc" rows="3" placeholder="Nhập mô tả chi tiết..."></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="button" class="btn btn-primary" id="btnSaveProduct">Lưu sản phẩm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5.3.2 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <!-- SCRIPT XỬ LÝ MODAL -->
+    <script>
+      let productModal;
+
+      document.addEventListener("DOMContentLoaded", function() {
+        const modalElement = document.getElementById('productModal');
+        productModal = new bootstrap.Modal(modalElement);
+      });
+
+      // Hàm xem trước ảnh khi nhập URL
+      function previewImage() {
+          const url = document.getElementById('prodImg').value;
+          const img = document.getElementById('imgPreview');
+          const placeholder = document.getElementById('imgPlaceholder');
+          
+          if (url) {
+              img.src = url;
+              img.style.display = 'block';
+              placeholder.style.display = 'none';
+          } else {
+              img.style.display = 'none';
+              placeholder.style.display = 'block';
+          }
+      }
+
+      // Hàm mở modal Thêm mới (Reset form)
+      function resetAddProductModal() {
+        document.getElementById('productModalTitle').innerText = 'Thêm sản phẩm mới';
+        document.getElementById('btnSaveProduct').innerText = 'Lưu sản phẩm';
+        
+        // Reset inputs
+        document.getElementById('prodName').value = '';
+        document.getElementById('prodCategory').value = '1';
+        document.getElementById('prodBrand').value = 'ZeroWatch';
+        document.getElementById('prodPrice').value = '';
+        document.getElementById('prodStock').value = '';
+        document.getElementById('prodImg').value = '';
+        document.getElementById('prodStatus').value = 'active';
+        document.getElementById('prodDesc').value = '';
+        
+        // Reset preview ảnh
+        previewImage();
+
+        productModal.show();
+      }
+
+      // Hàm mở modal Sửa (Điền dữ liệu)
+      function openEditProductModal(name, category, brand, price, stock, status, imgUrl) {
+        document.getElementById('productModalTitle').innerText = 'Cập nhật sản phẩm';
+        document.getElementById('btnSaveProduct').innerText = 'Lưu thay đổi';
+
+        // Fill data
+        document.getElementById('prodName').value = name;
+        document.getElementById('prodCategory').value = category; // Value tương ứng option
+        document.getElementById('prodBrand').value = brand;
+        document.getElementById('prodPrice').value = price;
+        document.getElementById('prodStock').value = stock;
+        document.getElementById('prodStatus').value = status;
+        document.getElementById('prodImg').value = imgUrl;
+        
+        // Cập nhật preview ảnh ngay lập tức
+        previewImage();
+
+        productModal.show();
+      }
+    </script>
+  </body>
+</html>

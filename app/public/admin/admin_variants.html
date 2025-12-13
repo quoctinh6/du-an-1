@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap 5.3.2 CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      xintegrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons 1.11.3 CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <title>Quản lý Biến thể - FashionShop Admin</title>
+
+    <!-- Custom CSS (Giữ nguyên style hệ thống) -->
+    <style>
+      :root {
+        --color-accent: #000f38;
+        --color-accent-darker: #000826;
+        --color-text-main: #1a1a1a;
+        --color-text-subtle: #555555;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        color: var(--color-text-main);
+        background-color: #f8f9fa;
+      }
+      .btn-primary {
+        background-color: var(--color-accent);
+        border-color: var(--color-accent);
+        color: #ffffff;
+      }
+      .btn-primary:hover {
+        background-color: var(--color-accent-darker);
+        border-color: var(--color-accent-darker);
+        color: #ffffff;
+      }
+      .btn-outline-secondary {
+        color: var(--color-accent);
+        border-color: var(--color-accent);
+      }
+      .btn-outline-secondary:hover {
+        background-color: var(--color-accent);
+        color: #ffffff;
+      }
+      
+      /* Sidebar */
+      #admin-sidebar {
+        min-height: 100vh;
+        background-color: #212529;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 1000;
+      }
+      #admin-sidebar .nav-link {
+        color: #adb5bd;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+      }
+      #admin-sidebar .nav-link i {
+        margin-right: 0.75rem;
+        width: 20px;
+        text-align: center;
+      }
+      #admin-sidebar .nav-link:hover {
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+      /* Sidebar Active State for Product related pages */
+      #admin-sidebar .nav-link.active {
+        color: #ffffff;
+        background-color: var(--color-accent);
+      }
+      #admin-sidebar .sidebar-heading {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: #6c757d;
+        padding: 0.5rem 1.5rem;
+        margin-top: 1rem;
+      }
+      .admin-top-nav {
+        background-color: #ffffff;
+        border-bottom: 1px solid #dee2e6;
+      }
+      .admin-content {
+        padding: 2rem;
+      }
+      .admin-table img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid #dee2e6;
+      }
+      
+      /* Style riêng cho biến thể */
+      .variant-attribute {
+        font-weight: 600;
+        color: var(--color-accent);
+        background-color: rgba(0, 15, 56, 0.05);
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-right: 5px;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="d-flex">
+      <!-- SIDEBAR -->
+      <nav id="admin-sidebar" class="col-lg-2 col-md-3 d-none d-md-block p-0">
+        <div class="position-sticky pt-3">
+          <a href="index.html" class="d-block px-3 mb-3 text-white text-decoration-none fs-5">
+            <span><strong>ZEROWATCH</strong>Admin</span>
+          </a>
+
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="admin.html"><i class="bi bi-speedometer2"></i> Tổng quan</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="admin_orders.html"><i class="bi bi-receipt"></i> Quản lý Đơn hàng</a>
+            </li>
+            <li class="nav-item">
+              <!-- Giữ active để biết đang ở mục Sản phẩm -->
+              <a class="nav-link active" href="admin_products.html"><i class="bi bi-box-seam"></i> Quản lý Sản phẩm</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="admin_categories.html"><i class="bi bi-tags"></i> Quản lý Danh mục</a>
+            </li>
+             <li class="nav-item">
+              <a class="nav-link" href="admin_account.html"><i class="bi bi-people"></i> Quản lý Tài khoản</a>
+            </li>
+          </ul>
+
+          <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+             Tài khoản
+          </h6>
+          <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+              <a class="nav-link" href="admin_profile.html">
+                <i class="bi bi-person-circle"></i>
+                Admin (Bạn)
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <i class="bi bi-box-arrow-left"></i>
+                Đăng xuất
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- CONTENT -->
+      <main class="col-lg-10 col-md-9 ms-sm-auto px-0">
+        <nav class="navbar navbar-expand-lg admin-top-nav shadow-sm sticky-top">
+           <div class="container-fluid">
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#admin-sidebar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i class="bi bi-person-circle fs-4 align-middle"></i>
+                  <span class="d-none d-lg-inline align-middle ms-1">Chào, Admin</span>
+                </a>
+              </li>
+            </ul>
+           </div>
+        </nav>
+
+        <div class="admin-content">
+          <!-- Breadcrumb điều hướng -->
+          <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="admin_products.html" style="color: var(--color-accent); text-decoration: none;">Sản phẩm</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Quản lý biến thể</li>
+            </ol>
+          </nav>
+
+          <!-- Header -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 mb-1 fw-bold" style="color: var(--color-text-main)">
+                  Biến thể sản phẩm
+                </h1>
+                <p class="text-muted mb-0">Sản phẩm: <strong>Áo Khoác Nam Dù (Mã: AK-001)</strong></p>
+            </div>
+            <!-- SỬA: Thêm onclick gọi hàm reset -->
+            <button class="btn btn-primary" onclick="resetAddVariantModal()">
+               <i class="bi bi-plus-lg me-2"></i>Thêm biến thể mới
+            </button>
+          </div>
+
+          <!-- Bảng Biến thể -->
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle admin-table">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col" style="width: 70px;">Ảnh</th>
+                      <th scope="col">Mã SKU</th>
+                      <th scope="col">Thuộc tính (Size / Màu)</th>
+                      <th scope="col">Giá bán</th>
+                      <th scope="col">Tồn kho</th>
+                      <th scope="col" class="text-end">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    <!-- Biến thể 1 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1005/100/100" alt="Black M">
+                      </td>
+                      <td><strong>AK-001-BL-M</strong></td>
+                      <td>
+                          <span class="variant-attribute">Màu: Đen</span>
+                          <span class="variant-attribute">Size: M</span>
+                      </td>
+                      <td>450.000đ</td>
+                      <td>
+                          <div class="d-flex align-items-center">
+                              <span class="me-2">50</span>
+                              <span class="badge bg-success" style="font-size: 0.7em;">Nhiều</span>
+                          </div>
+                      </td>
+                      <td class="text-end">
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1" 
+                                 onclick="openEditVariantModal('AK-001-BL-M', 'Đen', 'M', '450000', '50')">
+                            <i class="bi bi-pencil"></i>
+                         </button>
+                         <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                      </td>
+                    </tr>
+
+                    <!-- Biến thể 2 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1005/100/100" alt="Black L">
+                      </td>
+                      <td><strong>AK-001-BL-L</strong></td>
+                      <td>
+                          <span class="variant-attribute">Màu: Đen</span>
+                          <span class="variant-attribute">Size: L</span>
+                      </td>
+                      <td>450.000đ</td>
+                      <td>
+                          <div class="d-flex align-items-center">
+                              <span class="me-2">5</span>
+                              <span class="badge bg-warning text-dark" style="font-size: 0.7em;">Sắp hết</span>
+                          </div>
+                      </td>
+                      <td class="text-end">
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1"
+                                 onclick="openEditVariantModal('AK-001-BL-L', 'Đen', 'L', '450000', '5')">
+                            <i class="bi bi-pencil"></i>
+                         </button>
+                         <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                      </td>
+                    </tr>
+
+                    <!-- Biến thể 3 -->
+                    <tr>
+                      <td>
+                        <img src="https://picsum.photos/id/1005/100/100" alt="Blue M">
+                      </td>
+                      <td><strong>AK-001-BU-M</strong></td>
+                      <td>
+                          <span class="variant-attribute">Màu: Xanh Than</span>
+                          <span class="variant-attribute">Size: M</span>
+                      </td>
+                      <td>460.000đ <small class="text-muted">(+10k)</small></td>
+                      <td>
+                          <div class="d-flex align-items-center">
+                              <span class="me-2">0</span>
+                              <span class="badge bg-danger" style="font-size: 0.7em;">Hết hàng</span>
+                          </div>
+                      </td>
+                      <td class="text-end">
+                         <!-- SỬA: Nút Sửa -->
+                         <button class="btn btn-sm btn-outline-primary me-1"
+                                 onclick="openEditVariantModal('AK-001-BU-M', 'Xanh Than', 'M', '460000', '0')">
+                            <i class="bi bi-pencil"></i>
+                         </button>
+                         <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODAL THÊM BIẾN THỂ -->
+    <div class="modal fade" id="addVariantModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <!-- ID title -->
+              <h5 class="modal-title fw-bold" id="variantModalTitle">Thêm biến thể mới</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                    <label class="form-label">Mã SKU Biến thể</label>
+                    <!-- ID: varSku -->
+                    <input type="text" class="form-control" id="varSku" placeholder="VD: AK-001-RED-XL">
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Màu sắc</label>
+                        <!-- ID: varColor -->
+                        <select class="form-select" id="varColor">
+                            <option value="Đen">Đen</option>
+                            <option value="Trắng">Trắng</option>
+                            <option value="Xanh">Xanh</option>
+                            <option value="Xanh Than">Xanh Than</option>
+                            <option value="Đỏ">Đỏ</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Kích thước (Size)</label>
+                        <!-- ID: varSize -->
+                        <select class="form-select" id="varSize">
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Giá bán riêng (nếu có)</label>
+                        <!-- ID: varPrice -->
+                        <input type="number" class="form-control" id="varPrice" placeholder="450000">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Số lượng tồn kho</label>
+                        <!-- ID: varStock -->
+                        <input type="number" class="form-control" id="varStock" value="0">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Ảnh đại diện biến thể</label>
+                    <!-- ID: varImg -->
+                    <input type="file" class="form-control" id="varImg">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+              <!-- ID: btnSaveVariant -->
+              <button type="button" class="btn btn-primary" id="btnSaveVariant">Lưu biến thể</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <!-- SCRIPT XỬ LÝ MODAL -->
+    <script>
+      let variantModal;
+
+      document.addEventListener("DOMContentLoaded", function() {
+        const modalElement = document.getElementById('addVariantModal');
+        variantModal = new bootstrap.Modal(modalElement);
+      });
+
+      // Hàm mở modal Thêm mới (Reset form)
+      function resetAddVariantModal() {
+        document.getElementById('variantModalTitle').innerText = 'Thêm biến thể mới';
+        document.getElementById('btnSaveVariant').innerText = 'Lưu biến thể';
+        
+        document.getElementById('varSku').value = '';
+        document.getElementById('varColor').selectedIndex = 0; // Reset về option đầu tiên
+        document.getElementById('varSize').selectedIndex = 0;
+        document.getElementById('varPrice').value = '';
+        document.getElementById('varStock').value = '0';
+        document.getElementById('varImg').value = ''; // Clear file input
+
+        variantModal.show();
+      }
+
+      // Hàm mở modal Sửa (Điền dữ liệu)
+      function openEditVariantModal(sku, color, size, price, stock) {
+        document.getElementById('variantModalTitle').innerText = 'Cập nhật biến thể';
+        document.getElementById('btnSaveVariant').innerText = 'Lưu thay đổi';
+
+        // Điền dữ liệu vào form
+        document.getElementById('varSku').value = sku;
+        
+        // Chọn đúng option cho Màu sắc
+        const colorSelect = document.getElementById('varColor');
+        colorSelect.value = color;
+
+        // Chọn đúng option cho Size
+        const sizeSelect = document.getElementById('varSize');
+        sizeSelect.value = size;
+
+        document.getElementById('varPrice').value = price;
+        document.getElementById('varStock').value = stock;
+        
+        // Lưu ý: Input type="file" không thể set value programmatically vì lý do bảo mật.
+        // Người dùng sẽ phải chọn lại ảnh nếu muốn thay đổi.
+
+        variantModal.show();
+      }
+    </script>
+  </body>
+</html>
