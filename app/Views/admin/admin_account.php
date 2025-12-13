@@ -1,3 +1,4 @@
+<main class="col-lg-10 col-md-9 ms-sm-auto px-0">
 <div class="admin-content">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0 fw-bold" style="color: var(--color-text-main)">
@@ -162,6 +163,7 @@
     </ul>
   </nav>
 </div>
+</main>
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

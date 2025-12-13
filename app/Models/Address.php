@@ -78,4 +78,3 @@ class Address
         return $this->db->update($sql, $address_id);
     }
 }
-?>

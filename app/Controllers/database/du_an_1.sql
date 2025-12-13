@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 12, 2025 at 12:53 PM
+-- Generation Time: Dec 13, 2025 at 03:03 PM
 -- Server version: 5.7.39
 -- PHP Version: 8.1.10
 
@@ -232,8 +232,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `total_price`, `shipping_address`, `phone_number`, `status`, `payment_method_id`, `shipping_method_id`, `coupon_id`, `created_at`, `updated_at`) VALUES
-(1, 1, '11550000.00', '123 Đường ABC, Quận 1, TP. HCM', '0909123456', 'processing', 1, 2, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18'),
-(2, 1, '351530000.00', '456 Đường XYZ, Quận Hoàn Kiếm, Hà Nội', '0909123456', 'pending', 2, 1, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18');
+(1, 1, '11550000.00', '123 Đường ABC, Quận 1, TP. HCM', '0909123456', 'completed', 1, 2, NULL, '2025-11-15 08:58:18', '2025-12-13 14:54:40'),
+(2, 1, '351530000.00', '456 Đường XYZ, Quận Hoàn Kiếm, Hà Nội', '0909123456', 'pending', 2, 1, NULL, '2025-11-15 08:58:18', '2025-12-13 03:46:21');
 
 -- --------------------------------------------------------
 
@@ -301,7 +301,8 @@ INSERT INTO `products` (`id`, `name`, `description`, `slug`, `brand_id`, `catego
 (4, 'Rolex Lady-Datejust', 'Phiên bản sang trọng dành cho phái nữ.', 'rolex-lady-datejust', 2, 3, 'published', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
 (5, 'Casio Vintage A168', 'Phong cách cổ điển, mạ vàng sang trọng.', 'casio-vintage-a168', 1, 2, 'published', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
 (6, 'Seiko Presage Cocktail', 'Lấy cảm hứng từ những ly cocktail, mặt số chải tia.', 'seiko-presage', 3, 1, 'published', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
-(7, 'Casio Edifice EFR', 'Đồng hồ Chronograph thể thao, lịch lãm.', 'casio-edifice', 1, 3, 'published', '2025-12-09 05:38:46', '2025-12-09 05:38:46');
+(7, 'Casio Edifice EFR', 'Đồng hồ Chronograph thể thao, lịch lãm.', 'casio-edifice', 1, 3, 'published', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
+(31, 'tets', '', '', 1, 3, 'draft', '2025-12-12 14:57:43', '2025-12-12 15:41:35');
 
 -- --------------------------------------------------------
 
@@ -329,7 +330,8 @@ INSERT INTO `product_images` (`id`, `product_id`, `image_url`, `alt_text`, `crea
 (4, 4, 'sp4.png', 'Ảnh Rolex Lady', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
 (5, 5, 'sp5.png', 'Ảnh Casio Vintage', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
 (6, 6, 'sp6.png', 'Ảnh Seiko Presage', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
-(7, 7, 'sp7.png', 'Ảnh Casio Edifice', '2025-12-09 05:38:46', '2025-12-09 05:38:46');
+(7, 7, 'sp7.png', 'Ảnh Casio Edifice', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
+(8, 31, 'uploads/products/31_1765551463.JPG', NULL, '2025-12-12 14:57:43', '2025-12-12 14:57:43');
 
 -- --------------------------------------------------------
 
@@ -664,13 +666,13 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `shipping_methods`

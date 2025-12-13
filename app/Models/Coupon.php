@@ -28,4 +28,3 @@
             return $this->db->update($sql, $coupon_id);
         }
     }
-?>
