@@ -107,80 +107,73 @@ $p_sku = htmlspecialchars($product_base['slug'] ?? '');
     </div>
   </section>
 
-      <!-- SECTION ĐÁNH GIÁ & BÌNH LUẬN MỚI -->
-<section class="reviews-section-container scroll-reveal">
+  <!-- SECTION ĐÁNH GIÁ & BÌNH LUẬN MỚI -->
+  <section class="reviews-section-container scroll-reveal">
     <div class="reviews-wrapper">
-        <div class="reviews-header">Đánh giá & Bình luận (3)</div>
-        
-        <!-- Danh sách đánh giá -->
-        <div class="review-list">
-            <!-- Review 1 -->
-            <div class="review-item">
-                <div class="review-avatar">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" alt="User Avatar">
-                </div>
-                <div class="review-content-area">
-                    <div class="review-meta">
-                        <span class="review-author">Trần Văn Tú</span>
-                        <div class="star-display">★★★★★</div>
-                    </div>
-                    <div class="review-text">Đồng hồ rất đẹp, cầm chắc tay. Giao hàng nhanh chóng chỉ trong 2 ngày. Rất hài lòng với shop!</div>
-                </div>
-            </div>
+      <div class="reviews-header">Đánh giá & Bình luận</div>
 
-            <!-- Review 2 -->
+      <!-- Danh sách đánh giá -->
+      <div class="review-list" id="reviewList">
+        <?php if (!empty($product_comments)): ?>
+          <?php foreach ($product_comments as $comment): ?>
             <div class="review-item">
-                <div class="review-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="User Avatar">
+              <div class="review-content-area">
+                <div class="review-meta">
+                  <span class="review-author"><?= htmlspecialchars($comment['name']) ?></span>
+                  <div class="star-display">
+                    <?= str_repeat('★', $comment['rating']) . str_repeat('☆', 5 - $comment['rating']) ?>
+                  </div>
+                  <span class="review-date"><?= date('d/m/Y H:i', strtotime($comment['created_at'])) ?></span>
                 </div>
-                <div class="review-content-area">
-                    <div class="review-meta">
-                        <span class="review-author">Nguyễn Thị Mai</span>
-                        <div class="star-display">★★★★☆</div>
-                    </div>
-                    <div class="review-text">Sản phẩm tốt, nhưng hộp bị móp một chút khi vận chuyển. Tuy nhiên đồng hồ bên trong vẫn nguyên vẹn.</div>
-                </div>
+                <div class="review-text"><?= htmlspecialchars($comment['content']) ?></div>
+              </div>
             </div>
-            
-            <!-- Review 3 -->
-             <div class="review-item">
-                <div class="review-avatar">
-                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80" alt="User Avatar">
-                </div>
-                <div class="review-content-area">
-                    <div class="review-meta">
-                        <span class="review-author">Lê Hoàng</span>
-                        <div class="star-display">★★★★★</div>
-                    </div>
-                    <div class="review-text">Xứng đáng với giá tiền. Màu Gold nhìn sang trọng hơn trong ảnh.</div>
-                </div>
-            </div>
-        </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p style="color: #999; text-align: center; padding: 20px;">Chưa có bình luận nào. Hãy là người đầu tiên bình
+            luận!</p>
+        <?php endif; ?>
+      </div>
 
-        <!-- Form viết đánh giá mới -->
-        <div class="add-review-box">
-            <div class="add-review-title">Viết đánh giá của bạn</div>
-            <form action="#" method="POST">
-                <div class="review-form-group">
-                    <label class="review-form-label">Đánh giá sao:</label>
-                    <div class="star-rating-input">
-                        <!-- Lưu ý: CSS flex-direction: row-reverse để hover hoạt động đúng từ phải sang trái -->
-                        <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">★</label>
-                        <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">★</label>
-                        <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">★</label>
-                        <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">★</label>
-                        <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">★</label>
-                    </div>
-                </div>
-                <div class="review-form-group">
-                    <label class="review-form-label">Bình luận:</label>
-                    <textarea class="review-textarea" placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm..."></textarea>
-                </div>
-                <button type="submit" class="submit-review-btn">Gửi đánh giá</button>
-            </form>
-        </div>
+      <!-- Form viết đánh giá mới -->
+      <div class="add-review-box">
+        <div class="add-review-title">Viết đánh giá của bạn</div>
+        <?php if (!isset($_SESSION['user'])): ?>
+          <div style="padding: 20px; background: #f9f9f9; border-radius: 8px; color: #d9534f; text-align: center;">
+            <p>Vui lòng <a href="<?= BASE_URL ?>index.php/User/login"
+                style="color: #0066cc; text-decoration: underline;">đăng nhập</a> để bình luận</p>
+          </div>
+        <?php elseif (!$user_bought): ?>
+          <div style="padding: 20px; background: #f9f9f9; border-radius: 8px; color: #d9534f; text-align: center;">
+            <p>Bạn cần phải mua sản phẩm này để có thể bình luận</p>
+          </div>
+        <?php else: ?>
+          <form method="POST" action="<?= BASE_URL ?>index.php/products/addComment">
+            <input type="hidden" name="product_id" value="<?= $product_base['id'] ?>">
+
+            <div class="review-form-group">
+              <label class="review-form-label">Đánh giá sao:</label>
+              <div class="star-rating-input">
+                <!-- Lưu ý: CSS flex-direction: row-reverse để hover hoạt động đúng từ phải sang trái -->
+                <input type="radio" id="star5" name="rating" value="5" required /><label for="star5"
+                  title="5 stars">★</label>
+                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">★</label>
+                <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">★</label>
+                <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">★</label>
+                <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">★</label>
+              </div>
+            </div>
+            <div class="review-form-group">
+              <label class="review-form-label">Bình luận:</label>
+              <textarea class="review-textarea" name="content" placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm..."
+                required minlength="5"></textarea>
+            </div>
+            <button type="submit" class="submit-review-btn">Gửi đánh giá</button>
+          </form>
+        <?php endif; ?>
+      </div>
     </div>
-</section>
+  </section>
 
 </section>
 

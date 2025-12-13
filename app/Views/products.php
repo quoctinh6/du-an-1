@@ -6,8 +6,8 @@ function renderProducts($item)
     $detailLink = BASE_URL . "index.php/products/detail/" . $slug;
     $product_id = htmlspecialchars($item['id']);
 
-    // Nếu $price['price'] là null hoặc không tồn tại, sử dụng 0 thay thế
-    $priceFormat = number_format($price['price'] ?? 0, 0, ',', '.') . ' VNĐ';
+    // Format giá sản phẩm
+    $priceFormat = number_format($item['price'] ?? 0, 0, ',', '.') . ' VNĐ';
 
     $imgSrc = $item['image_url'] ?? 'default.png';
     if (!filter_var($imgSrc, FILTER_VALIDATE_URL)) {
@@ -158,7 +158,7 @@ HTML;
             <?php
             // === DEBUG CHECK: Nếu vẫn lỗi thì bỏ comment dòng dưới để kiểm tra ===
             // var_dump($products); 
-
+            
             if (!empty($products)) {
                 foreach ($products as $item) {
                     echo renderProducts($item);
@@ -174,22 +174,22 @@ HTML;
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var form = document.querySelector('.filter-sidebar');
             if (!form) return;
             var hidden = document.getElementById('category-hidden');
             var checkboxes = form.querySelectorAll('input.category-checkbox[name="category[]"]');
 
             function syncHidden() {
-                var vals = Array.prototype.slice.call(checkboxes).filter(function(c) {
+                var vals = Array.prototype.slice.call(checkboxes).filter(function (c) {
                     return c.checked;
-                }).map(function(c) {
+                }).map(function (c) {
                     return c.value;
                 });
                 hidden.value = vals.join(',');
             }
 
-            checkboxes.forEach(function(ch) {
+            checkboxes.forEach(function (ch) {
                 ch.addEventListener('change', syncHidden);
             });
             // initialize on load
@@ -200,20 +200,20 @@ HTML;
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
 
         // 1. ADD TO CART
         const cartForms = document.querySelectorAll(".form-add-to-cart");
         cartForms.forEach(form => {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const formData = new FormData(form);
                 formData.append('is_ajax', '1');
 
                 fetch(form.action, {
-                        method: 'POST',
-                        body: formData
-                    })
+                    method: 'POST',
+                    body: formData
+                })
                     .then(response => response.text())
                     .then(text => {
                         let payload;
@@ -243,16 +243,16 @@ HTML;
         // 2. ADD TO FAVORITES
         const favorForms = document.querySelectorAll(".form-add-to-favor");
         favorForms.forEach(form => {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
 
                 const formData = new FormData(form);
                 formData.append('is_ajax', '1');
 
                 fetch(form.action, {
-                        method: 'POST',
-                        body: formData
-                    })
+                    method: 'POST',
+                    body: formData
+                })
                     .then(response => response.text())
                     .then(text => {
                         let payload;

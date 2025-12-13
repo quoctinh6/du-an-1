@@ -217,4 +217,61 @@ class Products
       return $this->db->update($sql, $color_id, $size_id, $price, $quantity, $sku, $variant_id);
     }
   }
+
+  // --- COMMENT FUNCTIONS ---
+
+  /**
+   * Lấy các comment/đánh giá của sản phẩm (3 đánh giá mới nhất)
+   * Chỉ hiển thị comments của sản phẩm này (id_product)
+   * @return array
+   */
+  function getCommentsByProductId($product_id, $limit = 3)
+  {
+    $sql = "SELECT c.id, c.user_id, c.id_product, c.content, c.rating, c.created_at, u.name, u.email
+            FROM comments c
+            INNER JOIN users u ON c.user_id = u.id
+            WHERE c.commentable_type = 'product' AND c.id_product = ?
+            ORDER BY c.created_at DESC
+            LIMIT ?";
+    return $this->db->query($sql, $product_id, $limit) ?? [];
+  }
+
+  /**
+   * Lấy tất cả comment của sản phẩm
+   * @return array
+   */
+  function getAllCommentsByProductId($product_id)
+  {
+    $sql = "SELECT c.id, c.user_id, c.id_product, c.content, c.rating, c.created_at, u.name, u.email
+            FROM comments c
+            INNER JOIN users u ON c.user_id = u.id
+            WHERE c.id_product = ?
+            ORDER BY c.created_at DESC";
+    return $this->db->query($sql, $product_id) ?? [];
+  }
+
+  /**
+   * Thêm comment/đánh giá mới cho sản phẩm
+   * @return bool
+   */
+  function addComment($user_id, $product_id, $content, $rating)
+  {
+    $sql = "INSERT INTO comments (user_id, id_product, content, rating, commentable_type, created_at, updated_at)
+            VALUES (?, ?, ?, ?, 'product', NOW(), NOW())";
+    return $this->db->insert($sql, $user_id, $product_id, $content, $rating);
+  }
+
+  /**
+   * Kiểm tra người dùng đã mua sản phẩm này chưa
+   * @return bool
+   */
+  function checkUserBoughtProduct($user_id, $product_id)
+  {
+    $sql = "SELECT COUNT(*) as count FROM order_items oi
+            INNER JOIN variants v ON oi.variant_id = v.id
+            INNER JOIN orders o ON oi.order_id = o.id
+            WHERE v.product_id = ? AND o.user_id = ?";
+    $result = $this->db->queryOne($sql, $product_id, $user_id);
+    return ($result['count'] ?? 0) > 0;
+  }
 }
