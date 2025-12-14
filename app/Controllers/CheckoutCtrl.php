@@ -2,6 +2,7 @@
 include_once 'Models/Order.php';
 include_once 'Models/Products.php';
 include_once 'Models/Coupon.php';
+include_once 'Models/Address.php';
 
 class CheckoutCtrl
 {
@@ -19,31 +20,35 @@ class CheckoutCtrl
 
         // Tính toán tổng tiền — dùng giá từ DB nếu có variant
         $productModel = new Products();
+        $addressModel = new Address()
+        ;
+        $address = $addressModel->getDefaultAddress($_SESSION['user']['id']);
         $subtotal = 0;
         foreach ($cartItems as $key => $item) {
-            $qty = isset($item['quantity']) ? (int)$item['quantity'] : 0;
+            $qty = isset($item['quantity']) ? (int) $item['quantity'] : 0;
             if (!empty($item['variant_id'])) {
-                $v = $productModel->getVariantById((int)$item['variant_id']);
+                $v = $productModel->getVariantById((int) $item['variant_id']);
                 if ($v) {
                     $cartItems[$key]['display_price'] = $v['price'];
                     $cartItems[$key]['variant_meta'] = [
-                        'size'=>$v['size_name'] ?? null,
-                        'color'=>$v['color_name'] ?? null,
-                        'sku'=>$v['sku'] ?? null
+                        'size' => $v['size_name'] ?? null,
+                        'color' => $v['color_name'] ?? null,
+                        'sku' => $v['sku'] ?? null
                     ];
-                    $subtotal += ((float)$v['price']) * $qty;
+                    $subtotal += ((float) $v['price']) * $qty;
                     continue;
                 }
             }
             // fallback: use price stored in session
             $cartItems[$key]['display_price'] = $item['price'] ?? 0;
-            $subtotal += ((float)($item['price'] ?? 0)) * $qty;
+            $subtotal += ((float) ($item['price'] ?? 0)) * $qty;
         }
 
         // Use the same shipping rule across controller: free when subtotal > 1,000,000
         $shipFreeThreshold = 1000000;
         $shipping = ($subtotal > $shipFreeThreshold) ? 0 : 30000;
-        if ($subtotal == 0) $shipping = 0;
+        if ($subtotal == 0)
+            $shipping = 0;
 
         $discount = 0;
         if (isset($_SESSION['applied_coupon'])) {
@@ -54,19 +59,22 @@ class CheckoutCtrl
                 $discount = $coupon['value'];
             }
             // Không giảm quá tổng tiền
-            if ($discount > $subtotal) $discount = $subtotal;
+            if ($discount > $subtotal)
+                $discount = $subtotal;
         }
 
         // Tinh tong tien
         $totalPrice = ($subtotal + $shipping) - $discount;
-        if ($totalPrice < 0) $totalPrice = 0;
+        if ($totalPrice < 0)
+            $totalPrice = 0;
 
         include_once 'Views/checkout.php';
     }
 
     public function process()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST')
+            return;
 
         // Lấy dữ liệu từ form
         $fullname = trim($_POST['fullname'] ?? '');
@@ -80,7 +88,7 @@ class CheckoutCtrl
 
         // Lấy ID User (Tạm thời = 1 nếu chưa login)
         // $userID = isset($_SESSION['user']) ? $_SESSION['user']['id'] : 1;
-        if(!isset($_SESSION['user'])) {
+        if (!isset($_SESSION['user'])) {
             //Chưa đăng nhập thì đá sang trang login
             header('location: ' . BASE_URL . 'index.php/User/login');
             exit;
@@ -100,12 +108,12 @@ class CheckoutCtrl
 
         $missingVariants = [];
         $insufficientStock = [];
-        
+
         foreach ($cart as $key => $item) {
-            $qty = isset($item['quantity']) ? (int)$item['quantity'] : 0;
+            $qty = isset($item['quantity']) ? (int) $item['quantity'] : 0;
 
             if (!empty($item['variant_id'])) {
-                $v = $productModel->getVariantById((int)$item['variant_id']);
+                $v = $productModel->getVariantById((int) $item['variant_id']);
                 if (!$v) {
                     $missingVariants[] = $item['name'] ?? ('#' . ($item['product_id'] ?? $item['id']));
                     continue;
@@ -116,17 +124,18 @@ class CheckoutCtrl
                     $insufficientStock[] = ($v['product_name'] ?? $item['name']) . ' (' . ($v['size_name'] ?? '') . ' / ' . ($v['color_name'] ?? '') . ')';
                 }
 
-                $subtotal += ((float)$v['price']) * $qty;
+                $subtotal += ((float) $v['price']) * $qty;
             } else {
                 // backward compatible: use price in session
-                $subtotal += ((float)($item['price'] ?? 0)) * $qty;
+                $subtotal += ((float) ($item['price'] ?? 0)) * $qty;
             }
         }
 
         // same shipping threshold as in index
         $shipFreeThreshold = 1000000;
         $shipping = ($subtotal > $shipFreeThreshold) ? 0 : 30000;
-        if ($subtotal == 0) $shipping = 0;
+        if ($subtotal == 0)
+            $shipping = 0;
 
         // === TÍNH LẠI GIẢM GIÁ (MỚI THÊM) ===
         $discount = 0;
@@ -134,17 +143,19 @@ class CheckoutCtrl
         if (isset($_SESSION['applied_coupon'])) {
             $coupon = $_SESSION['applied_coupon'];
             $couponId = $coupon['id']; // Lấy ID để lưu vào đơn
-            
+
             if ($coupon['type'] == 'percent') {
                 $discount = ($subtotal * $coupon['value']) / 100;
             } else {
                 $discount = $coupon['value'];
             }
-            if ($discount > $subtotal) $discount = $subtotal;
+            if ($discount > $subtotal)
+                $discount = $subtotal;
         }
 
         $totalPrice = ($subtotal + $shipping) - $discount;
-        if ($totalPrice < 0) $totalPrice = 0;
+        if ($totalPrice < 0)
+            $totalPrice = 0;
 
         // Server-side validation
         if (empty($fullname) || empty($phone) || empty($address)) {
@@ -182,7 +193,7 @@ class CheckoutCtrl
             // prefer explicit variant stored in cart
             if (!empty($item['variant_id'])) {
                 $variantId = $item['variant_id'];
-                $variant = $productModel->getVariantById((int)$variantId);
+                $variant = $productModel->getVariantById((int) $variantId);
                 $priceToSave = $variant ? $variant['price'] : $item['price'];
             } else {
                 // fallback: try to take price from session

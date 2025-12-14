@@ -73,7 +73,7 @@ if (!empty($product_category)) {
 
     <!-- Cột Trái: Thư viện ảnh -->
     <div class="product-gallery-box">
-      <button class="gallery-nav-btn left" aria-label="Previous image">&lt;</button>
+
       <div class="main-image-area">
         <!-- Ảnh chính sẽ được JS cập nhật -->
         <img src="" alt="<?= $p_name ?>" id="mainProductImage"
@@ -82,7 +82,7 @@ if (!empty($product_category)) {
       <div class="thumb-gallery-area" id="productThumbnails">
         <!-- JS sẽ tạo thumbnail ở đây -->
       </div>
-      <button class="gallery-nav-btn right" aria-label="Next image">&gt;</button>
+
     </div>
 
     <!-- Cột Phải: Thông tin & Chọn biến thể -->
@@ -243,9 +243,9 @@ if (!empty($product_category)) {
   <div class="product-grid">
     <!-- Four Trending Product Boxes -->
     <?= $html_products ?>
-    <div class="product-box">
 
-    </div>
+
+  </div>
 </section>
 
 <!-- SCRIPT XỬ LÝ LOGIC (Màu, Size, Giá) -->

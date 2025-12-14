@@ -88,7 +88,7 @@ if (!empty($productsCollections)) {
 
   <section class="section scroll-reveal" id="featured-products">
     <div class="section-header">
-      <div class="section-title">Đồng hồ cơ</div>
+      <div class="section-title"><?= $categories[0]['name'] ?></div>
       <button class="section-action"
         onclick="window.location.href='<?= BASE_URL ?>index.php/products/?category=1'">>></button>
     </div>
@@ -99,7 +99,7 @@ if (!empty($productsCollections)) {
 
   <section class="section scroll-reveal" id="trending-products">
     <div class="section-header">
-      <div class="section-title">Đồng hồ điện tử</div>
+      <div class="section-title"><?= $categories[1]['name'] ?></div>
       <button class="section-action"
         onclick="window.location.href='<?= BASE_URL ?>index.php/products/?category=2'">>></button>
     </div>
@@ -110,7 +110,7 @@ if (!empty($productsCollections)) {
 
   <div class="mid-banner scroll-reveal dark-filter">
     <img src="<?= BASE_URL ?>Views/assets/image/banner4.jpg" alt="Rolex Banner">
-    <div class="mid-banner-title">Đồng Hồ Rolex</div>
+    <div class="mid-banner-title"><?= $categories[2]['name'] ?></div>
     <button class="mid-banner-glass-button"
       onclick="window.location.href='<?= BASE_URL ?>index.php/products/index?brand=2'">Xem
       ngay</button>
