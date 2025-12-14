@@ -91,15 +91,15 @@ HTML;
             <div class="filter-group">
                 <div class="filter-group-title">Danh Mục</div>
                 <!-- Thêm name="category[]" và value -->
-                <label class="filter-checkbox-container">Đồng bán chạy
+                <label class="filter-checkbox-container">Đồng hồ cơ
                     <input type="checkbox" name="category[]" class="category-checkbox" value="1" <?php echo in_array('1', $selected_categories) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
-                <label class="filter-checkbox-container">Đồng hồ cơ
+                <label class="filter-checkbox-container">Đồng hồ điện tử
                     <input type="checkbox" name="category[]" class="category-checkbox" value="2" <?php echo in_array('2', $selected_categories) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>
-                <label class="filter-checkbox-container">Đồng hồ mới
+                <label class="filter-checkbox-container">Đồng hồ thông minh
                     <input type="checkbox" name="category[]" class="category-checkbox" value="3" <?php echo in_array('3', $selected_categories) ? 'checked' : ''; ?>>
                     <span class="checkmark"></span>
                 </label>

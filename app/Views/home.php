@@ -88,7 +88,7 @@ if (!empty($productsCollections)) {
 
   <section class="section scroll-reveal" id="featured-products">
     <div class="section-header">
-      <div class="section-title">Đồng hồ bán chạy</div>
+      <div class="section-title">Đồng hồ cơ</div>
       <button class="section-action"
         onclick="window.location.href='<?= BASE_URL ?>index.php/products/?category=1'">>></button>
     </div>
@@ -99,7 +99,7 @@ if (!empty($productsCollections)) {
 
   <section class="section scroll-reveal" id="trending-products">
     <div class="section-header">
-      <div class="section-title">Đồng hồ cơ</div>
+      <div class="section-title">Đồng hồ điện tử</div>
       <button class="section-action"
         onclick="window.location.href='<?= BASE_URL ?>index.php/products/?category=2'">>></button>
     </div>
@@ -117,7 +117,7 @@ if (!empty($productsCollections)) {
 
   <section class="section scroll-reveal" id="best-collection">
     <div class="section-header">
-      <div class="section-title">Đồng hồ mới</div>
+      <div class="section-title">Đồng hồ thông mình</div>
       <button class="section-action"
         onclick="window.location.href='<?= BASE_URL ?>index.php/products/?category=3'">>></button>
     </div>
