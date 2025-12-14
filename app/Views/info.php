@@ -140,43 +140,46 @@
                                 <div class="order-header">
                                     <span class="order-id">#DH<?php echo str_pad($order['id'], 5, '0', STR_PAD_LEFT); ?></span>
                                     <span class="order-status <?php echo $status_class; ?>"><?php echo $status_label; ?></span>
-                                    <div class="order-total">Ngày đặt: <span><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></span></div>
+                                    <div class="order-total">Ngày đặt:
+                                        <span><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></span></div>
                                 </div>
-                                
+
                                 <?php if (!empty($order_items)): ?>
-                                    <?php foreach ($order_items as $item): 
+                                    <?php foreach ($order_items as $item):
                                         $variants = [];
                                         if ($item['color_name'])
                                             $variants[] = $item['color_name'];
                                         if ($item['size_name'])
                                             $variants[] = $item['size_name'];
-                                    ?>
-                                    <div class="order-body">
-                                        <img src="<?php echo htmlspecialchars(BASE_URL . 'uploads/products/' . ($item['image_url'] ?? 'default.png')); ?>"
-                                            alt="<?php echo htmlspecialchars($item['product_name']); ?>" class="order-img">
-                                        <div class="order-details">
-                                            <div class="order-product-name">
-                                                <?php echo htmlspecialchars($item['product_name']); ?>
+                                        ?>
+                                        <div class="order-body">
+                                            <img src="<?php echo htmlspecialchars(BASE_URL . 'uploads/products/' . ($item['image_url'] ?? 'default.png')); ?>"
+                                                alt="<?php echo htmlspecialchars($item['product_name']); ?>" class="order-img">
+                                            <div class="order-details">
+                                                <div class="order-product-name">
+                                                    <?php echo htmlspecialchars($item['product_name']); ?>
+                                                </div>
+                                                <div class="order-meta">
+                                                    Phân loại: <?php echo htmlspecialchars(implode(', ', $variants) ?: 'N/A'); ?>
+                                                </div>
+                                                <div class="order-qty">x<?php echo $item['quantity']; ?></div>
                                             </div>
-                                            <div class="order-meta">
-                                                Phân loại: <?php echo htmlspecialchars(implode(', ', $variants) ?: 'N/A'); ?>
+                                            <div class="order-price" style="font-weight: 700;">
+                                                <?php echo number_format($item['price'] * $item['quantity'], 0, ',', '.'); ?> đ
                                             </div>
-                                            <div class="order-qty">x<?php echo $item['quantity']; ?></div>
+                                            <div class="order-actions">
+                                                <a href="<?php echo BASE_URL; ?>index.php/Products/detail/<?php echo htmlspecialchars($item['slug'] ?? '#'); ?>"
+                                                    class="outline-btn">Chi Tiết</a>
+                                            </div>
                                         </div>
-                                        <div class="order-price" style="font-weight: 700;">
-                                            <?php echo number_format($item['price'] * $item['quantity'], 0, ',', '.'); ?> đ
-                                        </div>
-                                        <div class="order-actions">
-                                            <a href="<?php echo BASE_URL; ?>index.php/Products/detail/<?php echo htmlspecialchars($item['slug'] ?? '#'); ?>"
-                                                class="outline-btn">Chi Tiết</a>
-                                        </div>
-                                    </div>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
 
                                 <div class="order-footer">
                                     <div style="text-align: right; font-weight: 700; font-size: 1.1em;">
-                                        Tổng: <span style="color: #ff9e00;"><?php echo number_format($order['total_price'], 0, ',', '.'); ?> đ</span>
+                                        Tổng: <span
+                                            style="color: #ff9e00;"><?php echo number_format($order['total_price'], 0, ',', '.'); ?>
+                                            đ</span>
                                     </div>
                                 </div>
                             </div>
