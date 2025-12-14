@@ -19,13 +19,12 @@ class Products
    * Lấy danh sách sản phẩm
    * @return array
    */
-  function getProducts($limit = 16, $categories_id = [], $brand = [], $search = '', $status = '', $stock = '')
+  function getProducts($limit = 16, $categories_id = [], $brand = [], $search = '', $status = 'published', $stock = '')
   {
     $sql = 'SELECT products.*, MIN(product_images.image_url) image_url, MIN(variants.price) price, SUM(variants.quantity) as total_stock
         FROM products 
         LEFT JOIN product_images ON products.id = product_images.product_id
         LEFT JOIN variants ON products.id = variants.product_id';
-
     $params = [];
     $where = [];
 

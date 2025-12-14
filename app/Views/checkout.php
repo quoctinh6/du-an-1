@@ -122,7 +122,7 @@
 
         <!-- TỔNG CỘNG -->
         <div class="summary-final-total" style="margin-top: 15px; border-top: 1px solid #444; padding-top: 15px;">
-            <span class="label">Tổng thanh toán</span>
+            <span class="label">Tổng <br> thanh toán</span>
             <span class="value" style="color: #d4af37;"><?= number_format($totalPrice, 0, ',', '.') ?>đ</span>
         </div>
 
@@ -132,8 +132,7 @@
             <!-- Input nằm ngoài form chính nhưng dùng thuộc tính form="checkout-form" để liên kết -->
             <select id="payment-method" name="payment_method" class="option-select" form="checkout-form">
                 <option value="cod">Thanh toán khi nhận hàng (COD)</option>
-                <option value="vnpay">Thanh toán Online (VNPAY)</option>
-                <option value="banking">Chuyển khoản ngân hàng</option>
+                <option value="banking">Thanh toán Online (Fake Payment)</option>
             </select>
         </div>
 

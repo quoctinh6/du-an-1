@@ -90,19 +90,21 @@ HTML;
             <!-- 1. Lọc theo Danh mục -->
             <div class="filter-group">
                 <div class="filter-group-title">Danh Mục</div>
-                <!-- Thêm name="category[]" và value -->
-                <label class="filter-checkbox-container">Đồng bán chạy
-                    <input type="checkbox" name="category[]" class="category-checkbox" value="1" <?php echo in_array('1', $selected_categories) ? 'checked' : ''; ?>>
-                    <span class="checkmark"></span>
-                </label>
-                <label class="filter-checkbox-container">Đồng hồ cơ
-                    <input type="checkbox" name="category[]" class="category-checkbox" value="2" <?php echo in_array('2', $selected_categories) ? 'checked' : ''; ?>>
-                    <span class="checkmark"></span>
-                </label>
-                <label class="filter-checkbox-container">Đồng hồ mới
-                    <input type="checkbox" name="category[]" class="category-checkbox" value="3" <?php echo in_array('3', $selected_categories) ? 'checked' : ''; ?>>
-                    <span class="checkmark"></span>
-                </label>
+                <?php
+                if (!empty($category_all)) {
+                    foreach ($category_all as $cat) {
+                        $cat_id = htmlspecialchars($cat['id']);
+                        $cat_name = htmlspecialchars($cat['name']);
+                        $is_checked = in_array($cat_id, $selected_categories) ? 'checked' : '';
+                        echo <<<HTML
+                            <label class="filter-checkbox-container">{$cat_name}
+                                <input type="checkbox" name="category[]" class="category-checkbox" value="{$cat_id}" {$is_checked}>
+                                <span class="checkmark"></span>
+                            </label>    
+                        HTML;
+                    }
+                }
+                ?>
             </div>
 
             <!-- 2. Lọc theo Giá tiền -->

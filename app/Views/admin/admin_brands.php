@@ -125,6 +125,14 @@
             <label class="form-label">Slug</label>
             <input type="text" class="form-control" name="slug" placeholder="omega (để trống tự tạo)">
           </div>
+          <!-- THÊM MỤC TRẠNG THÁI (Ẩn/Hiện) -->
+          <div class="mb-3">
+            <label class="form-label">Trạng thái</label>
+            <select class="form-select" name="status">
+              <option value="published" selected>Hiển thị</option>
+              <option value="hidden">Ẩn</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -153,6 +161,14 @@
           <div class="mb-3">
             <label class="form-label">Slug</label>
             <input type="text" class="form-control" name="slug" value="rolex">
+          </div>
+          <!-- THÊM MỤC TRẠNG THÁI (Ẩn/Hiện) -->
+          <div class="mb-3">
+            <label class="form-label">Trạng thái</label>
+            <select class="form-select" name="status">
+              <option value="published" selected>Hiển thị</option>
+              <option value="hidden">Ẩn</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer">

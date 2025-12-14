@@ -88,7 +88,7 @@ if (!empty($productsCollections)) {
 
   <section class="section scroll-reveal" id="featured-products">
     <div class="section-header">
-      <div class="section-title">Đồng hồ bán chạy</div>
+      <div class="section-title">Đồng hồ cơ</div>
       <button class="section-action"
         onclick="window.location.href='<?= BASE_URL ?>index.php/products/?category=1'">>></button>
     </div>
@@ -99,7 +99,7 @@ if (!empty($productsCollections)) {
 
   <section class="section scroll-reveal" id="trending-products">
     <div class="section-header">
-      <div class="section-title">Đồng hồ cơ</div>
+      <div class="section-title">Đồng hồ điện tử</div>
       <button class="section-action"
         onclick="window.location.href='<?= BASE_URL ?>index.php/products/?category=2'">>></button>
     </div>
@@ -111,13 +111,14 @@ if (!empty($productsCollections)) {
   <div class="mid-banner scroll-reveal dark-filter">
     <img src="<?= BASE_URL ?>Views/assets/image/banner4.jpg" alt="Rolex Banner">
     <div class="mid-banner-title">Đồng Hồ Rolex</div>
-    <button class="mid-banner-glass-button" onclick="window.location.href='<?= BASE_URL ?>index.php/products/index'">Xem
+    <button class="mid-banner-glass-button"
+      onclick="window.location.href='<?= BASE_URL ?>index.php/products/index?brand=2'">Xem
       ngay</button>
   </div>
 
   <section class="section scroll-reveal" id="best-collection">
     <div class="section-header">
-      <div class="section-title">Đồng hồ mới</div>
+      <div class="section-title">Đồng hồ thông mình</div>
       <button class="section-action"
         onclick="window.location.href='<?= BASE_URL ?>index.php/products/?category=3'">>></button>
     </div>

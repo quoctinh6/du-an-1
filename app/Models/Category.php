@@ -11,8 +11,7 @@ class Category
 
     function getAll()
     {
-        // CHỈ LẤY CÁC MỤC HIỂN THỊ (published)
-        $sql = "SELECT * FROM categories WHERE status = 'published' ORDER BY id DESC";
+        $sql = "SELECT * FROM categories WHERE status = 'published' ORDER BY id DESC ";
         return $this->db->query($sql);
     }
     
