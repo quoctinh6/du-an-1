@@ -478,57 +478,52 @@ class AdminCtrl
     {
         include_once 'Views/admin/admin_brands.php';
     }
-    // AdminCtrl.php
-
     public function comments()
     {
-        // Áp dụng Flash Message
-        $error = $_SESSION['error_admin'] ?? null;
-        $success = $_SESSION['success_admin'] ?? null;
-        unset($_SESSION['error_admin']);
-        unset($_SESSION['success_admin']);
+        // 1. LẤY THAM SỐ LỌC, TÌM KIẾM, PHÂN TRANG
+        $currentSearch = $_GET['search'] ?? '';
+        $currentRating = $_GET['rating'] ?? 'all'; // 'all', '1', '2', ..., '5'
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 10; // Số bình luận trên mỗi trang
 
-        // 1. Lấy Tham số Lọc, Tìm kiếm và Phân trang
-        $rating = $_GET['rating'] ?? 'all';     // Số sao: 1-5 hoặc 'all'
-        $search = $_GET['search'] ?? '';        // Nội dung, tên user, tên SP
-        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-        $limit = 10;
+        // 2. GỌI MODEL LẤY DỮ LIỆU
+        // Lấy tổng số để tính totalPages
+        $totalComments = $this->CommentModel->countCommentsAdmin($currentSearch, $currentRating);
 
-        // 2. Gọi Model
-        $comments = $this->CommentModel->getCommentsAdmin($rating, $search, $page, $limit);
-        $totalComments = $this->CommentModel->countCommentsAdmin($rating, $search);
+        // 3. TÍNH TOÁN PHÂN TRANG
         $totalPages = ceil($totalComments / $limit);
 
-        // 3. Truyền dữ liệu sang View
-        $data = [
-            'comments' => $comments,
-            'totalPages' => $totalPages,
-            'currentPage' => $page,
-            'currentRating' => $rating,
-            'currentSearch' => $search,
-            'error' => $error,
-            'success' => $success
-        ];
+        // Đảm bảo trang hiện tại hợp lệ
+        if ($currentPage < 1) $currentPage = 1;
+        if ($currentPage > $totalPages && $totalPages > 0) $currentPage = $totalPages;
+        if ($totalPages == 0) $currentPage = 1; // Nếu không có dữ liệu, page = 1
 
-        extract($data);
+        // Lấy dữ liệu theo phân trang đã chuẩn hóa
+        $comments = $this->CommentModel->getCommentsAdmin($currentSearch, $currentRating, $currentPage, $limit);
+
+        // 4. TRUYỀN DỮ LIỆU SANG VIEW
+        // Các biến này sẽ được View admin_comments.php sử dụng
         include_once 'Views/admin/admin_comments.php';
     }
 
-    /**
-     * Xử lý xóa bình luận
-     */
+    // 🛑 THÊM HÀM deleteComment()
     public function deleteComment()
     {
-        $id = $_GET['id'] ?? 0;
+        if (isset($_GET['id'])) {
+            $comment_id = (int)$_GET['id'];
+            // Ghi nhớ: Hãy ví von qua PHP. Trong PHP, việc xóa comment cũng tương tự như trong Laravel/CodeIgniter, bạn chỉ cần gọi phương thức DELETE của Model
+            $result = $this->CommentModel->deleteComment($comment_id);
 
-        if ($id) {
-            $result = $this->CommentModel->deleteComment($id);
             if ($result) {
-                $_SESSION['success_admin'] = 'Xóa bình luận thành công.';
+                $_SESSION['success'] = "Xóa bình luận thành công!";
             } else {
-                $_SESSION['error_admin'] = 'Không thể xóa bình luận.';
+                $_SESSION['error'] = "Không thể xóa bình luận hoặc bình luận không tồn tại.";
             }
+        } else {
+            $_SESSION['error'] = "Thiếu ID bình luận để xóa.";
         }
+
+        // Quay lại trang quản lý bình luận
         header("Location: " . BASE_URL . "index.php/admin/comments");
         exit();
     }

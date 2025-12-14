@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 14, 2025 at 07:00 AM
+-- Generation Time: Dec 14, 2025 at 07:25 AM
 -- Server version: 5.7.39
 -- PHP Version: 8.1.10
 
@@ -196,13 +196,26 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`id`, `user_id`, `product_id`, `content`, `rating`, `id_product`, `commentable_type`, `created_at`, `updated_at`) VALUES
-(6, 1, NULL, 'sản phẩm tốt', 4, 1, 'product', '2025-12-13 18:49:18', '2025-12-13 19:33:35'),
 (11, 1, NULL, 'Sản phẩm rất đẹp, giao hàng nhanh, sẽ ủng hộ shop tiếp!', 5, 1, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:38'),
 (12, 1, NULL, 'Chất lượng tạm ổn trong tầm giá, nhưng đóng gói hơi sơ sài.', 3, 6, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:41'),
 (13, 2, NULL, 'Hàng bị lỗi nhẹ ở viền, shop hỗ trợ đổi trả nhiệt tình.', 4, 6, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:44'),
 (14, 2, NULL, 'Không giống như hình ảnh quảng cáo, thất vọng.', 1, 6, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:46'),
 (15, 3, NULL, 'Dùng được 1 tuần thấy khá ổn, chưa thấy lỗi gì.', 5, 6, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:48'),
-(16, 1, NULL, 'sp tốt', 4, 6, 'product', '2025-12-13 19:07:10', '2025-12-13 19:33:49');
+(17, 1, NULL, 'Đồng hồ Casio này chất lượng tuyệt vời, xứng đáng 5 sao!', 5, 1, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(18, 3, NULL, 'Seiko 5 Sports rất đẹp, đúng như mong đợi. Rất hài lòng.', 5, 3, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(19, 2, NULL, 'Giao hàng nhanh, sản phẩm y hình, đã giới thiệu cho bạn bè.', 5, 6, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(20, 1, NULL, 'Casio Edifice bền bỉ, tính năng Chronograph hoạt động hoàn hảo.', 5, 7, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(21, 3, NULL, 'Mẫu GA-2100 quá ngầu, tôi rất thích thiết kế của nó.', 5, 1, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(22, 2, NULL, 'Chất lượng ổn, chỉ hơi nặng tay một chút xíu, nhưng vẫn đáng mua.', 4, 3, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(23, 1, NULL, 'Mặt kính dễ trầy hơn tôi nghĩ, nhưng tổng thể sản phẩm vẫn rất tốt.', 4, 6, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(24, 3, NULL, 'Đồng hồ lịch lãm, phù hợp đi làm. Đáng giá tiền.', 4, 7, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(25, 2, NULL, 'Dịch vụ chăm sóc khách hàng chu đáo. Sản phẩm ổn áp.', 4, 1, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(26, 1, NULL, 'Dùng được một thời gian thì thấy bình thường, không quá nổi bật.', 3, 3, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(27, 3, NULL, 'Màu sắc không được như ảnh, có lẽ do ánh sáng. Cho 3 sao.', 3, 6, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(28, 2, NULL, 'Hàng giao bị trễ 2 ngày, làm mất hứng mua sắm. Chất lượng tạm được.', 2, 7, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(29, 1, NULL, 'Sau 3 ngày sử dụng đã xuất hiện lỗi nhỏ ở kim giây.', 2, 6, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(30, 3, NULL, 'Sản phẩm giao đến bị hư hỏng, yêu cầu đổi trả gấp!', 1, 3, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
+(31, 2, NULL, 'Giá quá cao so với chất lượng thực tế. Thất vọng hoàn toàn.', 1, 1, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43');
 
 -- --------------------------------------------------------
 
@@ -246,7 +259,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `total_price`, `shipping_address`, `phone_number`, `status`, `payment_method_id`, `shipping_method_id`, `coupon_id`, `created_at`, `updated_at`) VALUES
-(1, 1, '11550000.00', '123 Đường ABC, Quận 1, TP. HCM', '0909123456', 'processing', 1, 2, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18'),
+(1, 1, '11550000.00', '123 Đường ABC, Quận 1, TP. HCM', '0909123456', 'completed', 1, 2, NULL, '2025-11-19 08:58:18', '2025-12-14 07:16:27'),
 (2, 1, '351530000.00', '456 Đường XYZ, Quận Hoàn Kiếm, Hà Nội', '0909123456', 'pending', 2, 1, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18'),
 (3, 1, '280000000.00', 'tan ky tan quy', '0909123456', 'pending', 1, 1, NULL, '2025-12-13 18:45:05', '2025-12-13 18:45:05'),
 (4, 1, '12000000.00', 'tan ky tan quy', '0909123456', 'pending', 1, 1, NULL, '2025-12-13 18:48:51', '2025-12-13 18:48:51'),
@@ -665,7 +678,7 @@ ALTER TABLE `colors`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `coupons`
