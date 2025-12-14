@@ -11,7 +11,7 @@ class Address
     }
 
     // Lấy tất cả địa chỉ của một user
-    
+
     function getAddressesByUserId($user_id)
     {
         $sql = "SELECT * FROM addresses WHERE user_id = ? ORDER BY is_default DESC, created_at DESC";

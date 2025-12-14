@@ -14,9 +14,9 @@ class Category
         $sql = "SELECT * FROM categories WHERE status = 'published' ORDER BY id DESC ";
         return $this->db->query($sql);
     }
-    
-    // HÀM MỚI: Đếm tổng số danh mục (Chỉ tính published và hidden)
-    function countCategoriesAdmin($search = '', $status = '')
+
+    // Lấy danh sách có tìm kiếm
+    function getCategoriesAdmin($search = '')
     {
         $sql = "SELECT COUNT(*) as total
                 FROM categories c 
@@ -55,15 +55,7 @@ class Category
             $params[] = "%$search%";
         }
 
-        if (!empty($status)) {
-            $sql .= " AND c.status = ?";
-            $params[] = $status;
-        }
-
-        $sql .= " ORDER BY c.id DESC LIMIT ? OFFSET ?";
-        
-        $params[] = $limit;
-        $params[] = $offset;
+        $sql .= " ORDER BY c.id DESC";
 
         return $this->db->query($sql, ...$params);
     }
@@ -74,20 +66,17 @@ class Category
         return $this->db->queryOne($sql, $id);
     }
 
-    function createCategory($name, $slug, $description, $status, $icon)
+    // Thêm danh mục (Thêm status)
+    function createCategory($name, $slug, $status = 'published')
     {
-        $sql = "INSERT INTO categories (name, slug, description, status, icon) VALUES (?, ?, ?, ?, ?)";
-        return $this->db->insert($sql, $name, $slug, $description, $status, $icon);
+        $sql = "INSERT INTO categories (name, slug, status) VALUES (?, ?, ?)";
+        return $this->db->insert($sql, $name, $slug, $status);
     }
 
-    function updateCategory($id, $name, $slug, $description, $status, $icon = null)
+    // Cập nhật danh mục (Thêm status)
+    function updateCategory($id, $name, $slug, $status)
     {
-        if ($icon) {
-            $sql = "UPDATE categories SET name=?, slug=?, description=?, status=?, icon=? WHERE id=?";
-            return $this->db->update($sql, $name, $slug, $description, $status, $icon, $id);
-        } else {
-            $sql = "UPDATE categories SET name=?, slug=?, description=?, status=? WHERE id=?";
-            return $this->db->update($sql, $name, $slug, $description, $status, $id);
-        }
+        $sql = "UPDATE categories SET name=?, slug=?, status=? WHERE id=?";
+        return $this->db->update($sql, $name, $slug, $status, $id);
     }
 }

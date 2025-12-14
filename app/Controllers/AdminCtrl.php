@@ -103,41 +103,13 @@ class AdminCtrl
         include_once 'Views/admin/admin.php';
     }
 
+
+
     // --- QUẢN LÝ DANH MỤC ---
     public function categories()
     {
-        // Áp dụng Flash Message cho trang Admin
-        $error = $_SESSION['error_admin'] ?? null;
-        $success = $_SESSION['success_admin'] ?? null;
-        unset($_SESSION['error_admin']);
-        unset($_SESSION['success_admin']);
-
-        // 1. NHẬN THAM SỐ
         $search = $_GET['search'] ?? '';
-        $status = $_GET['status'] ?? '';
-        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
-        $limit = 10;
-
-        // 2. GỌI MODEL
-        $categories = $this->CategoryModel->getCategoriesAdmin($search, $status, $page, $limit);
-        $totalCategories = $this->CategoryModel->countCategoriesAdmin($search, $status);
-
-        // 3. TÍNH TOÁN PHÂN TRANG
-        $totalPages = ceil($totalCategories / $limit);
-        if ($totalPages == 0) $totalPages = 1;
-
-        // 4. TRUYỀN DỮ LIỆU SANG VIEW
-        $data = [
-            'categories' => $categories,
-            'totalPages' => $totalPages,
-            'currentPage' => $page,
-            'currentSearch' => $search,
-            'currentStatus' => $status,
-            'error' => $error,    // Truyền thông báo lỗi/thành công
-            'success' => $success,
-        ];
-        extract($data);
-
+        $categories = $this->CategoryModel->getCategoriesAdmin($search);
         include_once 'Views/admin/admin_category.php';
     }
 
@@ -146,27 +118,9 @@ class AdminCtrl
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_add_category'])) {
             $name = $_POST['name'];
             $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
-            $desc = $_POST['description'];
-            $status = $_POST['status'];
+            $status = $_POST['status']; // Lấy status từ form
 
-            $icon = '';
-            // Xử lý upload Icon
-            if (isset($_FILES['icon']) && $_FILES['icon']['error'] == 0) {
-                $target_dir = "uploads/categories/";
-                if (!file_exists($target_dir))
-                    mkdir($target_dir, 0777, true);
-                $ext = pathinfo($_FILES["icon"]["name"], PATHINFO_EXTENSION);
-                $file_name = "cat_" . time() . "." . $ext;
-                move_uploaded_file($_FILES["icon"]["tmp_name"], $target_dir . $file_name);
-                $icon = $target_dir . $file_name;
-            }
-
-            $result = $this->CategoryModel->createCategory($name, $slug, $desc, $status, $icon);
-            if ($result) {
-                $_SESSION['success_admin'] = "Thêm danh mục **$name** thành công!";
-            } else {
-                $_SESSION['error_admin'] = "Lỗi khi thêm danh mục.";
-            }
+            $this->CategoryModel->createCategory($name, $slug, $status);
             header("Location: " . BASE_URL . "index.php/admin/categories");
             exit;
         }
@@ -178,31 +132,16 @@ class AdminCtrl
             $id = $_POST['id'];
             $name = $_POST['name'];
             $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
-            $desc = $_POST['description'];
-            $status = $_POST['status'];
+            $status = $_POST['status']; // Lấy status từ form
 
-            $icon = null;
-            if (isset($_FILES['icon']) && $_FILES['icon']['error'] == 0) {
-                $target_dir = "uploads/categories/";
-                if (!file_exists($target_dir))
-                    mkdir($target_dir, 0777, true);
-                $ext = pathinfo($_FILES["icon"]["name"], PATHINFO_EXTENSION);
-                $file_name = "cat_" . time() . "." . $ext;
-                move_uploaded_file($_FILES["icon"]["tmp_name"], $target_dir . $file_name);
-                $icon = $target_dir . $file_name;
-            }
-
-            $result = $this->CategoryModel->updateCategory($id, $name, $slug, $desc, $status, $icon);
-            if ($result) {
-                $_SESSION['success_admin'] = "Cập nhật danh mục **$name** thành công!";
-            } else {
-                $_SESSION['error_admin'] = "Lỗi khi cập nhật danh mục.";
-            }
+            $this->CategoryModel->updateCategory($id, $name, $slug, $status);
             header("Location: " . BASE_URL . "index.php/admin/categories");
             exit;
         }
     }
 
+    
+    // (Giữ nguyên các hàm products, addProduct, updateProduct, variants, updateVariant, orders, account, user...)
     public function products()
     {
         $cate_id = isset($_GET['cate_id']) && $_GET['cate_id'] != '' ? [$_GET['cate_id']] : [];
