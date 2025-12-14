@@ -38,7 +38,7 @@ class Order
     // Lấy các item trong đơn hàng
     function getOrderItems($order_id)
     {
-        $sql = "SELECT oi.*, p.name as product_name, p.slug, pi.image_url, 
+        $sql = "SELECT oi.*, p.name as product_name, p.slug, MIN(pi.image_url) as image_url, 
                         sz.name as size_name, c.name as color_name
                 FROM order_items oi
                 INNER JOIN variants v ON oi.variant_id = v.id
@@ -103,7 +103,7 @@ class Order
         $sql = "SELECT o.*, u.name as user_name, u.email 
                 FROM orders o
                 LEFT JOIN users u ON o.user_id = u.id
-                WHERE 1=1"; 
+                WHERE 1=1";
 
         $params = [];
 
@@ -157,4 +157,14 @@ class Order
         $result = $this->db->queryOne($sql, ...$params);
         return $result['total'] ?? 0;
     }
+    public function getOrderById($orderId)
+    {
+        $orderId = (int)$orderId;
+
+        $sql = "SELECT * FROM orders WHERE id = $orderId";
+        $rows = $this->db->query($sql);
+
+        return $rows[0] ?? null; // QUAN TRỌNG
+    }
+
 }
