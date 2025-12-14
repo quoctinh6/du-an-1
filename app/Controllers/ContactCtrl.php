@@ -60,7 +60,7 @@
                 if (is_array($admins) && !empty($admins)) {
                     $headers = "MIME-Version: 1.0" . "\r\n";
                     $headers .= "Content-type:text/plain;charset=UTF-8" . "\r\n";
-                    $headers .= "From: no-reply@zerowatch.com" . "\r\n";
+                    $headers .= "From: reply@zerowatch.com" . "\r\n";
                     $headers .= "Reply-To: " . $email . "\r\n";
 
                     foreach ($admins as $admin) {

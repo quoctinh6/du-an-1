@@ -2,7 +2,8 @@
 
     <nav class="navbar navbar-expand-lg admin-top-nav shadow-sm sticky-top">
         <div class="container-fluid">
-            <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#admin-sidebar">
+            <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#admin-sidebar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -22,7 +23,8 @@
     <div class="admin-content">
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="?act=products" style="color: var(--color-accent); text-decoration: none;">Sản phẩm</a></li>
+                <li class="breadcrumb-item"><a href="?act=products"
+                        style="color: var(--color-accent); text-decoration: none;">Sản phẩm</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Quản lý biến thể</li>
             </ol>
         </nav>
@@ -34,7 +36,7 @@
                 </h1>
                 <p class="text-muted mb-0">
                     Sản phẩm: <strong><?= htmlspecialchars($product['name'] ?? 'Không rõ tên') ?></strong>
-                    <?php if(!empty($product['id'])): ?>
+                    <?php if (!empty($product['id'])): ?>
                         (ID: <?= $product['id'] ?>)
                     <?php endif; ?>
                 </p>
@@ -66,15 +68,17 @@
                                             <?php
                                             // Xử lý ảnh: Nếu có ảnh riêng thì dùng, không thì dùng ảnh placeholder
                                             // Lưu ý: BASE_URL phải được định nghĩa trong file config/index.php
-                                            $imgUrl = !empty($item['image']) ? BASE_URL . $item['image'] : 'https://placehold.co/100x100?text=No+Img';
+                                            $imgUrl = !empty($item['image']) ? BASE_URL . 'uploads/variants/' . $item['image'] : 'https://placehold.co/100x100?text=No+Img';
                                             ?>
-                                            <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($item['sku']) ?>" 
-                                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #dee2e6;">
+                                            <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($item['sku']) ?>"
+                                                style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #dee2e6;">
                                         </td>
                                         <td><strong><?= htmlspecialchars($item['sku']) ?></strong></td>
                                         <td>
-                                            <span class="variant-attribute">Màu: <?= htmlspecialchars($item['color_name'] ?? $item['color_id']) ?></span>
-                                            <span class="variant-attribute">Size: <?= htmlspecialchars($item['size_name'] ?? $item['size_id']) ?></span>
+                                            <span class="variant-attribute">Màu:
+                                                <?= htmlspecialchars($item['color_name'] ?? $item['color_id']) ?></span>
+                                            <span class="variant-attribute">Size:
+                                                <?= htmlspecialchars($item['size_name'] ?? $item['size_id']) ?></span>
                                         </td>
                                         <td>
                                             <?= number_format($item['price'], 0, ',', '.') ?>đ
@@ -82,25 +86,24 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <span class="me-2"><?= $item['quantity'] ?></span>
-                                                
+
                                                 <?php if ($item['quantity'] == 0): ?>
                                                     <span class="badge bg-danger" style="font-size: 0.7em;">Hết hàng</span>
                                                 <?php elseif ($item['quantity'] < 10): ?>
-                                                    <span class="badge bg-warning text-dark" style="font-size: 0.7em;">Sắp hết</span>
+                                                    <span class="badge bg-warning text-dark" style="font-size: 0.7em;">Sắp
+                                                        hết</span>
                                                 <?php else: ?>
                                                     <span class="badge bg-success" style="font-size: 0.7em;">Nhiều</span>
                                                 <?php endif; ?>
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <button class="btn btn-sm btn-outline-primary me-1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editVariantModal_<?= $item['id'] ?>"
-                                                title="Sửa biến thể">
+                                            <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                                                data-bs-target="#editVariantModal_<?= $item['id'] ?>" title="Sửa biến thể">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
-                                            
-                                      
+
+
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -155,7 +158,8 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Giá bán riêng</label>
-                            <input type="number" class="form-control" name="price" required value="<?= $product['price'] ?? 0 ?>">
+                            <input type="number" class="form-control" name="price" required
+                                value="<?= $product['price'] ?? 0 ?>">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Số lượng tồn kho</label>
@@ -192,7 +196,8 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Mã SKU Biến thể</label>
-                                <input type="text" class="form-control" name="sku" value="<?= htmlspecialchars($item['sku']) ?>" required>
+                                <input type="text" class="form-control" name="sku" value="<?= htmlspecialchars($item['sku']) ?>"
+                                    required>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -219,11 +224,13 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Giá bán riêng</label>
-                                    <input type="number" class="form-control" name="price" value="<?= $item['price'] ?>" required>
+                                    <input type="number" class="form-control" name="price" value="<?= $item['price'] ?>"
+                                        required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Số lượng tồn kho</label>
-                                    <input type="number" class="form-control" name="quantity" value="<?= $item['quantity'] ?>" required>
+                                    <input type="number" class="form-control" name="quantity" value="<?= $item['quantity'] ?>"
+                                        required>
                                 </div>
                             </div>
                             <div class="mb-3">
