@@ -11,16 +11,43 @@ class Category
 
     function getAll()
     {
-        $sql = "SELECT * FROM categories ORDER BY id DESC";
+        // CHỈ LẤY CÁC MỤC HIỂN THỊ (published)
+        $sql = "SELECT * FROM categories WHERE status = 'published' ORDER BY id DESC";
         return $this->db->query($sql);
     }
-
-    // Lấy danh sách có tìm kiếm, lọc trạng thái và đếm sản phẩm
-    function getCategoriesAdmin($search = '', $status = '')
+    
+    // HÀM MỚI: Đếm tổng số danh mục (Chỉ tính published và hidden)
+    function countCategoriesAdmin($search = '', $status = '')
     {
-        $sql = "SELECT c.*, (SELECT COUNT(*) FROM products p WHERE p.category_id = c.id) as product_count 
+        $sql = "SELECT COUNT(*) as total
                 FROM categories c 
-                WHERE 1=1";
+                WHERE 1=1 AND c.status IN ('published', 'hidden')";
+        
+        $params = [];
+
+        if (!empty($search)) {
+            $sql .= " AND c.name LIKE ?";
+            $params[] = "%$search%";
+        }
+
+        if (!empty($status)) {
+            $sql .= " AND c.status = ?";
+            $params[] = $status;
+        } 
+
+        $result = $this->db->queryOne($sql, ...$params);
+        return $result['total'] ?? 0;
+    }
+
+    // Lấy danh sách (Chỉ lấy published và hidden)
+    function getCategoriesAdmin($search = '', $status = '', $page = 1, $limit = 10)
+    {
+        $offset = ($page - 1) * $limit;
+        
+        $sql = "SELECT c.*, 
+                    (SELECT COUNT(*) FROM products p WHERE p.category_id = c.id) as product_count 
+                FROM categories c 
+                WHERE 1=1 AND c.status IN ('published', 'hidden')"; // ⚠️ Chỉ lấy 2 trạng thái chính
         
         $params = [];
 
@@ -34,7 +61,10 @@ class Category
             $params[] = $status;
         }
 
-        $sql .= " ORDER BY c.id DESC";
+        $sql .= " ORDER BY c.id DESC LIMIT ? OFFSET ?";
+        
+        $params[] = $limit;
+        $params[] = $offset;
 
         return $this->db->query($sql, ...$params);
     }
@@ -45,14 +75,12 @@ class Category
         return $this->db->queryOne($sql, $id);
     }
 
-    // Thêm danh mục (Có icon, mô tả, trạng thái)
     function createCategory($name, $slug, $description, $status, $icon)
     {
         $sql = "INSERT INTO categories (name, slug, description, status, icon) VALUES (?, ?, ?, ?, ?)";
         return $this->db->insert($sql, $name, $slug, $description, $status, $icon);
     }
 
-    // Cập nhật danh mục
     function updateCategory($id, $name, $slug, $description, $status, $icon = null)
     {
         if ($icon) {
@@ -62,15 +90,5 @@ class Category
             $sql = "UPDATE categories SET name=?, slug=?, description=?, status=? WHERE id=?";
             return $this->db->update($sql, $name, $slug, $description, $status, $id);
         }
-    }
-
-    function deleteCategory($id)
-    {
-        $check = $this->db->queryOne("SELECT count(*) as total FROM products WHERE category_id = ?", $id);
-        if ($check['total'] > 0) {
-            return false;
-        }
-        $sql = "DELETE FROM categories WHERE id=?";
-        return $this->db->delete($sql, $id);
     }
 }

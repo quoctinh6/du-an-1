@@ -23,7 +23,7 @@
     <div class="admin-content">
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="?act=products"
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>index.php/admin/products"
                         style="color: var(--color-accent); text-decoration: none;">Sản phẩm</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Quản lý biến thể</li>
             </ol>

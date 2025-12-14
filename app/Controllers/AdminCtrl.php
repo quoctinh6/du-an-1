@@ -106,10 +106,38 @@ class AdminCtrl
     // --- QUẢN LÝ DANH MỤC ---
     public function categories()
     {
-        $search = $_GET['search'] ?? '';
-        $status = $_GET['status'] ?? ''; // Nhận biến lọc trạng thái
+        // Áp dụng Flash Message cho trang Admin
+        $error = $_SESSION['error_admin'] ?? null;
+        $success = $_SESSION['success_admin'] ?? null;
+        unset($_SESSION['error_admin']);
+        unset($_SESSION['success_admin']);
 
-        $categories = $this->CategoryModel->getCategoriesAdmin($search, $status);
+        // 1. NHẬN THAM SỐ
+        $search = $_GET['search'] ?? '';
+        $status = $_GET['status'] ?? '';
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+        $limit = 10;
+
+        // 2. GỌI MODEL
+        $categories = $this->CategoryModel->getCategoriesAdmin($search, $status, $page, $limit);
+        $totalCategories = $this->CategoryModel->countCategoriesAdmin($search, $status);
+
+        // 3. TÍNH TOÁN PHÂN TRANG
+        $totalPages = ceil($totalCategories / $limit);
+        if ($totalPages == 0) $totalPages = 1;
+
+        // 4. TRUYỀN DỮ LIỆU SANG VIEW
+        $data = [
+            'categories' => $categories,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'currentSearch' => $search,
+            'currentStatus' => $status,
+            'error' => $error,    // Truyền thông báo lỗi/thành công
+            'success' => $success,
+        ];
+        extract($data);
+
         include_once 'Views/admin/admin_category.php';
     }
 
@@ -119,7 +147,7 @@ class AdminCtrl
             $name = $_POST['name'];
             $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
             $desc = $_POST['description'];
-            $status = $_POST['status']; // published / hidden
+            $status = $_POST['status'];
 
             $icon = '';
             // Xử lý upload Icon
@@ -133,7 +161,12 @@ class AdminCtrl
                 $icon = $target_dir . $file_name;
             }
 
-            $this->CategoryModel->createCategory($name, $slug, $desc, $status, $icon);
+            $result = $this->CategoryModel->createCategory($name, $slug, $desc, $status, $icon);
+            if ($result) {
+                $_SESSION['success_admin'] = "Thêm danh mục **$name** thành công!";
+            } else {
+                $_SESSION['error_admin'] = "Lỗi khi thêm danh mục.";
+            }
             header("Location: " . BASE_URL . "index.php/admin/categories");
             exit;
         }
@@ -159,27 +192,17 @@ class AdminCtrl
                 $icon = $target_dir . $file_name;
             }
 
-            $this->CategoryModel->updateCategory($id, $name, $slug, $desc, $status, $icon);
+            $result = $this->CategoryModel->updateCategory($id, $name, $slug, $desc, $status, $icon);
+            if ($result) {
+                $_SESSION['success_admin'] = "Cập nhật danh mục **$name** thành công!";
+            } else {
+                $_SESSION['error_admin'] = "Lỗi khi cập nhật danh mục.";
+            }
             header("Location: " . BASE_URL . "index.php/admin/categories");
             exit;
         }
     }
 
-    public function deleteCategory()
-    {
-        $id = $_GET['id'] ?? 0;
-        if ($id) {
-            $result = $this->CategoryModel->deleteCategory($id);
-            if (!$result) {
-                echo "<script>alert('Không thể xóa danh mục này vì đang có sản phẩm!'); window.location.href='" . BASE_URL . "index.php/admin/categories';</script>";
-                exit;
-            }
-        }
-        header("Location: " . BASE_URL . "index.php/admin/categories");
-        exit;
-    }
-
-    // (Giữ nguyên các hàm products, addProduct, updateProduct, variants, updateVariant, orders, account, user...)
     public function products()
     {
         $cate_id = isset($_GET['cate_id']) && $_GET['cate_id'] != '' ? [$_GET['cate_id']] : [];
@@ -263,6 +286,7 @@ class AdminCtrl
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
                 $target_dir = "uploads/variants/";
+
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
@@ -270,7 +294,8 @@ class AdminCtrl
                 $file_name = "var_" . preg_replace('/[^A-Za-z0-9]/', '', $sku) . "_" . time() . "." . $ext;
                 $target_file = $target_dir . $file_name;
                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                    $image_path = $target_file;
+                    // Chỉ lưu TÊN FILE vào DB.
+                    $image_path = $file_name;
                 }
             }
             $this->productModel->addVariant($product_id, $color_id, $size_id, $price, $quantity, $sku, $image_path);
@@ -311,9 +336,11 @@ class AdminCtrl
                 $file_name = "var_" . preg_replace('/[^A-Za-z0-9]/', '', $sku) . "_" . time() . "." . $ext;
                 $target_file = $target_dir . $file_name;
                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                    $image_path = $target_file;
+                    // Chỉ lưu TÊN FILE vào DB.
+                    $image_path = $file_name;
                 }
             }
+
             $this->productModel->updateVariant($variant_id, $color_id, $size_id, $price, $quantity, $sku, $image_path);
             header("Location: " . BASE_URL . "index.php/admin/variants?product_id=" . $product_id);
             exit;
@@ -491,7 +518,7 @@ class AdminCtrl
         $limit = 10; // Số bình luận trên mỗi trang
 
         // 2. GỌI MODEL LẤY DỮ LIỆU
-        
+
         // Lấy tổng số để tính totalPages
         $totalComments = $this->CommentModel->countCommentsAdmin($currentSearch, $currentRating);
 
