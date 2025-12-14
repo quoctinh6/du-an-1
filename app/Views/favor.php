@@ -1,4 +1,32 @@
 <?php
+// === FIX: TỰ ĐỘNG LOAD MODEL NẾU CHƯA CÓ DỮ LIỆU (VÌ KHÔNG ĐƯỢC SỬA CONTROLLER) ===
+if (!isset($category_all) || !isset($brands)) {
+    // Cố gắng tìm đường dẫn đến Model (Tính từ thư mục gốc index.php)
+    $modelPath = 'Models/'; 
+    if (!file_exists($modelPath . 'Category.php')) {
+        // Fallback: Thử tìm theo đường dẫn tương đối nếu file view nằm sâu trong thư mục
+        $modelPath = __DIR__ . '/../../Models/'; 
+    }
+
+    // Load Category Model
+    if (!isset($category_all) && file_exists($modelPath . 'Category.php')) {
+        include_once $modelPath . 'Category.php';
+        if (class_exists('Category')) {
+            $catModel = new Category();
+            $category_all = $catModel->getAll();
+        }
+    }
+
+    // Load Brand Model
+    if (!isset($brands) && file_exists($modelPath . 'Brand.php')) {
+        include_once $modelPath . 'Brand.php';
+        if (class_exists('Brand')) {
+            $brandModel = new Brand();
+            $brands = $brandModel->getAll();
+        }
+    }
+}
+
 // === HÀM RENDER HTML RIÊNG CHO TRANG FAVOR ===
 function renderFavorProducts($item)
 {
@@ -71,20 +99,26 @@ function renderFavorBrands($item)
           placeholder="Tên sản phẩm...">
       </div>
 
+      <!-- 1. Lọc theo Danh mục -->
       <div class="filter-group">
-        <div class="filter-group-title">Danh Mục</div>
-        <label class="filter-checkbox-container">Đồng hồ cơ (ID:1)
-          <input type="checkbox" name="category[]" value="1" <?php echo in_array('1', $selected_categories) ? 'checked' : ''; ?>>
-          <span class="checkmark"></span>
-        </label>
-        <label class="filter-checkbox-container">Đồng hồ thông minh (ID:2)
-          <input type="checkbox" name="category[]" value="2" <?php echo in_array('2', $selected_categories) ? 'checked' : ''; ?>>
-          <span class="checkmark"></span>
-        </label>
-        <label class="filter-checkbox-container">Đồng hồ pin (ID:3)
-          <input type="checkbox" name="category[]" value="3" <?php echo in_array('3', $selected_categories) ? 'checked' : ''; ?>>
-          <span class="checkmark"></span>
-        </label>
+          <div class="filter-group-title">Danh Mục</div>
+          <?php
+          if (!empty($category_all)) {
+              foreach ($category_all as $cat) {
+                  $cat_id = htmlspecialchars($cat['id']);
+                  $cat_name = htmlspecialchars($cat['name']);
+                  $is_checked = in_array($cat_id, $selected_categories) ? 'checked' : '';
+                  echo <<<HTML
+                  <label class="filter-checkbox-container">{$cat_name}
+                      <input type="checkbox" name="category[]" class="category-checkbox" value="{$cat_id}" {$is_checked}>
+                      <span class="checkmark"></span>
+                  </label>
+HTML;
+              }
+          } else {
+              echo "<p class='text-muted small'>Không tải được danh mục.</p>";
+          }
+          ?>
       </div>
 
       <div class="filter-group">
@@ -100,6 +134,9 @@ function renderFavorBrands($item)
           ?>
         </select>
       </div>
+
+      <!-- FIX: Thêm input hidden để đồng bộ với logic Javascript giống trang products -->
+      <input type="hidden" name="category" id="category-hidden" value="">
 
       <div class="filter-actions-bottom">
         <!-- Sửa đường dẫn Reset về FavorCtrl -->
@@ -124,6 +161,36 @@ function renderFavorBrands($item)
     </div>
   </div>
 </section>
+
+<!-- FIX: Thêm Script xử lý checkbox danh mục giống trang Products -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      var form = document.querySelector('.favor-sidebar');
+      if (!form) return;
+      var hidden = document.getElementById('category-hidden');
+      var checkboxes = form.querySelectorAll('input.category-checkbox[name="category[]"]');
+
+      function syncHidden() {
+          var vals = Array.prototype.slice.call(checkboxes).filter(function (c) {
+              return c.checked;
+          }).map(function (c) {
+              return c.value;
+          });
+          // Nếu backend cần chuỗi phân cách dấu phẩy thì uncomment dòng dưới
+          // hidden.value = vals.join(','); 
+          // Nếu backend xử lý mảng category[] tốt thì có thể không cần hidden này, 
+          // nhưng giữ lại để logic giống hệt products.php
+          hidden.value = vals.join(',');
+      }
+
+      checkboxes.forEach(function (ch) {
+          ch.addEventListener('change', syncHidden);
+      });
+      // initialize on load
+      syncHidden();
+  });
+</script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
 
