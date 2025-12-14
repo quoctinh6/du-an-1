@@ -63,3 +63,26 @@ New Password: ag26fu
 =================================================
 
 [2025-12-14 12:15:07] To: truongthanhsang31415@gmail.com | Sub: KHÁCH HÀNG LIÊN HỆ: CHILL
+=== LOG MAIL [2025-12-14 16:16:50] ===
+To Admins: truongthanhsang31415@gmail.com
+Subject: KHÁCH HÀNG LIÊN HỆ: CHILL
+Content:
+Bạn có một liên hệ mới từ khách hàng.
+
+THÔNG TIN CHI TIẾT:
+--------------------------------
+Họ và tên: chill
+Email: angtenchill@gmail.com
+Chủ đề: buy
+--------------------------------
+NỘI DUNG TIN NHẮN:
+cak
+--------------------------------
+
+=================================================
+
+=== RESET PASSWORD LOG [2025-12-14 16:17:07] ===
+To: truongthanhsang31415@gmail.com
+New Password: nfkmv6
+=================================================
+
