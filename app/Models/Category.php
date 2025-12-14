@@ -15,7 +15,7 @@ class Category
         return $this->db->query($sql);
     }
 
-    // Lấy danh sách có tìm kiếm và đếm sản phẩm (Bỏ lọc status vì DB không có)
+    // Lấy danh sách có tìm kiếm
     function getCategoriesAdmin($search = '')
     {
         $sql = "SELECT c.*, (SELECT COUNT(*) FROM products p WHERE p.category_id = c.id) as product_count 
@@ -40,18 +40,18 @@ class Category
         return $this->db->queryOne($sql, $id);
     }
 
-    // Thêm danh mục (Chỉ có name, slug)
-    function createCategory($name, $slug)
+    // Thêm danh mục (Thêm status)
+    function createCategory($name, $slug, $status = 'published')
     {
-        $sql = "INSERT INTO categories (name, slug) VALUES (?, ?)";
-        return $this->db->insert($sql, $name, $slug);
+        $sql = "INSERT INTO categories (name, slug, status) VALUES (?, ?, ?)";
+        return $this->db->insert($sql, $name, $slug, $status);
     }
 
-    // Cập nhật danh mục (Chỉ cập nhật name, slug)
-    function updateCategory($id, $name, $slug)
+    // Cập nhật danh mục (Thêm status)
+    function updateCategory($id, $name, $slug, $status)
     {
-        $sql = "UPDATE categories SET name=?, slug=? WHERE id=?";
-        return $this->db->update($sql, $name, $slug, $id);
+        $sql = "UPDATE categories SET name=?, slug=?, status=? WHERE id=?";
+        return $this->db->update($sql, $name, $slug, $status, $id);
     }
 
     function deleteCategory($id)

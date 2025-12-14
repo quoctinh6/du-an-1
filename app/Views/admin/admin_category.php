@@ -46,6 +46,7 @@
                 <th scope="col">Tên danh mục</th>
                 <th scope="col">Slug</th>
                 <th scope="col" class="text-center">Số lượng SP</th>
+                <th scope="col">Trạng thái</th>
                 <th scope="col" class="text-end">Hành động</th>
               </tr>
             </thead>
@@ -61,6 +62,13 @@
                             <?= $cat['product_count'] ?? 0 ?>
                         </span>
                     </td>
+                    <td>
+                        <?php if (isset($cat['status']) && $cat['status'] == 'published'): ?>
+                            <span class="badge bg-success">Hiển thị</span>
+                        <?php else: ?>
+                            <span class="badge bg-secondary">Ẩn</span>
+                        <?php endif; ?>
+                    </td>
                     <td class="text-end">
                       <button class="btn btn-sm btn-outline-primary me-1" title="Sửa"
                               data-bs-toggle="modal" data-bs-target="#editCategoryModal_<?= $cat['id'] ?>">
@@ -71,7 +79,7 @@
                 <?php endforeach; ?>
               <?php else: ?>
                 <tr>
-                    <td colspan="5" class="text-center py-4">Chưa có danh mục nào.</td>
+                    <td colspan="6" class="text-center py-4">Chưa có danh mục nào.</td>
                 </tr>
               <?php endif; ?>
             </tbody>
@@ -110,6 +118,13 @@
             <label class="form-label">Slug (Đường dẫn)</label>
             <input type="text" class="form-control" name="slug" placeholder="ao-vest (để trống tự tạo)">
           </div>
+          <div class="mb-3">
+            <label class="form-label">Trạng thái</label>
+            <select class="form-select" name="status">
+              <option value="published" selected>Hiển thị</option>
+              <option value="hidden">Ẩn</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -142,6 +157,14 @@
               <div class="mb-3">
                 <label class="form-label">Slug</label>
                 <input type="text" class="form-control" name="slug" value="<?= htmlspecialchars($cat['slug']) ?>">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Trạng thái</label>
+                <select class="form-select" name="status">
+                  <option value="published" <?= (isset($cat['status']) && $cat['status'] == 'published') ? 'selected' : '' ?>>Hiển thị</option>
+                  <option value="hidden" <?= (isset($cat['status']) && $cat['status'] == 'hidden') ? 'selected' : '' ?>>Ẩn</option>
+                </select>
               </div>
             </div>
             <div class="modal-footer">
