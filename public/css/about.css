@@ -5,7 +5,7 @@
     min-height: 300px;
     /* Tận dụng lại màu nền và gradient */
     background: linear-gradient(to bottom, rgba(0,0,0,0.6), var(--bg)),
-                url('../image/mainbanner1.png') no-repeat center/cover;
+                url('../image/banner4.jpg') no-repeat center/cover;
     display: flex;
     align-items: center;
     justify-content: center;

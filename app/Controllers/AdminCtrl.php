@@ -57,7 +57,7 @@ class AdminCtrl
         // Đây là logic Presentation, nó chuyển đổi dữ liệu thô thành định dạng cần thiết cho View/JS
         foreach ($rawCategoryData as $row) {
             $categoryLabels[] = $row['name']; // Tên danh mục (ví dụ: 'Áo Khoác')
-            $categoryCounts[] = (int)$row['product_count']; // Số lượng sản phẩm
+            $categoryCounts[] = (int) $row['product_count']; // Số lượng sản phẩm
         }
 
         // Chuyển 2 mảng PHP thành JSON để JavaScript có thể đọc được
@@ -74,7 +74,7 @@ class AdminCtrl
         $revenueMap = [];
         foreach ($rawRevenueData as $row) {
             // Chuẩn bị mảng Map: ['2025-12-01' => 12345000, '2025-12-02' => 0, ...]
-            $revenueMap[$row['order_date']] = (float)$row['total_daily_revenue'];
+            $revenueMap[$row['order_date']] = (float) $row['total_daily_revenue'];
         }
 
         // 2. Điền đầy đủ 30 ngày (Dù không có doanh thu)
@@ -125,7 +125,8 @@ class AdminCtrl
             // Xử lý upload Icon
             if (isset($_FILES['icon']) && $_FILES['icon']['error'] == 0) {
                 $target_dir = "uploads/categories/";
-                if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
+                if (!file_exists($target_dir))
+                    mkdir($target_dir, 0777, true);
                 $ext = pathinfo($_FILES["icon"]["name"], PATHINFO_EXTENSION);
                 $file_name = "cat_" . time() . "." . $ext;
                 move_uploaded_file($_FILES["icon"]["tmp_name"], $target_dir . $file_name);
@@ -150,7 +151,8 @@ class AdminCtrl
             $icon = null;
             if (isset($_FILES['icon']) && $_FILES['icon']['error'] == 0) {
                 $target_dir = "uploads/categories/";
-                if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
+                if (!file_exists($target_dir))
+                    mkdir($target_dir, 0777, true);
                 $ext = pathinfo($_FILES["icon"]["name"], PATHINFO_EXTENSION);
                 $file_name = "cat_" . time() . "." . $ext;
                 move_uploaded_file($_FILES["icon"]["tmp_name"], $target_dir . $file_name);
@@ -208,11 +210,12 @@ class AdminCtrl
             if ($new_product_id) {
                 if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
                     $target_dir = "uploads/products/";
-                    if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
+                    if (!file_exists($target_dir))
+                        mkdir($target_dir, 0777, true);
                     $ext = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
                     $file_name = $new_product_id . "_" . time() . "." . $ext;
                     move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $file_name);
-                    $this->productModel->addProductImage($new_product_id, $target_dir . $file_name);
+                    $this->productModel->addProductImage($new_product_id, $file_name);
                 }
                 header("Location: " . BASE_URL . "index.php/admin/variants?product_id=" . $new_product_id);
                 exit;
@@ -235,11 +238,12 @@ class AdminCtrl
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
                 $target_dir = "uploads/products/";
-                if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
+                if (!file_exists($target_dir))
+                    mkdir($target_dir, 0777, true);
                 $ext = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
                 $file_name = $id . "_" . time() . "." . $ext;
                 move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $file_name);
-                $this->productModel->updateProductImage($id, $target_dir . $file_name);
+                $this->productModel->updateProductImage($id, $file_name);
             }
             header("Location: " . BASE_URL . "index.php/admin/products");
             exit;
@@ -250,11 +254,11 @@ class AdminCtrl
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_add_variant'])) {
             $product_id = $_POST['product_id'];
-            $sku        = $_POST['sku'];
-            $color_id   = $_POST['color_id'];
-            $size_id    = $_POST['size_id'];
-            $price      = $_POST['price'];
-            $quantity   = $_POST['quantity'];
+            $sku = $_POST['sku'];
+            $color_id = $_POST['color_id'];
+            $size_id = $_POST['size_id'];
+            $price = $_POST['price'];
+            $quantity = $_POST['quantity'];
             $image_path = '';
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
@@ -279,10 +283,10 @@ class AdminCtrl
             header("Location: index.php?act=products");
             exit;
         }
-        $product  = $this->productModel->getProductById($product_id);
+        $product = $this->productModel->getProductById($product_id);
         $variants = $this->productModel->getVariantsById_product($product_id);
-        $sizes    = $this->productModel->getAllSizes();
-        $colors   = $this->productModel->getAllColors();
+        $sizes = $this->productModel->getAllSizes();
+        $colors = $this->productModel->getAllColors();
         include_once 'Views/admin/admin_variants.php';
     }
 
@@ -291,11 +295,11 @@ class AdminCtrl
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_update_variant'])) {
             $variant_id = $_POST['variant_id'];
             $product_id = $_POST['product_id'];
-            $sku        = $_POST['sku'];
-            $color_id   = $_POST['color_id'];
-            $size_id    = $_POST['size_id'];
-            $price      = $_POST['price'];
-            $quantity   = $_POST['quantity'];
+            $sku = $_POST['sku'];
+            $color_id = $_POST['color_id'];
+            $size_id = $_POST['size_id'];
+            $price = $_POST['price'];
+            $quantity = $_POST['quantity'];
             $image_path = null;
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
@@ -322,7 +326,7 @@ class AdminCtrl
     {
         $status = $_GET['status'] ?? '';
         $keyword = $_GET['keyword'] ?? '';
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
         $limit = 10;
         $orders = $this->OrderModel->getAllOrdersAdmin($status, $keyword, $page, $limit);
         $totalOrders = $this->OrderModel->countOrdersAdmin($status, $keyword);
@@ -344,7 +348,7 @@ class AdminCtrl
         $search = $_GET['search'] ?? '';        // Từ khóa tìm kiếm
 
         // 2. THAM SỐ PHÂN TRANG
-        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
         $limit = 10;
 
         // 3. GỌI MODEL LẤY DỮ LIỆU
@@ -418,8 +422,8 @@ class AdminCtrl
     public function updateStatus()
     {
         if (isset($_GET['id']) && isset($_GET['status'])) {
-            $user_id = (int)$_GET['id'];
-            $new_status = (int)$_GET['status']; // 1: Active, 0: Locked
+            $user_id = (int) $_GET['id'];
+            $new_status = (int) $_GET['status']; // 1: Active, 0: Locked
 
             // ⚠️ Kiểm tra: Không cho khóa chính tài khoản Admin đang dùng
             if ($user_id == ($_SESSION['user']['id'] ?? 0)) {
@@ -447,7 +451,7 @@ class AdminCtrl
     public function updateRole()
     {
         if (isset($_GET['id']) && isset($_GET['role'])) {
-            $user_id = (int)$_GET['id'];
+            $user_id = (int) $_GET['id'];
             $new_role = $_GET['role']; // 'admin' hoặc 'client'
 
             // ⚠️ Kiểm tra: Không cho tự đổi quyền của chính tài khoản Admin đang dùng
@@ -483,7 +487,7 @@ class AdminCtrl
         // 1. LẤY THAM SỐ LỌC, TÌM KIẾM, PHÂN TRANG
         $currentSearch = $_GET['search'] ?? '';
         $currentRating = $_GET['rating'] ?? 'all'; // 'all', '1', '2', ..., '5'
-        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
         $limit = 10; // Số bình luận trên mỗi trang
 
         // 2. GỌI MODEL LẤY DỮ LIỆU
@@ -495,9 +499,12 @@ class AdminCtrl
         $totalPages = ceil($totalComments / $limit);
 
         // Đảm bảo trang hiện tại hợp lệ
-        if ($currentPage < 1) $currentPage = 1;
-        if ($currentPage > $totalPages && $totalPages > 0) $currentPage = $totalPages;
-        if ($totalPages == 0) $currentPage = 1; // Nếu không có dữ liệu, page = 1
+        if ($currentPage < 1)
+            $currentPage = 1;
+        if ($currentPage > $totalPages && $totalPages > 0)
+            $currentPage = $totalPages;
+        if ($totalPages == 0)
+            $currentPage = 1; // Nếu không có dữ liệu, page = 1
 
         // Lấy dữ liệu theo phân trang đã chuẩn hóa
         $comments = $this->CommentModel->getCommentsAdmin($currentSearch, $currentRating, $currentPage, $limit);
@@ -509,7 +516,7 @@ class AdminCtrl
     public function deleteComment()
     {
         if (isset($_GET['id'])) {
-            $comment_id = (int)$_GET['id'];
+            $comment_id = (int) $_GET['id'];
             // Ghi nhớ: Hãy ví von qua PHP. Trong PHP, việc xóa comment cũng tương tự như trong Laravel/CodeIgniter, bạn chỉ cần gọi phương thức DELETE của Model
             $result = $this->CommentModel->deleteComment($comment_id);
 
