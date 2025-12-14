@@ -128,7 +128,9 @@
                       // Kiểm tra: Nếu có link ảnh thì nối BASE_URL vào, nếu không thì dùng ảnh mặc định
                       $imgUrl = !empty($item['image_url']) ? BASE_URL . $item['image_url'] : 'https://placehold.co/50x50?text=No+Img';
                       ?>
-                      <img src="<?= $item['image_url'] ?? $item['image'] ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="shadow-sm"
+                      <img
+                        src="<?= BASE_URL . "uploads/products/" . $item['image_url'] ?? BASE_URL . "uploads/products/" . $item['image'] ?>"
+                        alt="<?= htmlspecialchars($item['name']) ?>" class="shadow-sm"
                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #eee;">
                     </td>
                     <td>
