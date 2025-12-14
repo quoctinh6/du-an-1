@@ -109,7 +109,6 @@ class AdminCtrl
     public function categories()
     {
         $search = $_GET['search'] ?? '';
-        // Database không có status nên bỏ tham số lọc theo status
         $categories = $this->CategoryModel->getCategoriesAdmin($search);
         include_once 'Views/admin/admin_category.php';
     }
@@ -118,11 +117,10 @@ class AdminCtrl
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_add_category'])) {
             $name = $_POST['name'];
-            // Tạo slug đơn giản nếu người dùng không nhập
             $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
+            $status = $_POST['status']; // Lấy status từ form
 
-            // Chỉ lưu name và slug theo đúng database
-            $this->CategoryModel->createCategory($name, $slug);
+            $this->CategoryModel->createCategory($name, $slug, $status);
             header("Location: " . BASE_URL . "index.php/admin/categories");
             exit;
         }
@@ -134,14 +132,13 @@ class AdminCtrl
             $id = $_POST['id'];
             $name = $_POST['name'];
             $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
+            $status = $_POST['status']; // Lấy status từ form
 
-            // Chỉ cập nhật name và slug theo đúng database
-            $this->CategoryModel->updateCategory($id, $name, $slug);
+            $this->CategoryModel->updateCategory($id, $name, $slug, $status);
             header("Location: " . BASE_URL . "index.php/admin/categories");
             exit;
         }
     }
-
 
     
     // (Giữ nguyên các hàm products, addProduct, updateProduct, variants, updateVariant, orders, account, user...)
