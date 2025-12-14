@@ -127,6 +127,8 @@ class ProductsCtrl
             }
         }
 
+        $category_all = $this->categoryModel->getAll();
+
         $products = $this->productModel->getProducts(16, $category, $brand, $search);
         include_once("Views/products.php");
     }
