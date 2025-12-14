@@ -46,11 +46,13 @@
                 <th scope="col">Tên thương hiệu</th>
                 <th scope="col">Slug (Đường dẫn)</th>
                 <th scope="col">Ngày tạo</th>
+                <!-- THÊM CỘT TRẠNG THÁI Ở ĐÂY -->
+                <th scope="col">Trạng thái</th>
                 <th scope="col" class="text-end">Hành động</th>
               </tr>
             </thead>
             <tbody>
-              <!-- Dữ liệu mẫu tĩnh -->
+              <!-- Dữ liệu mẫu tĩnh (Cần cập nhật PHP để load động sau này) -->
               <tr>
                 <td>#1</td>
                 <td>
@@ -58,6 +60,8 @@
                 </td>
                 <td>rolex</td>
                 <td>2025-11-10</td>
+                <!-- Hiển thị trạng thái -->
+                <td><span class="badge bg-success">Hiển thị</span></td>
                 <td class="text-end">
                   <button class="btn btn-sm btn-outline-primary me-1" title="Sửa" data-bs-toggle="modal" data-bs-target="#editBrandModal">
                     <i class="bi bi-pencil"></i>
@@ -74,6 +78,8 @@
                 </td>
                 <td>casio</td>
                 <td>2025-11-10</td>
+                <!-- Hiển thị trạng thái -->
+                <td><span class="badge bg-success">Hiển thị</span></td>
                 <td class="text-end">
                   <button class="btn btn-sm btn-outline-primary me-1" title="Sửa">
                     <i class="bi bi-pencil"></i>
@@ -90,6 +96,8 @@
                 </td>
                 <td>seiko</td>
                 <td>2025-11-10</td>
+                <!-- Hiển thị trạng thái (Demo ẩn) -->
+                <td><span class="badge bg-secondary">Đang ẩn</span></td>
                 <td class="text-end">
                   <button class="btn btn-sm btn-outline-primary me-1" title="Sửa">
                     <i class="bi bi-pencil"></i>
@@ -125,7 +133,6 @@
             <label class="form-label">Slug</label>
             <input type="text" class="form-control" name="slug" placeholder="omega (để trống tự tạo)">
           </div>
-          <!-- THÊM MỤC TRẠNG THÁI (Ẩn/Hiện) -->
           <div class="mb-3">
             <label class="form-label">Trạng thái</label>
             <select class="form-select" name="status">
@@ -162,7 +169,6 @@
             <label class="form-label">Slug</label>
             <input type="text" class="form-control" name="slug" value="rolex">
           </div>
-          <!-- THÊM MỤC TRẠNG THÁI (Ẩn/Hiện) -->
           <div class="mb-3">
             <label class="form-label">Trạng thái</label>
             <select class="form-select" name="status">
