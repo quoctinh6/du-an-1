@@ -38,8 +38,10 @@ if (empty($parts[0])) {
     include_once "./Views/footer.php";
 
 } elseif (strtolower($parts[0]) == 'admin') {
-
-    if (!$isAjax)
+    if ($_SESSION['user']['role'] != 'admin') {
+        header('Location: ' . BASE_URL);
+        exit;
+    } elseif (!$isAjax)
         include_once "./Views/admin/header.php";
     include_once "./Controllers/AdminCtrl.php";
     $ctrl = new AdminCtrl();
