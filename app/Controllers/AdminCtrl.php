@@ -7,6 +7,7 @@ class AdminCtrl
     private $OrderModel;
     private $StatsModel;
     private $UserModel;
+    private $CommentModel;
 
     public function __construct()
     {
@@ -16,8 +17,8 @@ class AdminCtrl
         include_once __DIR__ . "/../Models/Category.php";
         $this->CategoryModel = new Category();
 
-        include_once __DIR__ . "/../Models/Brand.php"; 
-        $this->BrandModel = new Brand(); 
+        include_once __DIR__ . "/../Models/Brand.php";
+        $this->BrandModel = new Brand();
 
         include_once __DIR__ . "/../Models/Order.php";
         $this->OrderModel = new Order();
@@ -27,6 +28,9 @@ class AdminCtrl
 
         include_once __DIR__ . "/../Models/User.php";
         $this->UserModel = new Users();
+
+        include_once __DIR__ . "/../Models/Comments.php";
+        $this->CommentModel = new Comments();
     }
 
     public function index()
@@ -474,9 +478,59 @@ class AdminCtrl
     {
         include_once 'Views/admin/admin_brands.php';
     }
+    // AdminCtrl.php
+
     public function comments()
     {
+        // Áp dụng Flash Message
+        $error = $_SESSION['error_admin'] ?? null;
+        $success = $_SESSION['success_admin'] ?? null;
+        unset($_SESSION['error_admin']);
+        unset($_SESSION['success_admin']);
+
+        // 1. Lấy Tham số Lọc, Tìm kiếm và Phân trang
+        $rating = $_GET['rating'] ?? 'all';     // Số sao: 1-5 hoặc 'all'
+        $search = $_GET['search'] ?? '';        // Nội dung, tên user, tên SP
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $limit = 10;
+
+        // 2. Gọi Model
+        $comments = $this->CommentModel->getCommentsAdmin($rating, $search, $page, $limit);
+        $totalComments = $this->CommentModel->countCommentsAdmin($rating, $search);
+        $totalPages = ceil($totalComments / $limit);
+
+        // 3. Truyền dữ liệu sang View
+        $data = [
+            'comments' => $comments,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'currentRating' => $rating,
+            'currentSearch' => $search,
+            'error' => $error,
+            'success' => $success
+        ];
+
+        extract($data);
         include_once 'Views/admin/admin_comments.php';
+    }
+
+    /**
+     * Xử lý xóa bình luận
+     */
+    public function deleteComment()
+    {
+        $id = $_GET['id'] ?? 0;
+
+        if ($id) {
+            $result = $this->CommentModel->deleteComment($id);
+            if ($result) {
+                $_SESSION['success_admin'] = 'Xóa bình luận thành công.';
+            } else {
+                $_SESSION['error_admin'] = 'Không thể xóa bình luận.';
+            }
+        }
+        header("Location: " . BASE_URL . "index.php/admin/comments");
+        exit();
     }
     public function coupons()
     {
