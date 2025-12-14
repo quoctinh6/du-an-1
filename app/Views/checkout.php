@@ -132,8 +132,7 @@
             <!-- Input nằm ngoài form chính nhưng dùng thuộc tính form="checkout-form" để liên kết -->
             <select id="payment-method" name="payment_method" class="option-select" form="checkout-form">
                 <option value="cod">Thanh toán khi nhận hàng (COD)</option>
-                <option value="vnpay">Thanh toán Online (VNPAY)</option>
-                <option value="banking">Chuyển khoản ngân hàng</option>
+                <option value="banking">Thanh toán Online (Fake Payment)</option>
             </select>
         </div>
 

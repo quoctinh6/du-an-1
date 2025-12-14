@@ -157,4 +157,14 @@ class Order
         $result = $this->db->queryOne($sql, ...$params);
         return $result['total'] ?? 0;
     }
+    public function getOrderById($orderId)
+    {
+        $orderId = (int)$orderId;
+
+        $sql = "SELECT * FROM orders WHERE id = $orderId";
+        $rows = $this->db->query($sql);
+
+        return $rows[0] ?? null; // QUAN TRỌNG
+    }
+
 }

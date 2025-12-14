@@ -204,9 +204,43 @@ class CheckoutCtrl
             exit;
         }
 
-        // Bước 3: xóa giỏ hàng và thông báo thành công
+        // Bước 3: xử lý theo phương thức thanh toán
         unset($_SESSION['cart']);
-        echo "<script>alert('Đặt hàng thành công! Mã đơn: #" . $orderId . "'); window.location.href='" . BASE_URL . "';</script>";
+
+        if ($paymentMethod === 'banking') {
+
+            $orderModel->updateOrderStatus($orderId, 'processing');
+
+            echo "<script>
+                alert('Đặt hàng thành công! Vui lòng chuyển khoản theo hướng dẫn. Mã đơn: #{$orderId}');
+                window.location.href='" . BASE_URL . "index.php/checkout/success?order_id={$orderId}';
+            </script>";
+            exit;
+        }
+
+        // COD
+        echo "<script>
+            alert('Đặt hàng thành công! Thanh toán khi nhận hàng. Mã đơn: #{$orderId}');
+            window.location.href='" . BASE_URL . "index.php/checkout/success?order_id={$orderId}';
+        </script>";
+        exit;
+    }
+    public function success()
+    {
+        $orderId = $_GET['order_id'] ?? null;
+
+        if (!$orderId) {
+            die("Không tìm thấy đơn hàng");
+        }
+
+        $orderModel = new Order();
+        $order = $orderModel->getOrderById($orderId);
+
+        if (!$order) {
+            die("Đơn hàng không tồn tại");
+        }
+
+        include_once 'Views/checkout_success.php';
     }
 }
 
