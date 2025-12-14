@@ -207,25 +207,13 @@ class CheckoutCtrl
         // Bước 3: xử lý theo phương thức thanh toán
         unset($_SESSION['cart']);
 
-        // Fake Payment: Online
-        if ($paymentMethod === 'vnpay') {
-            // Giả lập thanh toán thành công
-            $orderModel->updateOrderStatus($orderId, 'paid');
-
-            echo "<script>
-                alert('Thanh toán Online (Fake) thành công! Mã đơn: #{$orderId}');
-                window.location.href='" . BASE_URL . "index.php/checkout/success?order_id={$orderId}';
-            </script>";
-            exit;
-        }
-
-        // COD hoặc Banking
-        $orderModel->updateOrderStatus($orderId, 'pending');
-
         if ($paymentMethod === 'banking') {
+
+            $orderModel->updateOrderStatus($orderId, 'processing');
+
             echo "<script>
                 alert('Đặt hàng thành công! Vui lòng chuyển khoản theo hướng dẫn. Mã đơn: #{$orderId}');
-                window.location.href='" . BASE_URL . "index.php/checkout/banking?order_id={$orderId}';
+                window.location.href='" . BASE_URL . "index.php/checkout/success?order_id={$orderId}';
             </script>";
             exit;
         }
