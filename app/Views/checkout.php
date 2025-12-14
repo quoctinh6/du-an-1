@@ -5,46 +5,97 @@
     <div class="checkout-container">
 
         <!-- CỘT 1: THÔNG TIN GIAO HÀNG (2/3 CHIỀU RỘNG) -->
-        <div class="checkout-info-wrapper">
-            <div class="checkout-title">Thông tin giao hàng</div>
+<div class="checkout-info-wrapper">
+    <div class="checkout-title">Thông tin giao hàng</div>
 
-            <!-- FORM CHÍNH: Gửi dữ liệu về CheckoutCtrl -> process -->
-            <!-- ID="checkout-form" dùng để liên kết với nút Đặt hàng ở cột bên phải -->
-            <form id="checkout-form" action="<?= BASE_URL ?>index.php/checkout/process" method="POST">
+    <form id="checkout-form" action="<?= BASE_URL ?>index.php/checkout/process" method="POST">
 
-                <!-- Họ và tên -->
-                <div class="form-group">
-                    <label for="full-name" class="form-label">Họ và tên</label>
-                    <input type="text" id="full-name" name="fullname" class="form-input"
-                        value="<?= isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']['name']) : '' ?>"
-                        placeholder="Nhập họ tên" required>
-                </div>
-
-                <!-- Số điện thoại -->
-                <div class="form-group">
-                    <label for="phone" class="form-label">Số điện thoại</label>
-                    <input type="tel" id="phone" name="phone" class="form-input"
-                        value="<?= isset($_SESSION['user']['phone_number']) ? htmlspecialchars($_SESSION['user']['phone_number']) : '' ?>"
-                        placeholder="Nhập số điện thoại" required>
-                </div>
-
-                <!-- Địa chỉ -->
-
-                <div class="form-group">
-                    <label for="address" class="form-label">Địa chỉ nhận hàng</label>
-                    <input type="text" id="address" name="address" class="form-input"
-                        value="<?= $address['address_line'] ?? '' ?>" placeholder="Số nhà, đường, phường/xã..." required>
-                </div>
-
-                <!-- Ghi chú (Tùy chọn) -->
-                <div class="form-group">
-                    <label for="notes" class="form-label">Ghi chú đơn hàng</label>
-                    <textarea id="notes" name="note" class="form-textarea"
-                        placeholder="VD: Giao hàng giờ hành chính..."></textarea>
-                </div>
-
-            </form>
+        <?php if (!empty($userAddresses)): ?>
+            <div class="form-group" style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px dashed #ccc; margin-bottom: 20px;">
+                <label for="saved-address" class="form-label" style="color: #d4af37;">
+                    <i class="fa fa-map-marker"></i> Chọn từ sổ địa chỉ:
+                </label>
+                <select id="saved-address" class="form-input" onchange="fillAddress(this)">
+                    <option value="new">-- Nhập địa chỉ mới --</option>
+                    <?php foreach ($userAddresses as $addr): ?>
+                        <option value="<?= $addr['id'] ?>" 
+                                data-name="<?= htmlspecialchars($addr['full_name']) ?>"
+                                data-phone="<?= htmlspecialchars($addr['phone_number']) ?>"
+                                data-address="<?= htmlspecialchars($addr['address_line']) ?>"
+                                <?= ($addr['is_default'] == 1) ? 'selected' : '' ?>
+                        >
+                            <?= htmlspecialchars($addr['full_name']) ?> - <?= htmlspecialchars($addr['address_line']) ?> <?= ($addr['is_default'] == 1) ? '(Mặc định)' : '' ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        <?php endif; ?>
+        <div class="form-group">
+            <label for="full-name" class="form-label">Họ và tên</label>
+            <input type="text" id="full-name" name="fullname" class="form-input" 
+                   value="<?= isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']['name']) : '' ?>" 
+                   placeholder="Nhập họ tên" required>
         </div>
+
+        <div class="form-group">
+            <label for="phone" class="form-label">Số điện thoại</label>
+            <input type="tel" id="phone" name="phone" class="form-input" 
+                   value="<?= isset($_SESSION['user']['phone_number']) ? htmlspecialchars($_SESSION['user']['phone_number']) : '' ?>"
+                   placeholder="Nhập số điện thoại" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address" class="form-label">Địa chỉ nhận hàng</label>
+            <input type="text" id="address" name="address" class="form-input" placeholder="Số nhà, đường, phường/xã..." required>
+        </div>
+
+        <div class="form-group">
+            <label for="notes" class="form-label">Ghi chú đơn hàng</label>
+            <textarea id="notes" name="note" class="form-textarea" placeholder="VD: Giao hàng giờ hành chính..."></textarea>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    // Hàm xử lý khi chọn địa chỉ từ dropdown
+    function fillAddress(selectElement) {
+        // Lấy option đang được chọn
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        
+        var nameInput = document.getElementById('full-name');
+        var phoneInput = document.getElementById('phone');
+        var addressInput = document.getElementById('address');
+
+        if (selectElement.value === 'new') {
+            // Nếu chọn nhập mới -> Xóa trắng các ô (hoặc reset về thông tin gốc của user session nếu muốn)
+            nameInput.value = '';
+            phoneInput.value = '';
+            addressInput.value = '';
+            // Focus vào ô tên để người dùng nhập
+            nameInput.focus();
+        } else {
+            // Lấy dữ liệu từ data-attribute
+            var name = selectedOption.getAttribute('data-name');
+            var phone = selectedOption.getAttribute('data-phone');
+            var address = selectedOption.getAttribute('data-address');
+
+            // Điền vào form
+            nameInput.value = name;
+            phoneInput.value = phone;
+            addressInput.value = address;
+        }
+    }
+
+    // Tự động kích hoạt logic khi trang vừa tải xong (để điền địa chỉ mặc định)
+    document.addEventListener("DOMContentLoaded", function() {
+        var addressSelect = document.getElementById('saved-address');
+        if(addressSelect) {
+            // Kiểm tra xem có option nào đang selected không (địa chỉ mặc định sẽ có attribute selected từ PHP)
+            fillAddress(addressSelect);
+        }
+    });
+</script>
 
         <!-- CỘT 2: TÓM TẮT ĐƠN HÀNG (1/3 CHIỀU RỘNG) -->
         <div class="order-summary-wrapper">

@@ -68,6 +68,13 @@ class CheckoutCtrl
         if ($totalPrice < 0)
             $totalPrice = 0;
 
+        $userAddresses = [];
+        if (isset($_SESSION['user'])) {
+            $userID = $_SESSION['user']['id'];
+            $addressModel = new Address();
+            $userAddresses = $addressModel->getAddressesByUserId($userID);
+        }
+
         include_once 'Views/checkout.php';
     }
 
