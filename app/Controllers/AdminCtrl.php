@@ -491,6 +491,7 @@ class AdminCtrl
         $limit = 10; // Số bình luận trên mỗi trang
 
         // 2. GỌI MODEL LẤY DỮ LIỆU
+        
         // Lấy tổng số để tính totalPages
         $totalComments = $this->CommentModel->countCommentsAdmin($currentSearch, $currentRating);
 
@@ -509,11 +510,9 @@ class AdminCtrl
         $comments = $this->CommentModel->getCommentsAdmin($currentSearch, $currentRating, $currentPage, $limit);
 
         // 4. TRUYỀN DỮ LIỆU SANG VIEW
-        // Các biến này sẽ được View admin_comments.php sử dụng
         include_once 'Views/admin/admin_comments.php';
     }
 
-    // 🛑 THÊM HÀM deleteComment()
     public function deleteComment()
     {
         if (isset($_GET['id'])) {
