@@ -109,7 +109,7 @@ if (!empty($productsCollections)) {
   </section>
 
   <div class="mid-banner scroll-reveal dark-filter">
-    <img src="<?= BASE_URL ?>Views/assets/image/mainbanner1.png" alt="Rolex Banner">
+    <img src="<?= BASE_URL ?>Views/assets/image/banner4.jpg" alt="Rolex Banner">
     <div class="mid-banner-title">Đồng Hồ Rolex</div>
     <button class="mid-banner-glass-button" onclick="window.location.href='<?= BASE_URL ?>index.php/products/index'">Xem
       ngay</button>
