@@ -262,7 +262,7 @@ class AdminCtrl
             $image_path = '';
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $target_dir = "uploads/variants/";
+                $target_dir = "uploads/products";
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
@@ -303,7 +303,7 @@ class AdminCtrl
             $image_path = null;
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $target_dir = "uploads/variants/";
+                $target_dir = "uploads/products";
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }

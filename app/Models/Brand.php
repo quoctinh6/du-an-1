@@ -10,7 +10,7 @@ class Brand
 
     function getAll()
     {
-        $sql = "SELECT * FROM brands";
+        $sql = "SELECT * FROM brands WHERE status = 'published' ";
         return $this->db->query($sql);
     }
 

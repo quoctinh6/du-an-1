@@ -97,11 +97,11 @@ HTML;
                         $cat_name = htmlspecialchars($cat['name']);
                         $is_checked = in_array($cat_id, $selected_categories) ? 'checked' : '';
                         echo <<<HTML
-                        <label class="filter-checkbox-container">{$cat_name}
-                            <input type="checkbox" name="category[]" class="category-checkbox" value="{$cat_id}" {$is_checked}>
-                            <span class="checkmark"></span>
-                        </label>
-HTML;
+                            <label class="filter-checkbox-container">{$cat_name}
+                                <input type="checkbox" name="category[]" class="category-checkbox" value="{$cat_id}" {$is_checked}>
+                                <span class="checkmark"></span>
+                            </label>    
+                        HTML;
                     }
                 }
                 ?>

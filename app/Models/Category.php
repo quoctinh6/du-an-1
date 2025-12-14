@@ -11,7 +11,7 @@ class Category
 
     function getAll()
     {
-        $sql = "SELECT * FROM categories ORDER BY id DESC";
+        $sql = "SELECT * FROM categories WHERE status = 'published' ORDER BY id DESC ";
         return $this->db->query($sql);
     }
 
