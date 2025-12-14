@@ -7,10 +7,15 @@ $p_sku = htmlspecialchars($product_base['slug'] ?? '');
 
 $html_products_featured = '';
 
-function render_product_item($item)
+function render_product_item($item, $id)
 {
   $formatted_price = number_format($item['price'] ?? 0, 0, ',', '.') . ' VND';
   $product_id = htmlspecialchars($item['id'] ?? '');
+  if ($product_id == $id) {
+    return '';
+  }
+  ;
+
   $product_price = htmlspecialchars($item['price'] ?? '');
   $image_url = htmlspecialchars($item['image_url'] ?? '');
 
@@ -55,7 +60,7 @@ HTML;
 $html_products = '';
 if (!empty($product_category)) {
   foreach ($product_category as $item)
-    $html_products .= render_product_item($item);
+    $html_products .= render_product_item($item, $p_id);
 }
 ?>
 

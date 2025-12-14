@@ -3,9 +3,9 @@ $html_products_featured = '';
 
 function render_product_item($item)
 {
-  $formatted_price = number_format($item['price'] ?? 0, 0, ',', '.') . ' VND'; 
+  $formatted_price = number_format($item['price'] ?? 0, 0, ',', '.') . ' VND';
   $product_id = htmlspecialchars($item['id'] ?? '');
-  $product_price = htmlspecialchars($item['price'] ?? ''); 
+  $product_price = htmlspecialchars($item['price'] ?? '');
   $image_url = htmlspecialchars($item['image_url'] ?? '');
 
   if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
@@ -126,55 +126,7 @@ if (!empty($productsCollections)) {
     </div>
   </section>
 
-  <section class="section scroll-reveal" id="watch-blog">
-    <div class="section-header">
-      <div class="section-title">Tin tức</div>
-    </div>
-    <div class="blog-grid">
-      <div class="blog-feature bloghover">
-        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
-          alt="Watch Trends 2025" class="blog-feature-img">
-        <div class="blog-feature-title">Watch Trends 2025</div>
-        <div class="blog-feature-desc">
-          Uncover the boldest looks and next-gen technologies for wristwatches in 2025: smart chronos, eco-friendly, and
-          classic revivals.
-        </div>
-      </div>
-      <div class="blog-list">
-        <div class="blog-list-item bloghover">
-          <img src="https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=400&q=80"
-            class="blog-list-img" alt="Wind Your Watch">
-          <div class="blog-list-info">
-            <div class="blog-list-title">How to Wind Your Watch</div>
-            <div class="blog-list-desc">
-              Learn proper winding techniques for mechanical and automatic watches.
-            </div>
-          </div>
-        </div>
-        <div class="blog-list-item bloghover">
-          <img src="https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80"
-            class="blog-list-img" alt="Watch Care">
-          <div class="blog-list-info">
-            <div class="blog-list-title">Watch Care 101</div>
-            <div class="blog-list-desc">
-              Essential tips: cleaning, storage, servicing. Make your timepiece last.
-            </div>
-          </div>
-        </div>
-        <div class="blog-list-item bloghover">
-          <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=400&q=80"
-            class="blog-list-img" alt="Choosing the Right Fit">
-          <div class="blog-list-info">
-            <div class="blog-list-title">Choosing the Right Fit</div>
-            <div class="blog-list-desc">
-              Select a watch that suits your wrist, lifestyle, and wardrobe.
-            </div>
-          </div>
-        </div>
-        <button class="glass-button blog-list-btn">Xem Thêm</button>
-      </div>
-    </div>
-  </section>
+
 
 </main>
 
