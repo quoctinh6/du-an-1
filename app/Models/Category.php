@@ -15,8 +15,8 @@ class Category
         return $this->db->query($sql);
     }
 
-    // Lấy danh sách có tìm kiếm, lọc trạng thái và đếm sản phẩm
-    function getCategoriesAdmin($search = '', $status = '')
+    // Lấy danh sách có tìm kiếm và đếm sản phẩm (Bỏ lọc status vì DB không có)
+    function getCategoriesAdmin($search = '')
     {
         $sql = "SELECT c.*, (SELECT COUNT(*) FROM products p WHERE p.category_id = c.id) as product_count 
                 FROM categories c 
@@ -27,11 +27,6 @@ class Category
         if (!empty($search)) {
             $sql .= " AND c.name LIKE ?";
             $params[] = "%$search%";
-        }
-
-        if (!empty($status)) {
-            $sql .= " AND c.status = ?";
-            $params[] = $status;
         }
 
         $sql .= " ORDER BY c.id DESC";
@@ -45,23 +40,18 @@ class Category
         return $this->db->queryOne($sql, $id);
     }
 
-    // Thêm danh mục (Có icon, mô tả, trạng thái)
-    function createCategory($name, $slug, $description, $status, $icon)
+    // Thêm danh mục (Chỉ có name, slug)
+    function createCategory($name, $slug)
     {
-        $sql = "INSERT INTO categories (name, slug, description, status, icon) VALUES (?, ?, ?, ?, ?)";
-        return $this->db->insert($sql, $name, $slug, $description, $status, $icon);
+        $sql = "INSERT INTO categories (name, slug) VALUES (?, ?)";
+        return $this->db->insert($sql, $name, $slug);
     }
 
-    // Cập nhật danh mục
-    function updateCategory($id, $name, $slug, $description, $status, $icon = null)
+    // Cập nhật danh mục (Chỉ cập nhật name, slug)
+    function updateCategory($id, $name, $slug)
     {
-        if ($icon) {
-            $sql = "UPDATE categories SET name=?, slug=?, description=?, status=?, icon=? WHERE id=?";
-            return $this->db->update($sql, $name, $slug, $description, $status, $icon, $id);
-        } else {
-            $sql = "UPDATE categories SET name=?, slug=?, description=?, status=? WHERE id=?";
-            return $this->db->update($sql, $name, $slug, $description, $status, $id);
-        }
+        $sql = "UPDATE categories SET name=?, slug=? WHERE id=?";
+        return $this->db->update($sql, $name, $slug, $id);
     }
 
     function deleteCategory($id)

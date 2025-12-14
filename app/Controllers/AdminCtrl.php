@@ -103,13 +103,14 @@ class AdminCtrl
         include_once 'Views/admin/admin.php';
     }
 
+
+
     // --- QUẢN LÝ DANH MỤC ---
     public function categories()
     {
         $search = $_GET['search'] ?? '';
-        $status = $_GET['status'] ?? ''; // Nhận biến lọc trạng thái
-
-        $categories = $this->CategoryModel->getCategoriesAdmin($search, $status);
+        // Database không có status nên bỏ tham số lọc theo status
+        $categories = $this->CategoryModel->getCategoriesAdmin($search);
         include_once 'Views/admin/admin_category.php';
     }
 
@@ -117,23 +118,11 @@ class AdminCtrl
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_add_category'])) {
             $name = $_POST['name'];
+            // Tạo slug đơn giản nếu người dùng không nhập
             $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
-            $desc = $_POST['description'];
-            $status = $_POST['status']; // published / hidden
 
-            $icon = '';
-            // Xử lý upload Icon
-            if (isset($_FILES['icon']) && $_FILES['icon']['error'] == 0) {
-                $target_dir = "uploads/categories/";
-                if (!file_exists($target_dir))
-                    mkdir($target_dir, 0777, true);
-                $ext = pathinfo($_FILES["icon"]["name"], PATHINFO_EXTENSION);
-                $file_name = "cat_" . time() . "." . $ext;
-                move_uploaded_file($_FILES["icon"]["tmp_name"], $target_dir . $file_name);
-                $icon = $target_dir . $file_name;
-            }
-
-            $this->CategoryModel->createCategory($name, $slug, $desc, $status, $icon);
+            // Chỉ lưu name và slug theo đúng database
+            $this->CategoryModel->createCategory($name, $slug);
             header("Location: " . BASE_URL . "index.php/admin/categories");
             exit;
         }
@@ -145,40 +134,16 @@ class AdminCtrl
             $id = $_POST['id'];
             $name = $_POST['name'];
             $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
-            $desc = $_POST['description'];
-            $status = $_POST['status'];
 
-            $icon = null;
-            if (isset($_FILES['icon']) && $_FILES['icon']['error'] == 0) {
-                $target_dir = "uploads/categories/";
-                if (!file_exists($target_dir))
-                    mkdir($target_dir, 0777, true);
-                $ext = pathinfo($_FILES["icon"]["name"], PATHINFO_EXTENSION);
-                $file_name = "cat_" . time() . "." . $ext;
-                move_uploaded_file($_FILES["icon"]["tmp_name"], $target_dir . $file_name);
-                $icon = $target_dir . $file_name;
-            }
-
-            $this->CategoryModel->updateCategory($id, $name, $slug, $desc, $status, $icon);
+            // Chỉ cập nhật name và slug theo đúng database
+            $this->CategoryModel->updateCategory($id, $name, $slug);
             header("Location: " . BASE_URL . "index.php/admin/categories");
             exit;
         }
     }
 
-    public function deleteCategory()
-    {
-        $id = $_GET['id'] ?? 0;
-        if ($id) {
-            $result = $this->CategoryModel->deleteCategory($id);
-            if (!$result) {
-                echo "<script>alert('Không thể xóa danh mục này vì đang có sản phẩm!'); window.location.href='" . BASE_URL . "index.php/admin/categories';</script>";
-                exit;
-            }
-        }
-        header("Location: " . BASE_URL . "index.php/admin/categories");
-        exit;
-    }
 
+    
     // (Giữ nguyên các hàm products, addProduct, updateProduct, variants, updateVariant, orders, account, user...)
     public function products()
     {
