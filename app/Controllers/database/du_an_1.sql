@@ -3,15 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
-<<<<<<< HEAD
--- Generation Time: Dec 14, 2025 at 03:14 PM
--- Server version: 5.7.39
--- PHP Version: 8.1.10
-=======
 -- Generation Time: Dec 14, 2025 at 02:19 PM
 -- Server version: 8.0.44
 -- PHP Version: 8.3.16
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -50,18 +44,6 @@ CREATE TABLE `addresses` (
 -- Table structure for table `blogs`
 --
 
-<<<<<<< HEAD
-CREATE TABLE `blogs` (
-  `id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
-  `blog_category_id` bigint(20) NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `excerpt` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('published','draft') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
-=======
 INSERT INTO `addresses` (`id`, `user_id`, `full_name`, `phone_number`, `address_line`, `is_default`, `created_at`, `updated_at`) VALUES
 (1, 1, 'neko neko', '0369353309', 'tan ky tan quy', 1, '2025-11-28 07:17:55', '2025-11-28 07:17:55');
 
@@ -81,7 +63,6 @@ CREATE TABLE `blogs` (
   `excerpt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `thumbnail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` enum('published','draft') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -93,15 +74,9 @@ CREATE TABLE `blogs` (
 --
 
 CREATE TABLE `blog_categories` (
-<<<<<<< HEAD
-  `id` bigint(20) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-=======
   `id` bigint NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -214,54 +189,16 @@ INSERT INTO `colors` (`id`, `name`, `code`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `comments` (
-<<<<<<< HEAD
-  `id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
-  `product_id` bigint(20) DEFAULT NULL,
-  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `rating` tinyint(4) DEFAULT NULL,
-  `id_product` bigint(20) DEFAULT NULL,
-  `commentable_type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-=======
   `id` bigint NOT NULL,
   `user_id` bigint NOT NULL,
   `content` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `rating` tinyint DEFAULT NULL,
   `commentable_id` bigint NOT NULL,
   `commentable_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-<<<<<<< HEAD
---
--- Dumping data for table `comments`
---
-
-INSERT INTO `comments` (`id`, `user_id`, `product_id`, `content`, `rating`, `id_product`, `commentable_type`, `created_at`, `updated_at`) VALUES
-(11, 1, NULL, 'Sản phẩm rất đẹp, giao hàng nhanh, sẽ ủng hộ shop tiếp!', 5, 1, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:38'),
-(12, 1, NULL, 'Chất lượng tạm ổn trong tầm giá, nhưng đóng gói hơi sơ sài.', 3, 6, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:41'),
-(13, 2, NULL, 'Hàng bị lỗi nhẹ ở viền, shop hỗ trợ đổi trả nhiệt tình.', 4, 6, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:44'),
-(14, 2, NULL, 'Không giống như hình ảnh quảng cáo, thất vọng.', 1, 6, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:46'),
-(15, 3, NULL, 'Dùng được 1 tuần thấy khá ổn, chưa thấy lỗi gì.', 5, 6, 'product', '2025-12-13 15:00:20', '2025-12-13 19:33:48'),
-(17, 1, NULL, 'Đồng hồ Casio này chất lượng tuyệt vời, xứng đáng 5 sao!', 5, 1, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(18, 3, NULL, 'Seiko 5 Sports rất đẹp, đúng như mong đợi. Rất hài lòng.', 5, 3, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(19, 2, NULL, 'Giao hàng nhanh, sản phẩm y hình, đã giới thiệu cho bạn bè.', 5, 6, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(20, 1, NULL, 'Casio Edifice bền bỉ, tính năng Chronograph hoạt động hoàn hảo.', 5, 7, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(21, 3, NULL, 'Mẫu GA-2100 quá ngầu, tôi rất thích thiết kế của nó.', 5, 1, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(22, 2, NULL, 'Chất lượng ổn, chỉ hơi nặng tay một chút xíu, nhưng vẫn đáng mua.', 4, 3, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(23, 1, NULL, 'Mặt kính dễ trầy hơn tôi nghĩ, nhưng tổng thể sản phẩm vẫn rất tốt.', 4, 6, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(24, 3, NULL, 'Đồng hồ lịch lãm, phù hợp đi làm. Đáng giá tiền.', 4, 7, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(26, 1, NULL, 'Dùng được một thời gian thì thấy bình thường, không quá nổi bật.', 3, 3, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(27, 3, NULL, 'Màu sắc không được như ảnh, có lẽ do ánh sáng. Cho 3 sao.', 3, 6, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(28, 2, NULL, 'Hàng giao bị trễ 2 ngày, làm mất hứng mua sắm. Chất lượng tạm được.', 2, 7, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(29, 1, NULL, 'Sau 3 ngày sử dụng đã xuất hiện lỗi nhỏ ở kim giây.', 2, 6, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(30, 3, NULL, 'Sản phẩm giao đến bị hư hỏng, yêu cầu đổi trả gấp!', 1, 3, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43'),
-(31, 2, NULL, 'Giá quá cao so với chất lượng thực tế. Thất vọng hoàn toàn.', 1, 1, 'product', '2025-12-14 07:14:43', '2025-12-14 07:14:43');
-
-=======
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 -- --------------------------------------------------------
 
 --
@@ -304,18 +241,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `total_price`, `shipping_address`, `phone_number`, `status`, `payment_method_id`, `shipping_method_id`, `coupon_id`, `created_at`, `updated_at`) VALUES
-<<<<<<< HEAD
-(1, 1, '11550000.00', '123 Đường ABC, Quận 1, TP. HCM', '0909123456', 'completed', 1, 2, NULL, '2025-11-19 08:58:18', '2025-12-14 07:16:27'),
-(2, 1, '351530000.00', '456 Đường XYZ, Quận Hoàn Kiếm, Hà Nội', '0909123456', 'pending', 2, 1, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18'),
-(3, 1, '280000000.00', 'tan ky tan quy', '0909123456', 'pending', 1, 1, NULL, '2025-12-13 18:45:05', '2025-12-13 18:45:05'),
-(4, 1, '12000000.00', 'tan ky tan quy', '0909123456', 'pending', 1, 1, NULL, '2025-12-13 18:48:51', '2025-12-13 18:48:51'),
-(5, 1, '7500000.00', 'tan ky tan quy12', '0909123456', 'pending', 1, 1, NULL, '2025-12-13 19:31:11', '2025-12-13 19:31:11'),
-(6, 6, '7000000.00', '30/6 Ha Thi Khiem', '0376630401', 'pending', 1, 1, NULL, '2025-12-14 09:01:09', '2025-12-14 09:01:09'),
-(7, 6, '4500000.00', '30/6 Ha Thi Khiem', '0376630401', 'pending', 1, 1, NULL, '2025-12-14 13:39:57', '2025-12-14 13:39:57');
-=======
 (1, 1, 11550000.00, '123 Đường ABC, Quận 1, TP. HCM', '0909123456', 'processing', 1, 2, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18'),
 (2, 1, 351530000.00, '456 Đường XYZ, Quận Hoàn Kiếm, Hà Nội', '0909123456', 'pending', 2, 1, NULL, '2025-11-10 08:58:18', '2025-11-10 08:58:18');
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 -- --------------------------------------------------------
 
@@ -333,20 +260,6 @@ CREATE TABLE `order_items` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-<<<<<<< HEAD
---
--- Dumping data for table `order_items`
---
-
-INSERT INTO `order_items` (`id`, `order_id`, `variant_id`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
-(1, 3, 4, 1, '280000000.00', '2025-12-13 18:45:05', '2025-12-13 18:45:05'),
-(2, 4, 6, 1, '12000000.00', '2025-12-13 18:48:51', '2025-12-13 18:48:51'),
-(3, 5, 3, 1, '7500000.00', '2025-12-13 19:31:11', '2025-12-13 19:31:11'),
-(4, 6, 1, 2, '3500000.00', '2025-12-14 09:01:09', '2025-12-14 09:01:09'),
-(5, 7, 7, 1, '4500000.00', '2025-12-14 13:39:57', '2025-12-14 13:39:57');
-
-=======
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 -- --------------------------------------------------------
 
 --
@@ -538,19 +451,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-<<<<<<< HEAD
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `phone_number`, `created_at`, `updated_at`, `is_active`) VALUES
-(1, 'Khách Hàng A', 'khachhang_a@gmail.com', '$2y$10$b/7g3169ZKdK62WLEkEBuu9HnQVnl0XmmttV433KTNXdOCbpEeJSu', 'customer', '0909123456', '2025-11-10 08:58:18', '2025-11-27 16:28:53', 1),
-(2, 'neko neko', 'necon12398@gmail.com', '$2y$10$b/7g3169ZKdK62WLEkEBuu9HnQVnl0XmmttV433KTNXdOCbpEeJSu', 'admin', '0346673889', '2025-11-27 16:27:50', '2025-12-14 14:33:38', 1),
-(3, 'Nguyen Van A', 'a@example.com', '123456', 'customer', NULL, '2025-12-13 14:59:51', '2025-12-14 09:38:51', 0),
-(4, 'Tran Van B', 'b@example.com', '123456', 'customer', NULL, '2025-12-13 14:59:51', '2025-12-13 14:59:51', 1),
-(5, 'Le Thi C', 'c@example.com', '123456', 'customer', NULL, '2025-12-13 14:59:51', '2025-12-14 09:32:22', 1),
-(6, 'đăng minh', 'dominhdang3010@gmail.com', '$2y$10$M0X8gsBkpsphm.ySwLRxI.N19MB76XPvQTFOdl.ySVpX58xDo861K', 'customer', '0376630401', '2025-12-14 09:00:12', '2025-12-14 14:38:22', 1);
-=======
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `phone_number`, `created_at`, `updated_at`) VALUES
 (1, 'Khách Hàng A', 'khachhang_a@gmail.com', '$2y$10$jW7.fH2aS2CWckayFbx/iO1KN6PD1cvZY/GDW5lgCG90wRaGUSt5m', 'customer', '0909123456', '2025-11-10 08:58:18', '2025-11-28 06:59:51'),
 (2, 'neko neko', 'necon12398@gmail.com', '$2y$10$jW7.fH2aS2CWckayFbx/iO1KN6PD1cvZY/GDW5lgCG90wRaGUSt5m', 'customer', '0369353309', '2025-11-28 06:57:34', '2025-11-28 06:57:34');
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 -- --------------------------------------------------------
 
@@ -576,16 +479,6 @@ CREATE TABLE `variants` (
 --
 
 INSERT INTO `variants` (`id`, `product_id`, `color_id`, `size_id`, `price`, `quantity`, `sku`, `image`, `created_at`, `updated_at`) VALUES
-<<<<<<< HEAD
-(1, 1, 1, 2, '3500000.00', 50, 'GA2100-BLK', 'sp8.png', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
-(2, 2, 2, 1, '350000000.00', 10, 'RLX-DJ41-SLV', 'sp9.png', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
-(3, 3, 1, 2, '7500000.00', 25, 'SRPD-BLK', 'sp10.png', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
-(4, 4, 3, 3, '280000000.00', 5, 'RLX-LDJ-GLD', 'sp11.png', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
-(5, 5, 3, 3, '1500000.00', 100, 'A168-GLD', 'sp12.png', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
-(6, 6, 2, 1, '12000000.00', 20, 'PRESAGE-BLU', 'sp6.png', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
-(7, 7, 2, 2, '4500000.00', 30, 'EDIFICE-SLV', 'sp7.png', '2025-12-09 05:38:46', '2025-12-09 05:38:46'),
-(37, 7, 2, 2, '123.00', 11, 'test', 'var_test_1765353506.png', '2025-12-10 07:58:26', '2025-12-10 08:03:26');
-=======
 (1, 1, 1, 1, 500000000.00, 0, 'TEST', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-1-750x500.jpg', '2025-11-14 12:13:58', '2025-11-18 14:10:48'),
 (6, 1, 1, 2, 3500000.00, 50, 'CS-GA2100-BLK-40', 'https://cdn.tgdd.vn/Products/Images/7077/308485/garmin-epix-pro-gen-2-3-750x500.jpg', '2025-11-10 09:00:19', '2025-11-18 14:11:29'),
 (7, 2, 5, 2, 350000000.00, 5, 'RLX-DJ41-BLU-42', 'product-2-blue.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
@@ -618,7 +511,6 @@ INSERT INTO `variants` (`id`, `product_id`, `color_id`, `size_id`, `price`, `qua
 (34, 28, 4, 3, 4200000.00, 14, 'CS-SHEEN-RG-38', 'product-28-rosegold.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
 (35, 29, 1, 1, 820000000.00, 1, 'RLX-YM40-BLK-40', 'product-29-black.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19'),
 (36, 30, 2, 3, 40000000.00, 6, 'KS-SBPK-SLV-38', 'product-30-silver.jpg', '2025-11-10 09:00:19', '2025-11-10 09:00:19');
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- Indexes for dumped tables
@@ -687,12 +579,7 @@ ALTER TABLE `colors`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`),
-<<<<<<< HEAD
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `product_id` (`product_id`) USING BTREE;
-=======
   ADD KEY `user_id` (`user_id`);
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- Indexes for table `coupons`
@@ -779,31 +666,19 @@ ALTER TABLE `variants`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-<<<<<<< HEAD
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-=======
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- AUTO_INCREMENT for table `blogs`
 --
 ALTER TABLE `blogs`
-<<<<<<< HEAD
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-=======
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- AUTO_INCREMENT for table `blog_categories`
 --
 ALTER TABLE `blog_categories`
-<<<<<<< HEAD
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-=======
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- AUTO_INCREMENT for table `brands`
@@ -839,11 +714,7 @@ ALTER TABLE `colors`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-<<<<<<< HEAD
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
-=======
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- AUTO_INCREMENT for table `coupons`
@@ -855,21 +726,13 @@ ALTER TABLE `coupons`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-<<<<<<< HEAD
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-=======
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-<<<<<<< HEAD
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-=======
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
@@ -887,11 +750,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-<<<<<<< HEAD
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-=======
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- AUTO_INCREMENT for table `shipping_methods`
@@ -909,21 +768,13 @@ ALTER TABLE `sizes`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-<<<<<<< HEAD
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-=======
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- AUTO_INCREMENT for table `variants`
 --
 ALTER TABLE `variants`
-<<<<<<< HEAD
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
-=======
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- Constraints for dumped tables
@@ -966,12 +817,7 @@ ALTER TABLE `cart_items`
 --
 ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-<<<<<<< HEAD
-  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `fk_comments_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-=======
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
->>>>>>> 4cb1d69910204a372f39a0e03b8f433d50d6428b
 
 --
 -- Constraints for table `orders`

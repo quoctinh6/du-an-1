@@ -506,6 +506,8 @@
       margin-right: 5px;
       font-size: 0.85rem;
     }
+
+    
   </style>
 </head>
 

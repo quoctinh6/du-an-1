@@ -140,19 +140,46 @@ class AdminCtrl
         }
     }
 
-    
-    // (Giữ nguyên các hàm products, addProduct, updateProduct, variants, updateVariant, orders, account, user...)
+
     public function products()
     {
+        // 1. NHẬN THAM SỐ LỌC
         $cate_id = isset($_GET['cate_id']) && $_GET['cate_id'] != '' ? [$_GET['cate_id']] : [];
         $brand_id = isset($_GET['brand_id']) && $_GET['brand_id'] != '' ? [$_GET['brand_id']] : [];
         $stock = $_GET['stock'] ?? '';
-        $status = $_GET['status'] ?? '';
+        $status = $_GET['status'] ?? 'published'; // Mặc định hiển thị sản phẩm đang bán
         $search = $_GET['search'] ?? '';
 
+        // 2. THAM SỐ PHÂN TRANG
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+        $limit = 16; // 16 sản phẩm mỗi trang
+
+        // 3. GỌI MODEL & TÍNH TOÁN
         $categoriesAll = $this->CategoryModel->getAll();
         $brandsAll = $this->BrandModel->getAll();
-        $products = $this->productModel->getProducts(16, $cate_id, $brand_id, $search, $status, $stock);
+
+        // Lấy tổng số sản phẩm
+        $totalProducts = $this->productModel->countProducts($cate_id, $brand_id, $search, $status, $stock);
+
+        // Tính tổng số trang
+        $totalPages = ceil($totalProducts / $limit);
+        if ($totalPages == 0) $totalPages = 1;
+
+        // Lấy dữ liệu sản phẩm theo phân trang
+        $products = $this->productModel->getProducts($limit, $cate_id, $brand_id, $search, $status, $stock, $page);
+
+        // 4. TRUYỀN DỮ LIỆU SANG VIEW
+        $data = [
+            'categoriesAll' => $categoriesAll,
+            'brandsAll' => $brandsAll,
+            'products' => $products,
+            'totalProducts' => $totalProducts,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'currentLimit' => $limit,
+            // ... (các biến lọc/tìm kiếm khác nếu cần)
+        ];
+        extract($data);
 
         include_once 'Views/admin/admin_products.php';
     }
@@ -165,25 +192,30 @@ class AdminCtrl
             $brand_id = $_POST['brand_id'];
             $desc = $_POST['description'];
             $status = $_POST['status'];
-            $slug = $_POST['slug'];
+            // ⚠️ Tự động tạo Slug nếu trống (Sử dụng logic từ các hàm Category)
+            $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
 
             $new_product_id = $this->productModel->createProduct($name, $cate_id, $brand_id, $desc, $status, $slug);
 
             if ($new_product_id) {
+                // ... (Phần xử lý ảnh giữ nguyên logic cũ: lưu tên file không kèm đường dẫn) ...
                 if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                    $target_dir = "uploads/products/";
+                    $target_dir = "uploads/products/"; // Thêm / vào cuối nếu chưa có
                     if (!file_exists($target_dir))
                         mkdir($target_dir, 0777, true);
                     $ext = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
                     $file_name = $new_product_id . "_" . time() . "." . $ext;
+                    // $target_dir phải bao gồm / ở cuối
                     move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $file_name);
-                    $this->productModel->addProductImage($new_product_id, $file_name);
+                    $this->productModel->addProductImage($new_product_id, $file_name); // Chỉ lưu tên file
                 }
                 header("Location: " . BASE_URL . "index.php/admin/variants?product_id=" . $new_product_id);
                 exit;
             }
         }
     }
+
+    // File: AdminCtrl.php
 
     public function updateProduct()
     {
@@ -194,18 +226,21 @@ class AdminCtrl
             $brand_id = $_POST['brand_id'];
             $desc = $_POST['description'];
             $status = $_POST['status'];
-            $slug = !empty($_POST['slug']) ? $_POST['slug'] : '';
+            // ⚠️ Tự động tạo Slug nếu trống
+            $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
 
             $this->productModel->updateProduct($id, $name, $cate_id, $brand_id, $desc, $status, $slug);
 
+            // ... (Phần xử lý ảnh giữ nguyên) ...
+
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $target_dir = "uploads/products/";
+                $target_dir = "uploads/products/"; // Thêm / vào cuối
                 if (!file_exists($target_dir))
                     mkdir($target_dir, 0777, true);
                 $ext = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
                 $file_name = $id . "_" . time() . "." . $ext;
                 move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $file_name);
-                $this->productModel->updateProductImage($id, $file_name);
+                $this->productModel->updateProductImage($id, $file_name); // Chỉ lưu tên file
             }
             header("Location: " . BASE_URL . "index.php/admin/products");
             exit;
@@ -289,15 +324,135 @@ class AdminCtrl
 
     public function orders()
     {
+        // Áp dụng Flash Message (cho các thao tác Cập nhật Trạng thái)
+        $error = $_SESSION['error_admin'] ?? null;
+        $success = $_SESSION['success_admin'] ?? null;
+        unset($_SESSION['error_admin']);
+        unset($_SESSION['success_admin']);
+
+        // 1. LẤY THAM SỐ LỌC & PHÂN TRANG
         $status = $_GET['status'] ?? '';
         $keyword = $_GET['keyword'] ?? '';
-        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
         $limit = 10;
+
+        $currentPage = $page;
+
+        // 2. GỌI MODEL LẤY DỮ LIỆU & TÍNH TOÁN
+
+        // Lấy danh sách đơn hàng chính (có user_name, phone_number, etc.)
         $orders = $this->OrderModel->getAllOrdersAdmin($status, $keyword, $page, $limit);
         $totalOrders = $this->OrderModel->countOrdersAdmin($status, $keyword);
         $totalPages = ceil($totalOrders / $limit);
+
+        // Đảm bảo trang hiện tại hợp lệ
+        if ($currentPage < 1) $currentPage = 1;
+        if ($currentPage > $totalPages && $totalPages > 0) $currentPage = $totalPages;
+
+        // 3. BỔ SUNG: Lấy Order Items chi tiết cho từng đơn hàng
+        $ordersWithDetails = [];
+        foreach ($orders as $order) {
+            // Lấy chi tiết sản phẩm thuộc đơn hàng này
+            $order['items'] = $this->OrderModel->getOrderItems($order['id']);
+
+            // Lấy thông tin thanh toán/vận chuyển chi tiết (vì Model Order đã có hàm getOrderDetail)
+            // Chúng ta lấy các cột cần thiết cho Modal chi tiết (payment_method_name, shipping_method_name)
+            $orderDetail = $this->OrderModel->getOrderDetail($order['id']);
+
+            // Gán các thông tin chi tiết vào mảng $order
+            $order['payment_method'] = $orderDetail['payment_method_name'] ?? 'N/A';
+            $order['shipping_method'] = $orderDetail['shipping_method_name'] ?? 'N/A';
+
+            $ordersWithDetails[] = $order;
+        }
+
+        // 4. TRUYỀN DỮ LIỆU SANG VIEW
+        $data = [
+            'orders' => $ordersWithDetails, // Truyền mảng đã có chi tiết sản phẩm
+            'totalOrders' => $totalOrders,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'status' => $status,
+            'keyword' => $keyword,
+            'error' => $error,
+            'success' => $success
+        ];
+
+        extract($data);
         include_once 'Views/admin/admin_orders.php';
     }
+
+    public function updateOrderStatus()
+{
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_update_status'])) {
+        
+        $order_id = (int)$_POST['order_id'];
+        $new_status = $_POST['new_status'];
+        // $note = $_POST['note']; // Ghi chú
+
+        // 1. Định nghĩa thứ tự trạng thái
+        $status_order = [
+            'pending' => 1,
+            'processing' => 2,
+            'shipped' => 3,
+            'completed' => 4,
+            'cancelled' => 0 // Dù không dùng, vẫn đặt ở mức thấp nhất
+        ];
+        
+        // 2. Lấy đơn hàng hiện tại để lấy trạng thái cũ
+        $order = $this->OrderModel->getOrderById($order_id);
+
+        if (!$order) {
+            $_SESSION['error_admin'] = "Không tìm thấy đơn hàng #FS$order_id.";
+            header("Location: " . BASE_URL . "index.php/admin/orders");
+            exit();
+        }
+
+        $current_status = $order['status'];
+        
+        // 3. KIỂM TRA LOGIC CẬP NHẬT LÙI (QUAN TRỌNG)
+        // Nếu thứ tự trạng thái mới (new_status) NHỎ HƠN thứ tự trạng thái hiện tại (current_status)
+        if ($status_order[$new_status] < $status_order[$current_status]) {
+            $current_text = $this->getStatusText($current_status);
+            $new_text = $this->getStatusText($new_status);
+            
+            $_SESSION['error_admin'] = "Cập nhật không hợp lệ! Đơn hàng đang ở trạng thái **$current_text**. Không thể chuyển lùi về **$new_text**.";
+            header("Location: " . BASE_URL . "index.php/admin/orders");
+            exit();
+        }
+
+        // 4. Nếu kiểm tra OK, tiến hành cập nhật
+        $result = $this->OrderModel->updateOrderStatus($order_id, $new_status);
+
+        if ($result) {
+            $status_text = $this->getStatusText($new_status);
+            $_SESSION['success_admin'] = "Cập nhật trạng thái đơn hàng **#FS$order_id** lên **$status_text** thành công!";
+        } else {
+            $_SESSION['error_admin'] = "Không thể cập nhật trạng thái đơn hàng **#FS$order_id**. Có thể trạng thái đã được cập nhật trước đó.";
+        }
+    } else {
+         $_SESSION['error_admin'] = "Yêu cầu không hợp lệ.";
+    }
+
+    // Chuyển hướng về trang quản lý đơn hàng
+    header("Location: " . BASE_URL . "index.php/admin/orders");
+    exit();
+}
+
+/**
+ * Hàm hỗ trợ (Cần được thêm vào AdminCtrl.php)
+ * Dùng để chuyển đổi key trạng thái thành chuỗi hiển thị
+ */
+private function getStatusText($status_key)
+{
+    $map = [
+        'pending' => 'Chờ xử lý',
+        'processing' => 'Đang chuẩn bị',
+        'shipped' => 'Đang giao',
+        'completed' => 'Đã giao (Hoàn thành)',
+    ];
+    return $map[$status_key] ?? $status_key;
+}
 
     public function account()
     {
@@ -443,9 +598,81 @@ class AdminCtrl
     {
         include_once 'Views/admin/user_profile.php';
     }
+    // --- QUẢN LÝ THƯƠNG HIỆU ---
     public function brands()
     {
+        // Áp dụng Flash Message
+        $error = $_SESSION['error_admin'] ?? null;
+        $success = $_SESSION['success_admin'] ?? null;
+        unset($_SESSION['error_admin']);
+        unset($_SESSION['success_admin']);
+
+        // 1. NHẬN THAM SỐ
+        $search = $_GET['search'] ?? '';
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+        $limit = 10;
+
+        // 2. GỌI MODEL & TÍNH TOÁN
+        $brands = $this->BrandModel->getBrandsAdmin($search, $page, $limit);
+        $totalBrands = $this->BrandModel->countBrandsAdmin($search);
+
+        // 3. TÍNH TOÁN PHÂN TRANG
+        $totalPages = ceil($totalBrands / $limit);
+        if ($totalPages == 0) $totalPages = 1;
+
+        // 4. TRUYỀN DỮ LIỆU SANG VIEW
+        $data = [
+            'brands' => $brands,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'currentSearch' => $search,
+            'error' => $error,
+            'success' => $success,
+        ];
+        extract($data);
+
         include_once 'Views/admin/admin_brands.php';
+    }
+
+    public function addBrand()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_add_brand'])) {
+            $name = $_POST['name'];
+            $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
+            $status = $_POST['status'];
+
+            // ⚠️ Cần kiểm tra trùng Slug ở Controller trước
+
+            $result = $this->BrandModel->createBrand($name, $slug, $status);
+            if ($result) {
+                $_SESSION['success_admin'] = "Thêm thương hiệu **$name** thành công!";
+            } else {
+                $_SESSION['error_admin'] = "Lỗi khi thêm thương hiệu (Có thể Slug đã tồn tại).";
+            }
+            header("Location: " . BASE_URL . "index.php/admin/brands");
+            exit;
+        }
+    }
+
+    public function updateBrand()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_update_brand'])) {
+            $id = $_POST['id'];
+            $name = $_POST['name'];
+            $slug = !empty($_POST['slug']) ? $_POST['slug'] : strtolower(str_replace(' ', '-', $name));
+            $status = $_POST['status'];
+
+            // ⚠️ Cần kiểm tra trùng Slug ở Controller trước
+
+            $result = $this->BrandModel->updateBrand($id, $name, $slug, $status);
+            if ($result) {
+                $_SESSION['success_admin'] = "Cập nhật thương hiệu **$name** thành công!";
+            } else {
+                $_SESSION['error_admin'] = "Không có thay đổi hoặc có lỗi xảy ra.";
+            }
+            header("Location: " . BASE_URL . "index.php/admin/brands");
+            exit;
+        }
     }
     public function comments()
     {

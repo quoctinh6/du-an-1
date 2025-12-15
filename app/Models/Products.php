@@ -19,14 +19,28 @@ class Products
    * Lấy danh sách sản phẩm
    * @return array
    */
-  function getProducts($limit = 16, $categories_id = [], $brand = [], $search = '', $status = 'published', $stock = '')
+  function getProducts($limit = 16, $categories_id = [], $brand = [], $search = '', $status = 'published', $stock = '', $page = 1)
   {
-    $sql = 'SELECT products.*, MIN(product_images.image_url) image_url, MIN(variants.price) price, SUM(variants.quantity) as total_stock
+    // ⚠️ Tính OFFSET cho phân trang
+    $offset = ($page - 1) * $limit;
+
+    // Câu truy vấn SQL đầy đủ (đã JOIN categories và brands để lấy tên)
+    $sql = 'SELECT products.*, 
+            MIN(product_images.image_url) image_url, 
+            MIN(variants.price) price, 
+            SUM(variants.quantity) as total_stock,
+            categories.name AS category_name,
+            brands.name AS brand_name
         FROM products 
         LEFT JOIN product_images ON products.id = product_images.product_id
-        LEFT JOIN variants ON products.id = variants.product_id';
+        LEFT JOIN variants ON products.id = variants.product_id
+        LEFT JOIN categories ON products.category_id = categories.id
+        LEFT JOIN brands ON products.brand_id = brands.id';
+
     $params = [];
     $where = [];
+
+    // --- LOGIC LỌC VÀ TÌM KIẾM ---
 
     if (!empty($categories_id)) {
       $placeholders = implode(',', array_fill(0, count($categories_id), '?'));
@@ -56,6 +70,8 @@ class Products
 
     $sql .= ' GROUP BY products.id';
 
+    // --- LOGIC LỌC THEO TỒN KHO (HAVING) ---
+
     if ($stock === 'in_stock') {
       $sql .= ' HAVING total_stock > 0';
     } elseif ($stock === 'out_of_stock') {
@@ -64,12 +80,14 @@ class Products
 
     $sql .= ' ORDER BY products.id DESC';
 
+    // --- LOGIC PHÂN TRANG (LIMIT/OFFSET) ---
     if ($limit > 0) {
-      $sql .= " LIMIT " . intval($limit);
+      $sql .= " LIMIT ? OFFSET ?"; // Thêm LIMIT và OFFSET
+      $params[] = $limit;
+      $params[] = $offset;
     }
 
     $result = $this->db->query($sql, ...$params);
-    // Đảm bảo luôn trả về mảng
     return is_array($result) ? $result : [];
   }
 
@@ -83,6 +101,64 @@ class Products
   {
     $sql = "SELECT * FROM products WHERE id = ?";
     return $this->db->queryOne($sql, $id);
+  }
+
+  // File: Products.php (Thêm hàm này)
+
+  function countProducts($categories_id = [], $brand = [], $search = '', $status = 'published', $stock = '')
+  {
+    $sql = 'SELECT COUNT(products.id) as total_products, SUM(variants.quantity) as total_stock
+            FROM products
+            LEFT JOIN variants ON products.id = variants.product_id';
+    $params = [];
+    $where = [];
+
+    // ... (logic lọc, tìm kiếm tương tự như hàm getProducts, nhưng bỏ qua các JOIN categories/brands nếu không cần)
+
+    if (!empty($categories_id)) {
+      $placeholders = implode(',', array_fill(0, count($categories_id), '?'));
+      $where[] = 'products.category_id IN (' . $placeholders . ')';
+      $params = array_merge($params, $categories_id);
+    }
+
+    if (!empty($brand)) {
+      $placeholders = implode(',', array_fill(0, count($brand), '?'));
+      $where[] = 'products.brand_id IN (' . $placeholders . ')';
+      $params = array_merge($params, $brand);
+    }
+
+    if (!empty($search)) {
+      $where[] = 'products.name LIKE ?';
+      $params[] = '%' . $search . '%';
+    }
+
+    if (!empty($status)) {
+      $where[] = 'products.status = ?';
+      $params[] = $status;
+    }
+
+    if ($where) {
+      $sql .= ' WHERE ' . implode(' AND ', $where);
+    }
+
+    $sql .= ' GROUP BY products.id'; // Group để tính stock nếu cần HAVING
+
+    $having = [];
+    if ($stock === 'in_stock') {
+      $having[] = 'total_stock > 0';
+    } elseif ($stock === 'out_of_stock') {
+      $having[] = 'total_stock <= 0 OR total_stock IS NULL';
+    }
+
+    if ($having) {
+      $sql .= ' HAVING ' . implode(' AND ', $having);
+    }
+
+    // Vì đã GROUP BY, ta cần đếm tổng số dòng (sản phẩm) sau khi áp dụng các điều kiện
+    $full_sql = "SELECT COUNT(*) as total FROM ($sql) AS subquery";
+
+    $result = $this->db->queryOne($full_sql, ...$params);
+    return $result['total'] ?? 0;
   }
 
   // 9. Lấy tất cả biến thể của một sản phẩm theo product_id

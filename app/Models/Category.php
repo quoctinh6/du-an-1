@@ -15,29 +15,6 @@ class Category
         return $this->db->query($sql);
     }
 
-    // Lấy danh sách có tìm kiếm
-    function getCategoriesAdmin($search = '')
-    {
-        $sql = "SELECT COUNT(*) as total
-                FROM categories c 
-                WHERE 1=1 AND c.status IN ('published', 'hidden')";
-        
-        $params = [];
-
-        if (!empty($search)) {
-            $sql .= " AND c.name LIKE ?";
-            $params[] = "%$search%";
-        }
-
-        if (!empty($status)) {
-            $sql .= " AND c.status = ?";
-            $params[] = $status;
-        } 
-
-        $result = $this->db->queryOne($sql, ...$params);
-        return $result['total'] ?? 0;
-    }
-
     // Lấy danh sách (Chỉ lấy published và hidden)
     function getCategoriesAdmin($search = '', $status = '', $page = 1, $limit = 10)
     {

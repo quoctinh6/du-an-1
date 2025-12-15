@@ -8,6 +8,9 @@
         <input type="hidden" name="act" value="products">
         <input class="form-control me-2" type="search" name="search"
           value="<?= htmlspecialchars($_GET['search'] ?? '') ?>" placeholder="Tìm kiếm sản phẩm..." />
+        <button class="btn btn-outline-success" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
       </form>
 
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -86,9 +89,9 @@
               <div class="d-flex gap-2">
                 <select class="form-select" name="status">
                   <option value="">Tất cả</option>
-                  <option value="active" <?= (isset($_GET['status']) && $_GET['status'] == 'active') ? 'selected' : '' ?>>
+                  <option value="published" <?= (isset($_GET['status']) && $_GET['status'] == 'published') ? 'selected' : '' ?>>
                     Đang bán</option>
-                  <option value="hidden" <?= (isset($_GET['status']) && $_GET['status'] == 'hidden') ? 'selected' : '' ?>>
+                  <option value="draft" <?= (isset($_GET['status']) && $_GET['status'] == 'draft') ? 'selected' : '' ?>>
                     Ẩn</option>
                 </select>
                 <button type="submit" class="btn btn-outline-secondary" title="Lọc">
@@ -125,21 +128,21 @@
                   <tr>
                     <td>
                       <?php
-                      // Kiểm tra: Nếu có link ảnh thì nối BASE_URL vào, nếu không thì dùng ảnh mặc định
-                      $imgUrl = !empty($item['image_url']) ? BASE_URL . $item['image_url'] : 'https://placehold.co/50x50?text=No+Img';
+                      // ⚠️ FIX: Sử dụng đường dẫn đầy đủ từ BASE_URL + thư mục + tên file (Controller chỉ lưu tên file)
+                      $imgUrl = !empty($item['image_url']) ? BASE_URL . "uploads/products/" . $item['image_url'] : 'https://placehold.co/50x50?text=No+Img';
                       ?>
                       <img
-                        src="<?= BASE_URL . "uploads/products/" . $item['image_url'] ?? BASE_URL . "uploads/products/" . $item['image'] ?>"
+                        src="<?= $imgUrl ?>"
                         alt="<?= htmlspecialchars($item['name']) ?>" class="shadow-sm"
                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #eee;">
                     </td>
                     <td>
                       <div class="fw-bold"><?= htmlspecialchars($item['name']) ?></div>
-                      <small class="text-muted">Danh mục: <?= htmlspecialchars($item['category_id']) ?></small>
+                      <small class="text-muted">Danh mục: <?= htmlspecialchars($item['category_name'] ?? $item['category_id']) ?></small>
                     </td>
                     <td>
                       <span class="badge bg-light text-dark border">
-                        <?= htmlspecialchars($item['brand_id']) ?>
+                        <?= htmlspecialchars($item['brand_name'] ?? $item['brand_id']) ?>
                       </span>
                     </td>
                     <td class="text-danger fw-bold">
@@ -183,198 +186,56 @@
     </div>
 
     <nav aria-label="Products pagination" class="d-flex justify-content-center mt-4">
-      <ul class="pagination">
-        <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">Sau</a></li>
-      </ul>
-    </nav>
-  </div>
-</main>
-<!-- FORM THÊM SẢN PHẨM -->
-<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold">Thêm sản phẩm mới</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form method="POST" enctype="multipart/form-data" action="<?= BASE_URL ?>index.php/admin/addProduct">
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="form-label">Tên sản phẩm</label>
-                <input type="text" class="form-control" name="name" required placeholder="Nhập tên sản phẩm">
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Danh mục</label>
-                  <select class="form-select" name="category_id">
-                    <?php foreach ($categoriesAll as $cat): ?>
-                      <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Thương hiệu</label>
-                  <select class="form-select" name="brand_id">
-                    <?php foreach ($brandsAll as $brand): ?>
-                      <option value="<?= $brand['id'] ?>"><?= $brand['name'] ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Mô tả ngắn</label>
-                <textarea class="form-control" name="description" rows="3"></textarea>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="form-label">Ảnh đại diện</label>
+    <ul class="pagination">
+        <?php 
+            $currentPage = $currentPage ?? 1;
+            $totalPages = $totalPages ?? 1;
+            
+            // Lấy các tham số lọc/tìm kiếm hiện tại để truyền vào URL phân trang
+            $currentParams = $_GET;
+            unset($currentParams['page']);
+            $queryString = http_build_query($currentParams);
 
-                <input type="file" class="form-control" name="image" accept="image/png, image/jpeg, image/jpg"
-                  onchange="previewImage(this, 'preview_img_product')">
+            function getProductPaginationUrl($page, $queryString) {
+                return BASE_URL . "index.php/admin/products?page=" . $page . "&" . $queryString;
+            }
+        ?>
 
-                <div class="mt-2 text-center">
-                  <img id="preview_img_product" src="#" alt="Ảnh xem trước"
-                    style="display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 5px; border: 1px solid #ccc;">
-                </div>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Trạng thái</label>
-                <select class="form-select" name="status">
-                  <option value="published">Đang bán</option>
-                  <option value="draft">Ẩn (Nháp)</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Slug (Đường dẫn SEO - Tự động tạo nếu để trống)</label>
-                <input type="text" class="form-control" name="slug" placeholder="ao-khoac-nam">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-          <button type="submit" name="btn_add" class="btn btn-primary">Lưu sản phẩm</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+        <?php if ($totalPages > 1): ?>
+            <li class="page-item <?= $currentPage <= 1 ? 'disabled' : '' ?>">
+                <a class="page-link" 
+                   href="<?= getProductPaginationUrl(max(1, $currentPage - 1), $queryString) ?>">
+                   Trước
+                </a>
+            </li>
+            
+            <?php 
+                // Hiển thị tối đa 5 trang gần trang hiện tại
+                $startPage = max(1, $currentPage - 2);
+                $endPage = min($totalPages, $currentPage + 2);
 
-<!-- FORM SỬA SẢN PHẨM -->
+                if ($startPage > 1) { echo '<li class="page-item disabled"><span class="page-link">...</span></li>'; }
+            ?>
 
-<?php if (!empty($products)): ?>
-  <?php foreach ($products as $item): ?>
+            <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+                <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
+                    <a class="page-link" 
+                       href="<?= getProductPaginationUrl($i, $queryString) ?>">
+                       <?= $i ?>
+                    </a>
+                </li>
+            <?php endfor; ?>
 
-    <div class="modal fade" id="editProductModal_<?= $item['id'] ?>" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title fw-bold">Cập nhật: <?= htmlspecialchars($item['name']) ?></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
+            <?php 
+                if ($endPage < $totalPages) { echo '<li class="page-item disabled"><span class="page-link">...</span></li>'; }
+            ?>
 
-          <form method="POST" enctype="multipart/form-data" action="<?= BASE_URL ?>index.php/admin/updateProduct">
-            <div class="modal-body">
-              <input type="hidden" name="id" value="<?= $item['id'] ?>">
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Tên sản phẩm</label>
-                    <input type="text" class="form-control" name="name" value="<?= htmlspecialchars($item['name']) ?>"
-                      required>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label">Danh mục</label>
-                      <select class="form-select" name="category_id">
-                        <?php foreach ($categoriesAll as $cat): ?>
-                          <option value="<?= $cat['id'] ?>" <?= ($item['category_id'] == $cat['id']) ? 'selected' : '' ?>>
-                            <?= $cat['name'] ?>
-                          </option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label">Thương hiệu</label>
-                      <select class="form-select" name="brand_id">
-                        <?php foreach ($brandsAll as $brand): ?>
-                          <option value="<?= $brand['id'] ?>" <?= ($item['brand_id'] == $brand['id']) ? 'selected' : '' ?>>
-                            <?= $brand['name'] ?>
-                          </option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Ảnh đại diện (Chọn mới để thay đổi)</label>
-                    <input type="file" class="form-control" name="image">
-                    <?php if (!empty($item['image_url'])): ?>
-                      <div class="mt-2">
-                        <img src="<?= BASE_URL . $item['image_url'] ?>" alt="Ảnh hiện tại"
-                          style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ddd; border-radius: 5px;">
-                        <span class="small text-muted ms-2 align-middle">Ảnh hiện tại</span>
-                      </div>
-                    <?php endif; ?>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label">Trạng thái</label>
-                    <select class="form-select" name="status">
-                      <option value="published" <?= ($item['status'] == 'published') ? 'selected' : '' ?>>Đang bán</option>
-                      <option value="draft" <?= ($item['status'] == 'draft' || $item['status'] == 'hidden') ? 'selected' : '' ?>>
-                        Ẩn</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Mô tả sản phẩm</label>
-                <textarea class="form-control" name="description"
-                  rows="3"><?= htmlspecialchars($item['description'] ?? '') ?></textarea>
-              </div>
-            </div>
-
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-              <button type="submit" name="btn_update" class="btn btn-primary">Lưu thay đổi</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  <?php endforeach; ?>
-<?php endif; ?>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-  // Hàm hiển thị ảnh preview
-  function previewImage(input, imgId) {
-    const preview = document.getElementById(imgId);
-
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        preview.src = e.target.result;
-        preview.style.display = 'block'; // Hiện ảnh lên
-      }
-
-      reader.readAsDataURL(input.files[0]);
-    } else {
-      preview.src = '#';
-      preview.style.display = 'none'; // Ẩn đi nếu bỏ chọn
-    }
-  }
-</script>
+            <li class="page-item <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">
+                <a class="page-link" 
+                   href="<?= getProductPaginationUrl(min($totalPages, $currentPage + 1), $queryString) ?>">
+                   Sau
+                </a>
+            </li>
+        <?php endif; ?>
+    </ul>
+</nav>

@@ -10,7 +10,7 @@ class Order
         $this->db = new Database();
     }
 
-    // --- CÁC HÀM CŨ CỦA BẠN (GIỮ NGUYÊN) ---
+    // --- CÁC HÀM CLIENT/CƠ SỞ (Giữ nguyên) ---
 
     // Lấy tất cả đơn hàng của một user
     function getOrdersByUserId($user_id)
@@ -89,82 +89,106 @@ class Order
         $result = $this->db->queryOne($sql, $user_id);
         return $result['total'] ?? 0;
     }
+    
+    // Lấy chi tiết đơn hàng theo ID (Dùng cho AdminCtrl)
+    public function getOrderById($orderId)
+    {
+        $sql = "SELECT * FROM orders WHERE id = ?";
+        return $this->db->queryOne($sql, $orderId);
+    }
 
-    // --- 2 HÀM MỚI BỔ SUNG ĐỂ SỬA LỖI ADMIN ---
+
+    // --- HÀM ADMIN BỔ SUNG ---
 
     /**
      * Lấy danh sách đơn hàng cho Admin (có lọc và phân trang)
+     * Đã fix lỗi tìm kiếm theo Mã đơn hàng (FS<ID>)
      * @return array
      */
     function getAllOrdersAdmin($status = '', $keyword = '', $page = 1, $limit = 10)
     {
         $offset = ($page - 1) * $limit;
+        $params = [];
 
         $sql = "SELECT o.*, u.name as user_name, u.email 
                 FROM orders o
                 LEFT JOIN users u ON o.user_id = u.id
                 WHERE 1=1";
 
-        $params = [];
+        // 🛑 LOGIC XỬ LÝ TÌM KIẾM MÃ ĐƠN HÀNG (FS<ID>)
+        $search_id = null;
+        $search_term = "%" . $keyword . "%";
 
+        if (!empty($keyword) && preg_match('/^FS(\d+)$/i', $keyword, $matches)) {
+            $search_id = (int)$matches[1]; // Lấy số ID từ 'FS123'
+        }
+
+        // 1. Lọc theo trạng thái
         if (!empty($status)) {
             $sql .= " AND o.status = ?";
             $params[] = $status;
         }
 
+        // 2. Lọc theo từ khóa
         if (!empty($keyword)) {
-            // Tìm trong Mã đơn OR Tên khách OR Số điện thoại
-            $sql .= " AND (o.id LIKE ? OR u.name LIKE ? OR o.phone_number LIKE ?)";
-            $search_term = "%" . $keyword . "%";
-            $params[] = $search_term;
-            $params[] = $search_term;
-            $params[] = $search_term;
+            // Nếu tìm theo FS<ID>, chỉ tìm chính xác ID đó
+            if ($search_id !== null) {
+                $sql .= " AND o.id = ?";
+                $params[] = $search_id;
+            } else {
+                // Ngược lại, tìm theo Tên khách, SĐT
+                $sql .= " AND (u.name LIKE ? OR o.phone_number LIKE ?)";
+                $params[] = $search_term;
+                $params[] = $search_term;
+            }
         }
 
         $sql .= " ORDER BY o.created_at DESC";
         $sql .= " LIMIT " . intval($limit) . " OFFSET " . intval($offset);
 
-        // Trả về mảng rỗng nếu query lỗi, giúp tránh lỗi void
         $result = $this->db->query($sql, ...$params);
         return $result ? $result : [];
     }
 
     /**
-     * Đếm tổng số đơn để phân trang
+     * Đếm tổng số đơn để phân trang (Đã fix lỗi tìm kiếm theo Mã đơn hàng)
      * @return int
      */
     function countOrdersAdmin($status = '', $keyword = '')
     {
+        $params = [];
+
         $sql = "SELECT COUNT(*) as total 
                 FROM orders o 
                 LEFT JOIN users u ON o.user_id = u.id 
                 WHERE 1=1";
-        $params = [];
+        
+        // 🛑 LOGIC XỬ LÝ TÌM KIẾM MÃ ĐƠN HÀNG (FS<ID>)
+        $search_id = null;
+        $search_term = "%" . $keyword . "%";
+        if (!empty($keyword) && preg_match('/^FS(\d+)$/i', $keyword, $matches)) {
+            $search_id = (int)$matches[1];
+        }
 
+        // 1. Lọc theo trạng thái
         if (!empty($status)) {
             $sql .= " AND o.status = ?";
             $params[] = $status;
         }
 
+        // 2. Lọc theo từ khóa
         if (!empty($keyword)) {
-            $sql .= " AND (o.id LIKE ? OR u.name LIKE ? OR o.phone_number LIKE ?)";
-            $search_term = "%" . $keyword . "%";
-            $params[] = $search_term;
-            $params[] = $search_term;
-            $params[] = $search_term;
+            if ($search_id !== null) {
+                $sql .= " AND o.id = ?";
+                $params[] = $search_id;
+            } else {
+                $sql .= " AND (u.name LIKE ? OR o.phone_number LIKE ?)";
+                $params[] = $search_term;
+                $params[] = $search_term;
+            }
         }
 
         $result = $this->db->queryOne($sql, ...$params);
         return $result['total'] ?? 0;
     }
-    public function getOrderById($orderId)
-    {
-        $orderId = (int)$orderId;
-
-        $sql = "SELECT * FROM orders WHERE id = $orderId";
-        $rows = $this->db->query($sql);
-
-        return $rows[0] ?? null; // QUAN TRỌNG
-    }
-
 }

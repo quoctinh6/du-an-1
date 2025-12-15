@@ -43,12 +43,19 @@ class StatsModel extends Database
     // Bảng 2: LẤY SẢN PHẨM BÁN CHẠY NHẤT (Top 5)
     function getTopSellingProducts($limit = 5)
     {
-        $sql = "SELECT p.name AS product_name, SUM(oi.quantity) AS total_sold
+        $sql = "SELECT 
+                    p.name AS product_name, 
+                    SUM(oi.quantity) AS total_sold,
+                    -- ⚠️ BỔ SUNG CỘT TÍNH TỔNG DOANH THU CHO SẢN PHẨM (TIÊU CHÍ PHỤ)
+                    SUM(oi.quantity * oi.price) AS total_revenue 
                 FROM order_items oi
                 JOIN variants v ON oi.variant_id = v.id
                 JOIN products p ON v.product_id = p.id
                 GROUP BY p.id, p.name
-                ORDER BY total_sold DESC
+                ORDER BY 
+                    total_sold DESC,     -- 1. Tiêu chí chính: Số lượng bán (SL Bán)
+                    total_revenue DESC,  -- 2. Tiêu chí phụ: Nếu SL Bán bằng nhau, ưu tiên Doanh thu cao hơn
+                    p.id DESC            -- 3. Tiêu chí phụ lần 2: Đảm bảo tính nhất quán
                 LIMIT " . intval($limit);
         return $this->query($sql);
     }

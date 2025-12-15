@@ -28,8 +28,13 @@
 
           <div class="col-md-4">
             <label class="form-label small text-muted">Tìm kiếm (Tên, Email, SĐT)</label>
-            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm tài khoản..."
-              value="<?= htmlspecialchars($currentSearch) ?>">
+            <div class="input-group">
+              <input type="text" name="search" class="form-control" placeholder="Tìm kiếm tài khoản..."
+                value="<?= htmlspecialchars($currentSearch) ?>">
+              <button class="btn btn-outline-secondary" type="submit" title="Tìm kiếm">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
           </div>
 
           <div class="col-md-3">
@@ -50,15 +55,20 @@
             </select>
           </div>
 
-          <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">
-              <i class="bi bi-funnel me-1"></i> Lọc
-            </button>
+          <div class="col-md-2">
+            <label class="form-label small text-muted">Áp dụng</label>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary flex-fill" title="Áp dụng bộ lọc">
+                <i class="bi bi-funnel"></i>
+              </button>
+              <a href="<?= BASE_URL ?>index.php/admin/account" class="btn btn-outline-danger" title="Đặt lại bộ lọc">
+                <i class="bi bi-x-lg"></i>
+              </a>
+            </div>
           </div>
         </form>
       </div>
     </div>
-
     <div class="card shadow-sm">
       <div class="card-body">
         <div class="table-responsive">
@@ -179,8 +189,9 @@
         </li>
       </ul>
     </nav>
-  </div>
+    </div>
 </main>
+
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -235,6 +246,5 @@
     </div>
   </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
   xintegrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

@@ -9,12 +9,6 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- SỬA: Đổi 'ms-md-4' (lệch) thành 'mx-auto' (ngay chính giữa) -->
-      <form class="d-flex mx-auto" style="width: 400px">
-        <input class="form-control me-2" type="search" placeholder="Tìm kiếm đơn hàng, sản phẩm..."
-          aria-label="Search" />
-      </form>
-
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
