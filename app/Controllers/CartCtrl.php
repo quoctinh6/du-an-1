@@ -66,29 +66,42 @@ class CartCtrl {
 
     // === Xu ly ap dung ma giam gia ===
     public function applyCoupon() {
-        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $code = $_POST['coupon_code'] ?? '';
 
+            // Gọi Model
             $couponModel = new Coupon();
-            $coupon = $couponModel->getByCode($code);
+            
+            // BƯỚC 1: Lấy dữ liệu thô (kể cả mã đã hết hạn) để kiểm tra tồn tại
+            $coupon = $couponModel->getRawByCode($code);
 
-            if($coupon) {
-                //Kiem tra han su dung
-                $now = date ('Y-m-d H:i:s');
-                if($coupon['expires_at'] < $now) {
-                    echo "<script>alert('Ma giam gia da het han!!'); window.location.href='../cart';</script>";
+            if ($coupon) {
+                // Mã có tồn tại trong Database -> Bắt đầu kiểm tra điều kiện
+                
+                $now = date('Y-m-d H:i:s');
+                
+                // BƯỚC 2: Kiểm tra Hạn sử dụng
+                // Nếu có ngày hết hạn VÀ ngày hiện tại đã vượt quá ngày hết hạn
+                if (!empty($coupon['expires_at']) && $coupon['expires_at'] < $now) {
+                    echo "<script>alert('Mã giảm giá đã hết hạn!'); window.location.href='../cart';</script>";
                     exit;
                 }
-                //Kiem tra luot dung
-                if($coupon['usage_limit'] <= 0) {
-                    echo "<script>alert('Ma giam gia da het han!!'); window.location.href='../cart';</script>";
-                    exit;
+
+                // BƯỚC 3: Kiểm tra Lượt dùng (Số lượng)
+                // Nếu có giới hạn số lượng VÀ số lượng <= 0
+                if (isset($coupon['usage_limit']) && $coupon['usage_limit'] !== null && $coupon['usage_limit'] <= 0) {
+                     echo "<script>alert('Mã giảm giá đã hết lượt sử dụng!'); window.location.href='../cart';</script>";
+                     exit;
                 }
 
-                // Neu hop le thi luu vao SESSION
+                // BƯỚC 4: Hợp lệ (Thỏa mãn mọi điều kiện)
+                // Trường hợp này bao gồm cả "Sắp hết hạn" và "Chưa hết hạn"
+                
                 $_SESSION['applied_coupon'] = $coupon;
                 echo "<script>alert('Áp dụng mã thành công!'); window.location.href='../cart';</script>";
-            }else {
+
+            } else {
+                // Trường hợp mã hoàn toàn không có trong database
                 echo "<script>alert('Mã giảm giá không tồn tại!'); window.location.href='../cart';</script>";
             }
         }
