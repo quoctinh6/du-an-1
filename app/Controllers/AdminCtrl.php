@@ -498,8 +498,79 @@ class AdminCtrl
         header("Location: " . BASE_URL . "index.php/admin/comments");
         exit();
     }
+
+    // --- QUẢN LÝ MÃ GIẢM GIÁ (COUPONS) - TỪ DÒNG 499 ---
     public function coupons()
     {
+        // Load Model thủ công (do không được sửa Constructor)
+        include_once __DIR__ . "/../Models/Coupon.php";
+        $couponModel = new Coupon();
+
+        // 1. Lấy tham số lọc từ URL
+        $search = $_GET['search'] ?? '';
+        $type = $_GET['type'] ?? 'all';
+        $status = $_GET['status'] ?? 'all';
+        
+        // 2. Gọi Model lấy dữ liệu
+        // (Bỏ qua phân trang theo yêu cầu, lấy 100 mã mới nhất)
+        $coupons = $couponModel->getCouponsAdmin($search, $type, $status, 1, 100); 
+
+        // 3. Load View
         include_once 'Views/admin/admin_coupons.php';
+    }
+
+    public function addCoupon()
+    {
+        include_once __DIR__ . "/../Models/Coupon.php";
+        $couponModel = new Coupon();
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Lấy dữ liệu từ Form
+            $code = strtoupper(trim($_POST['code'])); // Viết hoa mã
+            $type = $_POST['type'];
+            $value = $_POST['value'];
+            // Nếu để trống thì set là null
+            $usage_limit = !empty($_POST['usage_limit']) ? $_POST['usage_limit'] : null;
+            $expires_at = !empty($_POST['expires_at']) ? $_POST['expires_at'] : null;
+
+            $couponModel->createCoupon($code, $type, $value, $usage_limit, $expires_at);
+            
+            // Quay lại trang danh sách
+            header("Location: " . BASE_URL . "index.php/admin/coupons");
+            exit;
+        }
+    }
+
+    public function updateCoupon()
+    {
+        include_once __DIR__ . "/../Models/Coupon.php";
+        $couponModel = new Coupon();
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['id'];
+            $code = strtoupper(trim($_POST['code']));
+            $type = $_POST['type'];
+            $value = $_POST['value'];
+            $usage_limit = !empty($_POST['usage_limit']) ? $_POST['usage_limit'] : null;
+            $expires_at = !empty($_POST['expires_at']) ? $_POST['expires_at'] : null;
+
+            $couponModel->updateCoupon($id, $code, $type, $value, $usage_limit, $expires_at);
+            
+            header("Location: " . BASE_URL . "index.php/admin/coupons");
+            exit;
+        }
+    }
+
+    public function deleteCoupon()
+    {
+        include_once __DIR__ . "/../Models/Coupon.php";
+        $couponModel = new Coupon();
+
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $couponModel->deleteCoupon($id);
+        }
+        header("Location: " . BASE_URL . "index.php/admin/coupons");
+        exit;
     }
 }
