@@ -66,9 +66,10 @@
                                     <tr>
                                         <td>
                                             <?php
-                                            // Xử lý ảnh: Nếu có ảnh riêng thì dùng, không thì dùng ảnh placeholder
-                                            // Lưu ý: BASE_URL phải được định nghĩa trong file config/index.php
-                                            $imgUrl = !empty($item['image']) ? BASE_URL . 'uploads/variants/' . $item['image'] : 'https://placehold.co/100x100?text=No+Img';
+                                            // ĐÃ SỬA: Nối chuỗi đường dẫn ảnh chính xác
+                                            $imgUrl = !empty($item['image']) ? 
+                                                rtrim(BASE_URL, '/') . '/uploads/variants/' . $item['image'] : 
+                                                'https://placehold.co/100x100?text=No+Img';
                                             ?>
                                             <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($item['sku']) ?>"
                                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #dee2e6;">
@@ -236,9 +237,12 @@
                             <div class="mb-3">
                                 <label class="form-label">Ảnh đại diện (Chọn nếu muốn thay đổi)</label>
                                 <input type="file" class="form-control" name="image">
-                                <?php if (!empty($item['image'])): ?>
+                                <?php if (!empty($item['image'])): 
+                                    // ĐÃ SỬA: Nối chuỗi đường dẫn ảnh chính xác
+                                    $variantImgPath = rtrim(BASE_URL, '/') . '/uploads/variants/' . $item['image'];
+                                ?>
                                     <div class="mt-2">
-                                        <img src="<?= BASE_URL . $item['image'] ?>" width="60" class="border rounded">
+                                        <img src="<?= $variantImgPath ?>" width="60" class="border rounded">
                                         <small class="text-muted ms-2">Ảnh hiện tại</small>
                                     </div>
                                 <?php endif; ?>

@@ -259,7 +259,7 @@ class AdminCtrl
             $image_path = '';
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $target_dir = "uploads/products";
+                $target_dir = "uploads/variants/"; // lưu vào folder variants
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
@@ -301,13 +301,15 @@ class AdminCtrl
             $image_path = null;
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $target_dir = "uploads/products";
+                // ĐÃ SỬA: Đường dẫn lưu file phải là 'uploads/variants/'
+                $target_dir = "uploads/variants/"; 
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
                 $ext = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
                 $file_name = "var_" . preg_replace('/[^A-Za-z0-9]/', '', $sku) . "_" . time() . "." . $ext;
-                $target_file = $target_dir . $file_name;
+                $target_file = $target_dir . $file_name; // Nối chuỗi đúng
+
                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
                     // Chỉ lưu TÊN FILE vào DB.
                     $image_path = $file_name;
@@ -383,76 +385,76 @@ class AdminCtrl
     }
 
     public function updateOrderStatus()
-{
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_update_status'])) {
-        
-        $order_id = (int)$_POST['order_id'];
-        $new_status = $_POST['new_status'];
-        // $note = $_POST['note']; // Ghi chú
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_update_status'])) {
 
-        // 1. Định nghĩa thứ tự trạng thái
-        $status_order = [
-            'pending' => 1,
-            'processing' => 2,
-            'shipped' => 3,
-            'completed' => 4,
-            'cancelled' => 0 // Dù không dùng, vẫn đặt ở mức thấp nhất
-        ];
-        
-        // 2. Lấy đơn hàng hiện tại để lấy trạng thái cũ
-        $order = $this->OrderModel->getOrderById($order_id);
+            $order_id = (int)$_POST['order_id'];
+            $new_status = $_POST['new_status'];
+            // $note = $_POST['note']; // Ghi chú
 
-        if (!$order) {
-            $_SESSION['error_admin'] = "Không tìm thấy đơn hàng #FS$order_id.";
-            header("Location: " . BASE_URL . "index.php/admin/orders");
-            exit();
-        }
+            // 1. Định nghĩa thứ tự trạng thái
+            $status_order = [
+                'pending' => 1,
+                'processing' => 2,
+                'shipped' => 3,
+                'completed' => 4,
+                'cancelled' => 0 // Dù không dùng, vẫn đặt ở mức thấp nhất
+            ];
 
-        $current_status = $order['status'];
-        
-        // 3. KIỂM TRA LOGIC CẬP NHẬT LÙI (QUAN TRỌNG)
-        // Nếu thứ tự trạng thái mới (new_status) NHỎ HƠN thứ tự trạng thái hiện tại (current_status)
-        if ($status_order[$new_status] < $status_order[$current_status]) {
-            $current_text = $this->getStatusText($current_status);
-            $new_text = $this->getStatusText($new_status);
-            
-            $_SESSION['error_admin'] = "Cập nhật không hợp lệ! Đơn hàng đang ở trạng thái **$current_text**. Không thể chuyển lùi về **$new_text**.";
-            header("Location: " . BASE_URL . "index.php/admin/orders");
-            exit();
-        }
+            // 2. Lấy đơn hàng hiện tại để lấy trạng thái cũ
+            $order = $this->OrderModel->getOrderById($order_id);
 
-        // 4. Nếu kiểm tra OK, tiến hành cập nhật
-        $result = $this->OrderModel->updateOrderStatus($order_id, $new_status);
+            if (!$order) {
+                $_SESSION['error_admin'] = "Không tìm thấy đơn hàng #FS$order_id.";
+                header("Location: " . BASE_URL . "index.php/admin/orders");
+                exit();
+            }
 
-        if ($result) {
-            $status_text = $this->getStatusText($new_status);
-            $_SESSION['success_admin'] = "Cập nhật trạng thái đơn hàng **#FS$order_id** lên **$status_text** thành công!";
+            $current_status = $order['status'];
+
+            // 3. KIỂM TRA LOGIC CẬP NHẬT LÙI (QUAN TRỌNG)
+            // Nếu thứ tự trạng thái mới (new_status) NHỎ HƠN thứ tự trạng thái hiện tại (current_status)
+            if ($status_order[$new_status] < $status_order[$current_status]) {
+                $current_text = $this->getStatusText($current_status);
+                $new_text = $this->getStatusText($new_status);
+
+                $_SESSION['error_admin'] = "Cập nhật không hợp lệ! Đơn hàng đang ở trạng thái **$current_text**. Không thể chuyển lùi về **$new_text**.";
+                header("Location: " . BASE_URL . "index.php/admin/orders");
+                exit();
+            }
+
+            // 4. Nếu kiểm tra OK, tiến hành cập nhật
+            $result = $this->OrderModel->updateOrderStatus($order_id, $new_status);
+
+            if ($result) {
+                $status_text = $this->getStatusText($new_status);
+                $_SESSION['success_admin'] = "Cập nhật trạng thái đơn hàng **#FS$order_id** lên **$status_text** thành công!";
+            } else {
+                $_SESSION['error_admin'] = "Không thể cập nhật trạng thái đơn hàng **#FS$order_id**. Có thể trạng thái đã được cập nhật trước đó.";
+            }
         } else {
-            $_SESSION['error_admin'] = "Không thể cập nhật trạng thái đơn hàng **#FS$order_id**. Có thể trạng thái đã được cập nhật trước đó.";
+            $_SESSION['error_admin'] = "Yêu cầu không hợp lệ.";
         }
-    } else {
-         $_SESSION['error_admin'] = "Yêu cầu không hợp lệ.";
+
+        // Chuyển hướng về trang quản lý đơn hàng
+        header("Location: " . BASE_URL . "index.php/admin/orders");
+        exit();
     }
 
-    // Chuyển hướng về trang quản lý đơn hàng
-    header("Location: " . BASE_URL . "index.php/admin/orders");
-    exit();
-}
-
-/**
- * Hàm hỗ trợ (Cần được thêm vào AdminCtrl.php)
- * Dùng để chuyển đổi key trạng thái thành chuỗi hiển thị
- */
-private function getStatusText($status_key)
-{
-    $map = [
-        'pending' => 'Chờ xử lý',
-        'processing' => 'Đang chuẩn bị',
-        'shipped' => 'Đang giao',
-        'completed' => 'Đã giao (Hoàn thành)',
-    ];
-    return $map[$status_key] ?? $status_key;
-}
+    /**
+     * Hàm hỗ trợ (Cần được thêm vào AdminCtrl.php)
+     * Dùng để chuyển đổi key trạng thái thành chuỗi hiển thị
+     */
+    private function getStatusText($status_key)
+    {
+        $map = [
+            'pending' => 'Chờ xử lý',
+            'processing' => 'Đang chuẩn bị',
+            'shipped' => 'Đang giao',
+            'completed' => 'Đã giao (Hoàn thành)',
+        ];
+        return $map[$status_key] ?? $status_key;
+    }
 
     public function account()
     {
@@ -596,8 +598,113 @@ private function getStatusText($status_key)
 
     public function user()
     {
+        // 1. Lấy ID người dùng cần sửa từ URL
+        $user_id = $_GET['id'] ?? null;
+        $currentUser = null;
+
+        // 2. Lấy thông tin người dùng từ Model nếu có ID
+        if ($user_id) {
+            $currentUser = $this->UserModel->getById($user_id);
+        }
+
+        // Bổ sung Flash Message
+        $error = $_SESSION['error_admin'] ?? null;
+        $success = $_SESSION['success_admin'] ?? null;
+        unset($_SESSION['error_admin']);
+        unset($_SESSION['success_admin']);
+
+        // 3. Truyền dữ liệu sang View
+        $data = [
+            'currentUser' => $currentUser,
+            'error' => $error,
+            'success' => $success
+        ];
+        extract($data);
+
+        // Sử dụng view user_edit.php mới (hoặc user_profile.php)
         include_once 'Views/admin/user_profile.php';
     }
+
+    public function updateUserFromAdmin()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_update_profile'])) {
+            $id = (int) $_POST['id'];
+            $name = trim($_POST['name']);
+            $email = trim($_POST['email']);
+            $phone = trim($_POST['phone_number']);
+            $current_email = $_POST['current_email']; // Email cũ để kiểm tra trùng
+
+            // 1. Kiểm tra Email mới có bị trùng với người khác không
+            if ($email !== $current_email && $this->UserModel->getByEmail($email)) {
+                $_SESSION['error_admin'] = 'Email này đã được sử dụng bởi tài khoản khác. Vui lòng chọn Email khác.';
+            } else {
+                // 2. Gọi Model để cập nhật thông tin
+                $result = $this->UserModel->updateProfile($id, $name, $email, $phone);
+
+                if ($result) {
+                    $_SESSION['success_admin'] = "Cập nhật thông tin tài khoản **$name** thành công!";
+                    // Nếu admin đang sửa thông tin chính mình, cập nhật lại Session
+                    if ($id == ($_SESSION['user']['id'] ?? 0)) {
+                        $_SESSION['user'] = $this->UserModel->getById($id);
+                    }
+                } else {
+                    $_SESSION['error_admin'] = 'Không có thay đổi nào hoặc có lỗi xảy ra.';
+                }
+            }
+
+            // 3. Chuyển hướng về trang sửa để thấy thông báo
+            header("Location: " . BASE_URL . "index.php/admin/user?id=" . $id);
+            exit();
+        } else {
+            // Nếu truy cập không hợp lệ, chuyển hướng về trang account
+            header("Location: " . BASE_URL . "index.php/admin/account");
+            exit();
+        }
+    }
+
+    public function updatePassword()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_update_password'])) {
+            $user_id = (int) $_POST['id'];
+            $old_password = $_POST['old_password'];
+            $new_password = $_POST['new_password'];
+            $confirm_password = $_POST['confirm_password'];
+
+            // 1. Validation & Logic
+            if (empty($user_id) || empty($old_password) || empty($new_password) || empty($confirm_password)) {
+                $_SESSION['error_admin'] = 'Vui lòng điền đầy đủ các trường.';
+            } elseif ($new_password !== $confirm_password) {
+                $_SESSION['error_admin'] = 'Mật khẩu mới và Mật khẩu xác nhận không khớp.';
+            } elseif (strlen($new_password) < 6) {
+                $_SESSION['error_admin'] = 'Mật khẩu mới phải có ít nhất 6 ký tự.';
+            } 
+            // 2. Xác minh mật khẩu cũ
+            elseif (!$this->UserModel->verifyPassword($user_id, $old_password)) {
+                $_SESSION['error_admin'] = 'Mật khẩu hiện tại không đúng.';
+            } else {
+                // 3. Cập nhật mật khẩu
+                $result = $this->UserModel->updatePassword($user_id, $new_password);
+
+                if ($result) {
+                    $_SESSION['success_admin'] = "Cập nhật mật khẩu thành công! Bạn cần đăng nhập lại.";
+                    // Bắt buộc đăng xuất nếu đổi mật khẩu
+                    unset($_SESSION['user']); 
+                    header("Location: " . BASE_URL . "index.php/User/login");
+                    exit();
+                } else {
+                    $_SESSION['error_admin'] = 'Không có thay đổi nào hoặc có lỗi xảy ra.';
+                }
+            }
+            
+            // Chuyển hướng về trang profile để thấy thông báo lỗi
+            header("Location: " . BASE_URL . "index.php/admin/user?id=" . $user_id . "#v-pills-security");
+            exit();
+        }
+        // Nếu không phải POST, chuyển hướng về trang Admin
+        header("Location: " . BASE_URL . "index.php/admin");
+        exit();
+    }
+
     // --- QUẢN LÝ THƯƠNG HIỆU ---
     public function brands()
     {
@@ -737,10 +844,10 @@ private function getStatusText($status_key)
         $search = $_GET['search'] ?? '';
         $type = $_GET['type'] ?? 'all';
         $status = $_GET['status'] ?? 'all';
-        
+
         // 2. Gọi Model lấy dữ liệu
         // (Bỏ qua phân trang theo yêu cầu, lấy 100 mã mới nhất)
-        $coupons = $couponModel->getCouponsAdmin($search, $type, $status, 1, 100); 
+        $coupons = $couponModel->getCouponsAdmin($search, $type, $status, 1, 100);
 
         // 3. Load View
         include_once 'Views/admin/admin_coupons.php';
@@ -761,7 +868,7 @@ private function getStatusText($status_key)
             $expires_at = !empty($_POST['expires_at']) ? $_POST['expires_at'] : null;
 
             $couponModel->createCoupon($code, $type, $value, $usage_limit, $expires_at);
-            
+
             // Quay lại trang danh sách
             header("Location: " . BASE_URL . "index.php/admin/coupons");
             exit;
@@ -782,7 +889,7 @@ private function getStatusText($status_key)
             $expires_at = !empty($_POST['expires_at']) ? $_POST['expires_at'] : null;
 
             $couponModel->updateCoupon($id, $code, $type, $value, $usage_limit, $expires_at);
-            
+
             header("Location: " . BASE_URL . "index.php/admin/coupons");
             exit;
         }
