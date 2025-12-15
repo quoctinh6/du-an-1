@@ -21,7 +21,7 @@ class Category
     }
 
     // Lấy danh sách (Chỉ lấy published và hidden)
-    function getCategoriesAdmin($search = '', $status = '', $page = 1, $limit = 10)
+    function getCategoriesAdmin($search = '', $status = 'published', $page = 1, $limit = 10)
     {
         $offset = ($page - 1) * $limit;
 

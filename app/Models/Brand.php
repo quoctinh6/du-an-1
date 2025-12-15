@@ -11,10 +11,15 @@ class Brand
     // 1. LẤY TẤT CẢ (Sử dụng cho form lọc/thêm sản phẩm)
     function getAll()
     {
+        $sql = "SELECT * FROM brands ";
+        return $this->db->query($sql);
+    }
+    function getAllbyStatus($status)
+    {
         $sql = "SELECT * FROM brands WHERE status = 'published' ";
         return $this->db->query($sql);
     }
-    
+
     // 2. LẤY DANH SÁCH CHO ADMIN (Có phân trang, tìm kiếm)
     function getBrandsAdmin($search = '', $page = 1, $limit = 10)
     {
@@ -23,9 +28,9 @@ class Brand
         $sql = "SELECT b.*, (SELECT COUNT(*) FROM products p WHERE p.brand_id = b.id) AS product_count
                 FROM brands b
                 WHERE b.status IN ('published', 'hidden')";
-        
+
         $params = [];
-        
+
         if (!empty($search)) {
             $sql .= " AND b.name LIKE ?";
             $params[] = "%$search%";
@@ -50,7 +55,7 @@ class Brand
             $sql .= " AND b.name LIKE ?";
             $params[] = "%$search%";
         }
-        
+
         $result = $this->db->queryOne($sql, ...$params);
         return $result['total'] ?? 0;
     }
@@ -70,7 +75,7 @@ class Brand
         $sql = "UPDATE brands SET name=?, slug=?, status=? WHERE id=?";
         return $this->db->update($sql, $name, $slug, $status, $id);
     }
-    
+
     // 6. LẤY THÔNG TIN THEO ID
     function getNameById(int $id)
     {

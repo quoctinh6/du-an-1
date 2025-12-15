@@ -113,7 +113,7 @@ class ProductsCtrl
 
     public function index()
     {
-        $brands = $this->brandModel->getAll();
+        $brands = $this->brandModel->getAllbyStatus('published');
 
         $search = $_GET['search'] ?? '';
         $brand = (isset($_GET['brand']) && $_GET['brand'] != 'all') ? [$_GET['brand']] : [];

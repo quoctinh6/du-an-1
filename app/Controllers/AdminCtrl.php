@@ -109,7 +109,7 @@ class AdminCtrl
     public function categories()
     {
         $search = $_GET['search'] ?? '';
-        $categories = $this->CategoryModel->getCategoriesAdmin($search);
+        $categories = $this->CategoryModel->getAll();
         include_once 'Views/admin/admin_category.php';
     }
 
@@ -163,7 +163,8 @@ class AdminCtrl
 
         // Tính tổng số trang
         $totalPages = ceil($totalProducts / $limit);
-        if ($totalPages == 0) $totalPages = 1;
+        if ($totalPages == 0)
+            $totalPages = 1;
 
         // Lấy dữ liệu sản phẩm theo phân trang
         $products = $this->productModel->getProducts($limit, $cate_id, $brand_id, $search, $status, $stock, $page);
@@ -302,7 +303,7 @@ class AdminCtrl
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
                 // ĐÃ SỬA: Đường dẫn lưu file phải là 'uploads/variants/'
-                $target_dir = "uploads/variants/"; 
+                $target_dir = "uploads/variants/";
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
@@ -348,8 +349,10 @@ class AdminCtrl
         $totalPages = ceil($totalOrders / $limit);
 
         // Đảm bảo trang hiện tại hợp lệ
-        if ($currentPage < 1) $currentPage = 1;
-        if ($currentPage > $totalPages && $totalPages > 0) $currentPage = $totalPages;
+        if ($currentPage < 1)
+            $currentPage = 1;
+        if ($currentPage > $totalPages && $totalPages > 0)
+            $currentPage = $totalPages;
 
         // 3. BỔ SUNG: Lấy Order Items chi tiết cho từng đơn hàng
         $ordersWithDetails = [];
@@ -388,7 +391,7 @@ class AdminCtrl
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_update_status'])) {
 
-            $order_id = (int)$_POST['order_id'];
+            $order_id = (int) $_POST['order_id'];
             $new_status = $_POST['new_status'];
             // $note = $_POST['note']; // Ghi chú
 
@@ -677,7 +680,7 @@ class AdminCtrl
                 $_SESSION['error_admin'] = 'Mật khẩu mới và Mật khẩu xác nhận không khớp.';
             } elseif (strlen($new_password) < 6) {
                 $_SESSION['error_admin'] = 'Mật khẩu mới phải có ít nhất 6 ký tự.';
-            } 
+            }
             // 2. Xác minh mật khẩu cũ
             elseif (!$this->UserModel->verifyPassword($user_id, $old_password)) {
                 $_SESSION['error_admin'] = 'Mật khẩu hiện tại không đúng.';
@@ -688,14 +691,14 @@ class AdminCtrl
                 if ($result) {
                     $_SESSION['success_admin'] = "Cập nhật mật khẩu thành công! Bạn cần đăng nhập lại.";
                     // Bắt buộc đăng xuất nếu đổi mật khẩu
-                    unset($_SESSION['user']); 
+                    unset($_SESSION['user']);
                     header("Location: " . BASE_URL . "index.php/User/login");
                     exit();
                 } else {
                     $_SESSION['error_admin'] = 'Không có thay đổi nào hoặc có lỗi xảy ra.';
                 }
             }
-            
+
             // Chuyển hướng về trang profile để thấy thông báo lỗi
             header("Location: " . BASE_URL . "index.php/admin/user?id=" . $user_id . "#v-pills-security");
             exit();
@@ -725,7 +728,8 @@ class AdminCtrl
 
         // 3. TÍNH TOÁN PHÂN TRANG
         $totalPages = ceil($totalBrands / $limit);
-        if ($totalPages == 0) $totalPages = 1;
+        if ($totalPages == 0)
+            $totalPages = 1;
 
         // 4. TRUYỀN DỮ LIỆU SANG VIEW
         $data = [
