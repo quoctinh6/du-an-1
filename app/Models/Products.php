@@ -108,15 +108,16 @@ class Products
     return $this->db->queryOne($sql, $variant_id);
   }
 
+
   // --- HÀM YÊU THÍCH ---
   /**
    * @return array
    */
   function getFavorites(array $ids, array $categories_id = [], array $brand = [], string $search = '')
   {
-    if (empty($ids))
-      return [];
+    if (empty($ids)) return [];
 
+    // Sử dụng đúng tên cột 'id', 'product_id', 'image_url', 'price' từ database
     $sql = 'SELECT products.*, MIN(product_images.image_url) image_url, MIN(variants.price) price
         FROM products 
         LEFT JOIN product_images ON products.id = product_images.product_id
@@ -125,32 +126,39 @@ class Products
     $params = [];
     $where = [];
 
+    // 1. Lọc theo ID (Session Favorites - danh sách ID sản phẩm)
     $placeholders_ids = implode(',', array_fill(0, count($ids), '?'));
     $where[] = 'products.id IN (' . $placeholders_ids . ')';
     $params = array_merge($params, $ids);
 
+    // 2. Lọc theo Danh mục (category_id trong DB)
     if (!empty($categories_id)) {
       $placeholders = implode(',', array_fill(0, count($categories_id), '?'));
       $where[] = 'products.category_id IN (' . $placeholders . ')';
       $params = array_merge($params, $categories_id);
     }
 
+    // 3. Lọc theo Thương hiệu (brand_id trong DB)
     if (!empty($brand)) {
       $placeholders = implode(',', array_fill(0, count($brand), '?'));
       $where[] = 'products.brand_id IN (' . $placeholders . ')';
       $params = array_merge($params, $brand);
     }
 
+    // 4. Tìm kiếm theo tên (name trong DB)
     if (!empty($search)) {
       $where[] = 'products.name LIKE ?';
       $params[] = '%' . $search . '%';
     }
 
+    // Kết hợp điều kiện và chỉ lấy sản phẩm đang hiển thị (status='published' trong DB)
     $sql .= ' WHERE ' . implode(' AND ', $where) . ' AND status = "published" GROUP BY products.id';
 
     $result = $this->db->query($sql, ...$params);
     return is_array($result) ? $result : [];
   }
+
+
 
   // --- CÁC HÀM ADMIN ---
 
