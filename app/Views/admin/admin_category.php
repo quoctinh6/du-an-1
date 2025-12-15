@@ -86,6 +86,7 @@
           </table>
         </div>
 
+        <!-- Phân trang -->
         <nav aria-label="Category pagination" class="d-flex justify-content-center mt-4">
             <ul class="pagination">
                 <?php 
@@ -110,14 +111,7 @@
                         </a>
                     </li>
                     
-                    <?php 
-                        $startPage = max(1, $currentPage - 2);
-                        $endPage = min($totalPages, $currentPage + 2);
-
-                        if ($startPage > 1) { echo '<li class="page-item disabled"><span class="page-link">...</span></li>'; }
-                    ?>
-
-                    <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                         <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
                             <a class="page-link" 
                                href="<?= getPaginationUrl($i, $currentStatus, $currentSearch) ?>">
@@ -125,10 +119,6 @@
                             </a>
                         </li>
                     <?php endfor; ?>
-
-                    <?php 
-                        if ($endPage < $totalPages) { echo '<li class="page-item disabled"><span class="page-link">...</span></li>'; }
-                    ?>
 
                     <li class="page-item <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">
                         <a class="page-link" 
@@ -139,10 +129,12 @@
                 <?php endif; ?>
             </ul>
         </nav>
+      </div>
     </div>
+  </div>
 </main>
 
-
+<!-- MODAL THÊM DANH MỤC -->
 <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -168,9 +160,16 @@
             </select>
           </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" name="btn_add_category" class="btn btn-primary">Lưu danh mục</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
+<!-- MODAL SỬA DANH MỤC (VÒNG LẶP) -->
 <?php if (!empty($categories)): ?>
   <?php foreach ($categories as $cat): ?>
     <div class="modal fade" id="editCategoryModal_<?= $cat['id'] ?>" tabindex="-1" aria-hidden="true">
@@ -202,8 +201,15 @@
                 </select>
               </div>
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+              <button type="submit" name="btn_update_category" class="btn btn-primary">Lưu thay đổi</button>
+            </div>
+          </form>
         </div>
-    <?php endforeach; ?>
+      </div>
+    </div>
+  <?php endforeach; ?>
 <?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
