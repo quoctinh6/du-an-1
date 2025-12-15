@@ -11,7 +11,12 @@ class Category
 
     function getAll()
     {
-        $sql = "SELECT * FROM categories WHERE status = 'published' ORDER BY id DESC ";
+        $sql = "SELECT * FROM categories ORDER BY id DESC ";
+        return $this->db->query($sql);
+    }
+    function getAllbyStatus($status)
+    {
+        $sql = "SELECT * FROM categories WHERE status = '1' ORDER BY id DESC ";
         return $this->db->query($sql);
     }
 
@@ -19,12 +24,12 @@ class Category
     function getCategoriesAdmin($search = '', $status = '', $page = 1, $limit = 10)
     {
         $offset = ($page - 1) * $limit;
-        
+
         $sql = "SELECT c.*, 
                     (SELECT COUNT(*) FROM products p WHERE p.category_id = c.id) as product_count 
                 FROM categories c 
                 WHERE 1=1 AND c.status IN ('published', 'hidden')"; // ⚠️ Chỉ lấy 2 trạng thái chính
-        
+
         $params = [];
 
         if (!empty($search)) {

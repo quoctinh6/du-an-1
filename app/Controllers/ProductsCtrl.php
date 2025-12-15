@@ -127,7 +127,7 @@ class ProductsCtrl
             }
         }
 
-        $category_all = $this->categoryModel->getAll();
+        $category_all = $this->categoryModel->getAllbyStatus('1');
 
         $products = $this->productModel->getProducts(16, $category, $brand, $search);
         include_once("Views/products.php");
