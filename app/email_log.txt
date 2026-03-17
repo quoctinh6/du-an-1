@@ -96,3 +96,13 @@ To: dominhdang3010@gmail.com
 New Password: ngmd48
 =================================================
 
+=== RESET PASSWORD LOG [2026-03-10 04:14:38] ===
+To: necon12398@gmail.com
+New Password: afpger
+=================================================
+
+=== RESET PASSWORD LOG [2026-03-10 04:14:38] ===
+To: necon12398@gmail.com
+New Password: 80th1m
+=================================================
+
